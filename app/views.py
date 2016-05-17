@@ -2,7 +2,7 @@ from flask import redirect, url_for, session, request, render_template
 from flask_oauth import OAuth
 from app import app
 from config import SECRET_KEY, TOKEN, WEBHOOK, FACEBOOK_APP_ID, \
-    FACEBOOK_APP_SECRET
+    FACEBOOK_APP_SECRET, WEBHOOK_TOKEN
 import requests
 import json
 import traceback
@@ -43,7 +43,7 @@ def webhook():
     except Exception as e:
       print traceback.format_exc() # something went wrong
   elif request.method == 'GET': # For the initial verification
-    if request.args.get('hub.verify_token') == 'eveytesting':
+    if request.args.get('hub.verify_token') == WEBHOOK_TOKEN:
       return request.args.get('hub.challenge')
     return "Wrong Verift Token"
   return "Hello World"
