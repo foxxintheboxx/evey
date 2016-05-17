@@ -7,4 +7,5 @@ all traffic from that URL to our localhost!
 ```bash
 . venv/bin/activate
 ./ngrok http 8000
+./db_create.py
 ```
