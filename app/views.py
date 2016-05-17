@@ -1,15 +1,11 @@
 from flask import redirect, url_for, session, request, render_template
 from flask_oauth import OAuth
 from app import app
+from config import SECRET_KEY, TOKEN, WEBHOOK, FACEBOOK_APP_ID, \
+    FACEBOOK_APP_SECRET
 import requests
 import json
 import traceback
-
-SECRET_KEY = 'development key'
-TOKEN = "EAAYbvNuO44cBAGcjOnLfqTR0RtMVUVvZBZAIkFaEGNifKqC6kIPPDuYdwDdKaS7c9I12gGohd0NPFmoIGF9ikZCmHBZCYi7Tq1SKDwMs6sRBUofqGTSdyhFLB949kZBVHaW9h6ZCezKaRY4IPxvALDLGvCJDjzxMoZD"
-WEBHOOK = "518aaf94cff67b8498a4a811b91a50be40c75de1398f52b066"
-FACEBOOK_APP_ID = '1719347811640199'
-FACEBOOK_APP_SECRET = '04d030e82620967b0109f9fec8a36592'
 
 
 app.secret_key = SECRET_KEY
