@@ -1,2 +1,2 @@
-web: gunicorn HelloWorldBot:app
+web: gunicorn run:app
 

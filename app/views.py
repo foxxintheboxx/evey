@@ -22,7 +22,7 @@ facebook = oauth.remote_app('facebook',
     authorize_url='https://www.facebook.com/dialog/oauth',
     consumer_key=FACEBOOK_APP_ID,
     consumer_secret=FACEBOOK_APP_SECRET,
-    request_token_params={'scope': 'read_custom_friendlists' }
+    request_token_params={'scope': 'public_profile' }
 )
 
 
@@ -77,7 +77,12 @@ def facebook_authorized(resp):
     me = facebook.get('/me')
     print("/" + me.data['id'] + "/" + "friends")
    # print(facebook.get("/" + me.data['id'] + "/" + "friendlists").data)
-    print(facebook.get("/me/friends").data)
+    #print(facebook.get("/me/friends").data)
+    user_details_url = "https://graph.facebook.com/v2.6/%s"%me.data['id']
+    user_details_params = {'fields':'picture', 'access_token':resp['access_token']}
+    r = requests.get(user_details_url, user_details_params).json()
+    print(r)
+    #print(json.dumps(facebook.get('/me/picture').data))
     return 'Logged in as id=%s name=%s redirect=%s' % \
         (me.data['id'], me.data['name'], request.args.get('next'))
 
