@@ -1,8 +1,7 @@
 from flask import redirect, url_for, session, request, render_template
 from flask_oauth import OAuth
 from app import app
-from config import SECRET_KEY, TOKEN, WEBHOOK, FACEBOOK_APP_ID, \
-    FACEBOOK_APP_SECRET, WEBHOOK_TOKEN
+from config import SECRET_KEY, TOKEN, WEBHOOK, WEBHOOK_TOKEN
 import requests
 import json
 import traceback
@@ -10,7 +9,8 @@ import traceback
 
 app.secret_key = SECRET_KEY
 oauth = OAuth()
-
+FACEBOOK_APP_ID = '1719347811640199'
+FACEBOOK_APP_SECRET = '04d030e82620967b0109f9fec8a36592'
 facebook = oauth.remote_app('facebook',
     base_url='https://graph.facebook.com/',
     request_token_url=None,
