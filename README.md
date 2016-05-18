@@ -9,6 +9,7 @@ all traffic from that URL to our localhost!
 . venv/bin/activate
 ./ngrok http 8000
 ./db_create.py
+heroku run python manage.py db upgrade
 ```
 
 ### Useful links

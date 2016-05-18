@@ -79,8 +79,9 @@ def facebook_authorized(resp):
     r = requests.get(user_details_url, user_details_params).json()
     print(r)
     #print(json.dumps(facebook.get('/me/picture').data))
-    return 'Logged in as id=%s name=%s redirect=%s' % \
-        (me.data['id'], me.data['name'], request.args.get('next'))
+    #return 'Logged in as id=%s name=%s redirect=%s' % \
+    #    (me.data['id'], me.data['name'], request.args.get('next'))
+    return render_template("index.html")
 
 @facebook.tokengetter
 def get_facebook_oauth_token():

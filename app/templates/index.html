@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Alpha by HTML5 UP</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+		<link rel="stylesheet" href="{{ url_for('static', filename='font-awesome.min.css') }}" />
+		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+	</head>
+	<body class="landing">
+		<div id="page-wrapper">
+
+			<!-- Header -->
+				<header id="header" class="alt">
+				</header>
+			<!-- Banner -->
+				<section id="banner">
+					<h2>Evey</h2>
+					<p>Connecting calendars so you dont have to</p>
+					<ul class="actions">
+
+						<div class="fb-messengermessageus" 
+						  messenger_app_id="1719347811640199" 
+						  page_id="130562467349590"
+						  color="white"
+						  size="large" ></div>
+					</ul>
+				</section>
+			<!-- Footer -->
+				<footer id="footer">
+					<ul class="icons">
+					</ul>
+					<ul class="copyright">
+						<li>&copy; Evey 2016. All rights reserved.</li>
+					</ul>
+				</footer>
+
+		</div>
+	</body>
+	<script>
+	  window.fbAsyncInit = function() {
+	    FB.init({
+	      appId      : '423366987795505',
+	      xfbml      : true,
+	      version    : 'v2.6'
+	    });
+	  };
+	  (function(d, s, id){
+	     var js, fjs = d.getElementsByTagName(s)[0];
+	     if (d.getElementById(id)) {return;}
+	     js = d.createElement(s); js.id = id;
+	     js.src = "//connect.facebook.net/en_US/sdk.js";
+	     fjs.parentNode.insertBefore(js, fjs);
+	   }(document, 'script', 'facebook-jssdk'));
+	</script>
+</html>
