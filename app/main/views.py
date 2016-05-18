@@ -51,12 +51,12 @@ def webhook():
 
 @main.route('/')
 def index():
-    return redirect(url_for('login'))
+    return redirect(url_for('main.login'))
 
 
 @main.route('/login')
 def login():
-    return facebook.authorize(callback=url_for('facebook_authorized',
+    return facebook.authorize(callback=url_for('main.facebook_authorized',
         next=request.args.get('next') or request.referrer or None,
         _external=True))
 
