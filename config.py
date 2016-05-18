@@ -2,8 +2,7 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 if os.environ.get('DATABASE_URL') is None:
-    SQLALCHEMY_DATABASE_URI = ('sqlite:///' + os.path.join(basedir, 'app.db') +
-                               '?check_same_thread=False')
+    SQLALCHEMY_DATABASE_URI = ('sqlite:///' + os.path.join(basedir, 'app.db'))
 else:
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
 SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
@@ -14,5 +13,6 @@ TOKEN = "EAAYbvNuO44cBAGcjOnLfqTR0RtMVUVvZBZAIkFaEGNifKqC6kIPPDuYdwDdKaS7c9I12gG
 
 WEBHOOK = "518aaf94cff67b8498a4a811b91a50be40c75de1398f52b066"
 WEBHOOK_TOKEN = 'eveytesting'
-FACEBOOK_APP_ID = '1719347811640199'
-FACEBOOK_APP_SECRET = '04d030e82620967b0109f9fec8a3659'
+FACEBOOK_APP_ID = '423366987795505'
+
+FACEBOOK_APP_SECRET = 'd5163109796d51e5d875ac56797c11c6'

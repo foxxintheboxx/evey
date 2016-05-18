@@ -1,13 +1,13 @@
 from flask import redirect, url_for, session, request, render_template
 from flask_oauth import OAuth
-from app import app
+from . import main
 from config import SECRET_KEY, TOKEN, WEBHOOK, WEBHOOK_TOKEN
 import requests
 import json
 import traceback
 
 
-app.secret_key = SECRET_KEY
+main.secret_key = SECRET_KEY
 oauth = OAuth()
 FACEBOOK_APP_ID = '1719347811640199'
 FACEBOOK_APP_SECRET = '04d030e82620967b0109f9fec8a36592'
@@ -22,7 +22,7 @@ facebook = oauth.remote_app('facebook',
 )
 
 
-@app.route('/' + WEBHOOK, methods=['GET', 'POST'])
+@main.route('/' + WEBHOOK, methods=['GET', 'POST'])
 def webhook():
   if request.method == 'POST':
     try:
@@ -49,18 +49,18 @@ def webhook():
   return "Hello World"
 
 
-@app.route('/')
+@main.route('/')
 def index():
     return redirect(url_for('login'))
 
 
-@app.route('/login')
+@main.route('/login')
 def login():
     return facebook.authorize(callback=url_for('facebook_authorized',
         next=request.args.get('next') or request.referrer or None,
         _external=True))
 
-@app.route('/login/authorized')
+@main.route('/login/authorized')
 @facebook.authorized_handler
 def facebook_authorized(resp):
     if resp is None:
