@@ -34,7 +34,9 @@ def webhook():
             text = message['message']['text'] # Incoming Message Text
             print(text)
             sender = message['sender']['id'] # Sender ID
-            payload = {'recipient': {'id': sender}, 'message': {'text': "Hello World"}}
+            payload = {'recipient': {'id': sender}, 'message': {'text': "Hey, signing up with facebook \
+                                                                        helps me connect you with your friends. \
+                                                                        Plz sign in https://eveyai.herokuapp.com"}}
             user_details_url = "https://graph.facebook.com/v2.6/%s"%sender
             user_details_params = {'fields':'first_name,last_name,profile_pic', 'access_token':TOKEN}
             r = requests.post('https://graph.facebook.com/v2.6/me/messages/?access_token=' + TOKEN, json=payload) # Lets send it
