@@ -30,6 +30,8 @@ facebook = oauth.remote_app('facebook',
 def webhook():
   if request.method == 'POST':
     try:
+      users = MessengerUser.query.all()
+      print(users)
       data = json.loads(request.data)
       print(data)
       for entry in data['entry']:
@@ -56,7 +58,7 @@ def webhook():
 
 
 
-            print(r)
+            print(user_data)
             r = requests.post('https://graph.facebook.com/v2.6/me/messages/?access_token=' + TOKEN, json=payload) # Lets send it
     except Exception as e:
       print traceback.format_exc() # something went wrong

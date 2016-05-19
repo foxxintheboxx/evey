@@ -1,13 +1,13 @@
 """empty message
 
-Revision ID: b18ed3165303
+Revision ID: 5074ab74e708
 Revises: None
-Create Date: 2016-05-18 22:30:16.907136
+Create Date: 2016-05-18 22:49:00.466314
 
 """
 
 # revision identifiers, used by Alembic.
-revision = 'b18ed3165303'
+revision = '5074ab74e708'
 down_revision = None
 
 from alembic import op
@@ -25,8 +25,8 @@ def upgrade():
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_fb_user_fb_uid'), 'fb_user', ['fb_uid'], unique=True)
-    op.create_index(op.f('ix_fb_user_first_name'), 'fb_user', ['first_name'], unique=True)
-    op.create_index(op.f('ix_fb_user_last_name'), 'fb_user', ['last_name'], unique=True)
+    op.create_index(op.f('ix_fb_user_first_name'), 'fb_user', ['first_name'], unique=False)
+    op.create_index(op.f('ix_fb_user_last_name'), 'fb_user', ['last_name'], unique=False)
     op.create_index(op.f('ix_fb_user_profile_pic_id'), 'fb_user', ['profile_pic_id'], unique=True)
     op.create_table('messenger_user',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -36,8 +36,8 @@ def upgrade():
     sa.Column('profile_pic_id', sa.String(length=120), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_messenger_user_first_name'), 'messenger_user', ['first_name'], unique=True)
-    op.create_index(op.f('ix_messenger_user_last_name'), 'messenger_user', ['last_name'], unique=True)
+    op.create_index(op.f('ix_messenger_user_first_name'), 'messenger_user', ['first_name'], unique=False)
+    op.create_index(op.f('ix_messenger_user_last_name'), 'messenger_user', ['last_name'], unique=False)
     op.create_index(op.f('ix_messenger_user_messenger_uid'), 'messenger_user', ['messenger_uid'], unique=True)
     op.create_index(op.f('ix_messenger_user_profile_pic_id'), 'messenger_user', ['profile_pic_id'], unique=True)
     op.create_table('user',
