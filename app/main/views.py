@@ -6,6 +6,10 @@ import requests
 import json
 import traceback
 
+from ..models import User, Conversation, Message
+from .. import db
+from onboarding_utils import extract_pic_uid
+
 
 main.secret_key = SECRET_KEY
 oauth = OAuth()
@@ -39,9 +43,21 @@ def webhook():
                                                                         Plz sign in https://eveyai.herokuapp.com"}}
             user_details_url = "https://graph.facebook.com/v2.6/%s"%sender
             user_details_params = {'fields':'first_name,last_name,profile_pic', 'access_token':TOKEN}
-            r = requests.post('https://graph.facebook.com/v2.6/me/messages/?access_token=' + TOKEN, json=payload) # Lets send it
-            r = requests.get(user_details_url, user_details_params).json()
+
+            user_data = requests.get(user_details_url, user_details_params).json()
+            extracted_id = extract_pic_uid(user_data['profile_pic'])
+
+            messenger_user = MessengerUser(messenger_uid=int(sender),
+                                           first_name=user_data['first_name'],
+                                           last_name=user_data['last_name'],
+                                           profile_pic_id=extracted_id)
+            db.session.add(messenger_user)
+            db.session.commit()
+
+
+
             print(r)
+            r = requests.post('https://graph.facebook.com/v2.6/me/messages/?access_token=' + TOKEN, json=payload) # Lets send it
     except Exception as e:
       print traceback.format_exc() # something went wrong
   elif request.method == 'GET': # For the initial verification
