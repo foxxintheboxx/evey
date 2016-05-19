@@ -47,7 +47,7 @@ def webhook():
             user_data = requests.get(user_details_url, user_details_params).json()
             extracted_id = extract_pic_uid(user_data['profile_pic'])
 
-            messenger_user = MessengerUser(messenger_uid=int(sender),
+            messenger_user = MessengerUser(messenger_uid=str(sender),
                                            first_name=user_data['first_name'],
                                            last_name=user_data['last_name'],
                                            profile_pic_id=extracted_id)

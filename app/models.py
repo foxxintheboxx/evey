@@ -3,23 +3,25 @@ from . import db
 
 class MessengerUser(db.Model):
   id = db.Column(db.Integer, primary_key=True)
-  messenger_uid = db.Column(db.Integer, index=True, unique=True)
+  messenger_uid = db.Column(db.String(64), index=True, unique=True)
   first_name = db.Column(db.String(64), index=True, unique=True)
   last_name = db.Column(db.String(64), index=True, unique=True)
-  profile_pic_id = db.Column(db.String(64), index=True, unique=True)
+  profile_pic_id = db.Column(db.String(120), index=True, unique=True)
 
 class FBUser(db.Model):
   id = db.Column(db.Integer, primary_key=True)
-  fb_uid = db.Column(db.Integer, index=True, unique=True)
+  fb_uid = db.Column(db.String(64), index=True, unique=True)
   first_name = db.Column(db.String(64), index=True, unique=True)
   last_name = db.Column(db.String(64), index=True, unique=True)
-  profile_pic_id = db.Column(db.String(64), index=True, unique=True)
+  profile_pic_id = db.Column(db.String(120), index=True, unique=True)
 
 class User(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.String(120), index=True, unique=True)
-  messenger_uid = db.Column(db.Integer, index=True, unique=True)
-  fb_uid = db.Column(db.Integer, index=True, unique=True)
+  fb_uid = db.Column(db.String(64), index=True, unique=True)
+  messenger_uid = db.Column(db.String(64), index=True, unique=True)
+
+
   first_name = db.Column(db.String(64), index=True, unique=True)
   last_name = db.Column(db.String(64), index=True, unique=True)
   conversations = db.relationship('Conversation',
