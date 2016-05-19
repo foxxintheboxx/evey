@@ -6,7 +6,7 @@ import requests
 import json
 import traceback
 
-from ..models import User, Conversation, Message
+from ..models import User, Conversation, Message, MessengerUser
 from .. import db
 from onboarding_utils import extract_pic_uid
 
