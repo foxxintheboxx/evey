@@ -1,6 +1,6 @@
 
 from .. import db
-from models import User, MessengerUser, FBUser
+from ..models import User, MessengerUser, FBUser
 
 class UserManager():
 

@@ -1,7 +1,7 @@
 from flask import redirect, url_for, session, request, render_template
 from flask_oauth import OAuth
 from . import main
-from ..config import SECRET_KEY, TOKEN, WEBHOOK, WEBHOOK_TOKEN
+from config import SECRET_KEY, TOKEN, WEBHOOK, WEBHOOK_TOKEN
 from ..utils import FB_GRAPH_URL, MESNGR_API_URL
 import requests
 import json
@@ -45,7 +45,6 @@ def webhook():
             payload = {'recipient': {'id': sender}, 'message': {'text': "Hey, signing up with facebook \
                                                                         helps me connect you with your friends. \
                                                                         Plz sign in https://eveyai.herokuapp.com"}}
-            extracted_id = extract_pic_uid(user_data['profile_pic'])
             r = requests.post(MESNGR_API_URL + TOKEN, json=payload) # Lets send it
     except Exception as e:
       print traceback.format_exc() # something went wrong
