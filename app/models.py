@@ -27,13 +27,13 @@ class FBUser(db.Model):
 
 class User(db.Model):
   id = db.Column(db.Integer, primary_key=True)
-  name = db.Column(db.String(120), index=True, unique=True)
+  name = db.Column(db.String(120), index=True)
   fb_uid = db.Column(db.String(64), index=True, unique=True)
   messenger_uid = db.Column(db.String(64), index=True, unique=True)
 
 
-  first_name = db.Column(db.String(64), index=True, unique=True)
-  last_name = db.Column(db.String(64), index=True, unique=True)
+  first_name = db.Column(db.String(64), index=True)
+  last_name = db.Column(db.String(64), index=True)
   conversations = db.relationship('Conversation',
                                    backref='user',
                                    lazy='dynamic')
@@ -76,7 +76,6 @@ calendar_event_association = db.Table(
     'calendar_event_association', db.Model.metadata,
     db.Column('calendar_id', db.Integer, db.ForeignKey('calendar.id')),
     db.Column('event_id', db.Integer, db.ForeignKey('event.id')),
-    schema='main'
     )
 
 class Calendar(db.Model):

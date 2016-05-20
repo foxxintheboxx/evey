@@ -39,6 +39,7 @@ def webhook():
           if 'message' in message:
 
             sender = message['sender']['id'] # Sender ID
+            print("sender: " + sender)
             user_details_url = FB_GRAPH_URL + sender
             user_details_params = {'fields':'first_name,last_name,profile_pic', 'access_token':TOKEN}
             user_data = requests.get(user_details_url, user_details_params).json()
@@ -80,22 +81,30 @@ def facebook_authorized(resp):
     session['oauth_token'] = (resp['access_token'], '')
     print(resp)
     me = facebook.get('/me')
+    print(me.data)
     print(facebook.get('/me/friends').data)
     user_details_url = 'https://graph.facebook.com/v2.6/%s'%me.data['id']
     user_details_params = {'fields':'picture', 'access_token':resp['access_token']}
 
-    r = requests.get(user_details_url, user_details_params).json()
+    r = requests.get(user_details_url, user_details_params)
+    r = r.json()
+    print(r)
 
-    me.data['profile_pic'] = r['profile_pic']
+    me.data['profile_pic'] = r['picture']['data']['url']
+    print(me.data)
     me.data['fb_uid'] = me.data['id']
     me.data['first_name'] = me.data['name'].split()[0]
     me.data['last_name'] = me.data['name'].split()[1]
+    print(me.data)
     user = usr_manager.handle_fb_user(me.data)
+    print(user)
     if user != None:
       messenger_uid = user.messenger_uid
       resp_text = WAIT % me.data['first_name']
-      payload = {'recepient': {'id': messenger_uid}, 'message': {'text': resp_text}}
-      requests.post(MESNGR_API_URL + TOKEN, json=payload)
+      print("messneger" + " " + messenger_uid)
+      payload = {'recipient': {'id': messenger_uid}, 'message': {'text': resp_text}}
+      r = requests.post(MESNGR_API_URL + TOKEN, json=payload)
+      print(r.json())
     print(r)
     #return 'Logged in as id=%s name=%s redirect=%s' % \
     #    (me.data['id'], me.data['name'], request.args.get('next'))

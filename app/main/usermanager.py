@@ -12,7 +12,10 @@ class UserManager():
     users = MessengerUser.query.filter(
         MessengerUser.messenger_uid==user_data["messenger_uid"]).all()
     if len(users) == 1:
+      print("Exists")
+
       user = self.evey_user_exists(user_data)
+      print(user)
       if user != None:
         self.set_all_users(True)
         return user
@@ -22,7 +25,7 @@ class UserManager():
                               first_name=user_data["first_name"],
                               last_name=user_data["last_name"],
                               profile_pic_id=profile_pic_id)
-      db.session.add(u)
+      db.session.add(m_user)
       db.session.commit()
       uids = self.duo_accounts_exists(user_data)
       if uids != None:
@@ -45,9 +48,10 @@ class UserManager():
                        first_name=user_data["first_name"],
                        last_name=user_data["last_name"],
                        profile_pic_id=profile_pic_id)
-      db.session.add(u)
+      db.session.add(fb_user)
       db.session.commit()
       uids = self.duo_accounts_exists(user_data)
+      print(uids)
       if uids != None:
         user = self.create_evey_user(user_data, uids)
         self.set_all_users(True)
@@ -65,6 +69,7 @@ class UserManager():
     users = db.session.query(User) \
           .filter((User.messenger_uid==uid) | (User.fb_uid==uid)) \
           .all()
+    print(users)
     if len(users) == 1:
       return users[0]
     return None
@@ -74,6 +79,7 @@ class UserManager():
     messenger_users = MessengerUser.query.filter(
         MessengerUser.profile_pic_id==pic_uid).all()
     fb_users = FBUser.query.filter(FBUser.profile_pic_id==pic_uid).all()
+    print("duo_accounts")
     if len(messenger_users) == 1 and len(fb_users) == 1:
       return {"messenger_uid": messenger_users[0].messenger_uid,
               "fb_uid": fb_users[0].fb_uid}
@@ -91,5 +97,5 @@ class UserManager():
 
   def extract_pic_uid(self, pic_url):
     prefix = pic_url[:pic_url.index('jpg') - 1]
-    return prefix[prefix.rfind('/') + 1]
+    return prefix[prefix.rfind('/') + 1:]
 
