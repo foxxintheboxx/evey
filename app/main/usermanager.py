@@ -17,7 +17,7 @@ class UserManager():
         return user
     else:
       profile_pic_id = self.extract_pic_uid(user_data["profile_pic"])
-      m_user = MessengerUser(messenger_uid=user_data["fb_uid"],
+      m_user = MessengerUser(messenger_uid=user_data["messenger_uid"],
                               first_name=user_data["first_name"],
                               last_name=user_data["last_name"],
                               profile_pic_id=profile_pic_id)
@@ -90,4 +90,3 @@ class UserManager():
     prefix = pic_url[:pic_url.index('jpg') - 1]
     return prefix[prefix.rfind('/') + 1]
 
-usr_manager = UserManager()
