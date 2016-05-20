@@ -9,7 +9,7 @@ class UserManager():
                      "evey_user":False}
 
   def handle_messenger_user(self, user_data):
-    users = MessengerUser.query.filter(messenger_uid=user_data["messenger_uid"])
+    users = MessengerUser.query.filter(messenger_uid==user_data["messenger_uid"])
     if len(users) == 1:
       user = self.evey_user_exists(user_data)
       if user != None:
@@ -32,7 +32,7 @@ class UserManager():
     return None
 
   def handle_fb_user(self, user_data):
-    users = FBUser.query.filter(fb_uid=user_data["fb_uid"])
+    users = FBUser.query.filter(fb_uid==user_data["fb_uid"])
     if len(users) == 1:
       user = self.evey_user_exists(user_data)
       if user != None:
@@ -69,8 +69,8 @@ class UserManager():
 
   def duo_accounts_exists(self, user_data):
     pic_uid = self.extract_pic_uid(user_data['profile_pic'])
-    messenger_users = MessengerUser.query.filter(profile_pic_id=pic_uid)
-    fb_users = FBUser.query.filter(profile_pic_id=pic_uid)
+    messenger_users = MessengerUser.query.filter(profile_pic_id==pic_uid)
+    fb_users = FBUser.query.filter(profile_pic_id==pic_uid)
     if len(messenger_users) == 1 and len(fb_users) == 1:
       return {"messenger_uid": messenger_users[0].messenger_uid,
               "fb_uid": fb_users[0].fb_uid}
