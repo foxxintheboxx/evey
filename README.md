@@ -10,8 +10,13 @@ all traffic from that URL to our localhost!
 ./ngrok http 8000
 ./db_create.py
 heroku run python manage.py db upgrade
+heroku pg:reset
 ```
 
 ### Useful links
 "SQLAlchemy relationships"
 http://docs.sqlalchemy.org/en/latest/orm/basic_relationships.html
+
+### Heroku
+* db
+ - postgresql-elliptical-77964
