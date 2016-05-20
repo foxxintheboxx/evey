@@ -13,7 +13,7 @@ class MessengerUser(db.Model):
   profile_pic_id = db.Column(db.String(120), index=True, unique=True)
 
   def __repr__(self):
-    return '<MessengerUser %r>' % self.first_name + " " + self.last_name
+    return '<MessengerUser %r>' % (self.first_name + " " + self.last_name)
 
 class FBUser(db.Model):
   id = db.Column(db.Integer, primary_key=True)
@@ -23,7 +23,7 @@ class FBUser(db.Model):
   profile_pic_id = db.Column(db.String(120), index=True, unique=True)
 
   def __repr__(self):
-    return '<FBUser %r>' % self.first_name + " " + self.last_name
+    return '<FBUser %r>' % (self.first_name + " " + self.last_name)
 
 class User(db.Model):
   id = db.Column(db.Integer, primary_key=True)
