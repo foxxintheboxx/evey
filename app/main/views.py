@@ -1,14 +1,15 @@
 from flask import redirect, url_for, session, request, render_template
 from flask_oauth import OAuth
 from . import main
-from config import SECRET_KEY, TOKEN, WEBHOOK, WEBHOOK_TOKEN
+from ..config import SECRET_KEY, TOKEN, WEBHOOK, WEBHOOK_TOKEN
+from ..utils import FB_GRAPH_URL, MESNGR_API_URL
 import requests
 import json
 import traceback
 
 from ..models import User, Conversation, Message, MessengerUser
 from .. import db
-from onboarding_utils import extract_pic_uid
+from usermanager import usr_manager
 
 
 main.secret_key = SECRET_KEY
@@ -30,36 +31,22 @@ facebook = oauth.remote_app('facebook',
 def webhook():
   if request.method == 'POST':
     try:
-      users = MessengerUser.query.all()
-      print(users)
       data = json.loads(request.data)
-      print(data)
       for entry in data['entry']:
         for message in entry['messaging']:
           if 'message' in message:
-            text = message['message']['text'] # Incoming Message Text
-            print(text)
+
             sender = message['sender']['id'] # Sender ID
+            user_details_url = FB_GRAPH_URL + sender
+            user_details_params = {'fields':'first_name,last_name,profile_pic', 'access_token':TOKEN}
+            user_data = requests.get(user_details_url, user_details_params).json()
+
+            text = message['message']['text'] # Incoming Message Text
             payload = {'recipient': {'id': sender}, 'message': {'text': "Hey, signing up with facebook \
                                                                         helps me connect you with your friends. \
                                                                         Plz sign in https://eveyai.herokuapp.com"}}
-            user_details_url = "https://graph.facebook.com/v2.6/%s"%sender
-            user_details_params = {'fields':'first_name,last_name,profile_pic', 'access_token':TOKEN}
-
-            user_data = requests.get(user_details_url, user_details_params).json()
             extracted_id = extract_pic_uid(user_data['profile_pic'])
-
-            messenger_user = MessengerUser(messenger_uid=str(sender),
-                                           first_name=user_data['first_name'],
-                                           last_name=user_data['last_name'],
-                                           profile_pic_id=extracted_id)
-            db.session.add(messenger_user)
-            db.session.commit()
-
-
-
-            print(user_data)
-            r = requests.post('https://graph.facebook.com/v2.6/me/messages/?access_token=' + TOKEN, json=payload) # Lets send it
+            r = requests.post(MESNGR_API_URL + TOKEN, json=payload) # Lets send it
     except Exception as e:
       print traceback.format_exc() # something went wrong
   elif request.method == 'GET': # For the initial verification

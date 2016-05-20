@@ -89,3 +89,5 @@ class UserManager():
   def extract_pic_uid(self, pic_url):
     prefix = pic_url[:pic_url.index('jpg') - 1]
     return prefix[prefix.rfind('/') + 1]
+
+usr_manager = UserManager()
