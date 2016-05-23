@@ -108,7 +108,7 @@ def facebook_authorized(resp):
     print(r)
     #return 'Logged in as id=%s name=%s redirect=%s' % \
     #    (me.data['id'], me.data['name'], request.args.get('next'))
-    return render_template('index.html')
+    return redirect("http://www.messenger.com/t/evey.io", code=302)
 
 @facebook.tokengetter
 def get_facebook_oauth_token():
