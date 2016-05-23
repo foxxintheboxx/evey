@@ -43,7 +43,8 @@ class User(db.Model):
   calendar = db.relationship("Calendar",
                              uselist=False,
                              back_populates="user")
-
+  curr_session_id = db.Column(db.String(64), index=True)
+  last_msg_date = db.Column(db.Date, index=True)
 
 
   def __repr__(self):
