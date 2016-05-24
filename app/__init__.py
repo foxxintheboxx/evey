@@ -6,6 +6,7 @@ db = SQLAlchemy()
 def create_app():
   app = Flask(__name__)
   app.config.from_object('config')
+  app.config["CACHE_TYPE"] = "null"
   db.init_app(app)
   db.app = app
   from .main import main as main_blueprint
