@@ -70,7 +70,7 @@ class EveyEngine(WitEngine):
     self.user = user
 
   def understand(self, msgs):
-    if len(msg) == 0:
+    if len(msgs) == 0:
       return []
     if self.user == None:
       return [self.text_message(SIGNUP % self.user_name)]
