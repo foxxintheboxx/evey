@@ -1,6 +1,7 @@
 from flask import redirect, url_for, session, request, render_template
 from flask_oauth import OAuth
 from . import main
+from .convengine import EveyEngine
 from config import SECRET_KEY, TOKEN, WEBHOOK, WEBHOOK_TOKEN
 from ..utils import FB_GRAPH_URL, MESNGR_API_URL
 import requests
@@ -34,10 +35,11 @@ def webhook():
   if request.method == 'POST':
     try:
       data = json.loads(request.data)
+      print("raw json " + data)
+      msgs = []
       for entry in data['entry']:
         for message in entry['messaging']:
           if 'message' in message:
-
             sender = message['sender']['id'] # Sender ID
             print("sender: " + sender)
             user_details_url = FB_GRAPH_URL + sender
