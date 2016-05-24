@@ -59,8 +59,7 @@ PLZ_SLOWDOWN = ("I'm sorry %s, but currently I am wayy better "
                 "plz only text me 1 thing at a time")
 SIGNUP = ("Hey %s, signing up with facebook helps me connect you "
          "with your friends. Plz link fb at https://eveyai.herokuapp.com")
-WAIT = ("OK %s, Thanks for registering. I\'m not totally developed"
-       "yet -- Stay Tuned")
+WAIT = ("OK %s, Thanks for registering.")
 
 class EveyEngine(WitEngine):
 
@@ -77,8 +76,6 @@ class EveyEngine(WitEngine):
     if len(msgs) > 1:
       return [self.text_message(PLZ_SLOWDOWN % self.user_name)]
     if self.user.did_onboarding == False:
-      self.user.did_onboarding = 1
-      self.save()
       return self.onboarding()
     else:
       return [self.text_message(WAIT % self.user_name)]
@@ -93,6 +90,8 @@ class EveyEngine(WitEngine):
     """
       this is only called once during onboarding
     """
+    self.user.did_onboarding = 1
+    self.save()
     usage_msg = self.usage_examples()
     about_msg = self.about()
     payloads = [POSTBACK_TEMPLATE % "TUTORIAL:NO",
@@ -107,7 +106,7 @@ class EveyEngine(WitEngine):
     tutorial_text = "Do you want to try making an example event?"
     try_tutorial = self.button_attachment(tutorial_text,
                                           tutorial_buttons)
-    return [usage_msg, about_msg]
+    return [self.text_message(WAIT % self.user_name), usage_msg, about_msg]
 
   def tutorial(self):
     evey_dialogue = ["ok now send me this fake event",
@@ -169,13 +168,13 @@ class EveyEngine(WitEngine):
             }
 
   def make_generic_element(self, title, subtitle="",
-                                  imge_url="",
+                                  img_url="",
                                   buttons=[]):
     element = {"title": title}
     if len(subtitle) > 0:
       element["subtitle"] = subtitle
-    if len(imge_url) > 0:
-      element["image_url"] = image_url
+    if len(img_url) > 0:
+      element["image_url"] = img_url
     if len(buttons) > 0:
       element["buttons"] = buttons
     return element
