@@ -29,7 +29,7 @@ facebook = oauth.remote_app('facebook',
 usr_manager = UserManager()
 
 def fetch_user_data(user_url, params):
-  return requests.get(user_url, user_details_params).json()
+  return requests.get(user_url, params).json()
 
 @main.route('/' + WEBHOOK, methods=['GET', 'POST'])
 def webhook():
@@ -53,7 +53,7 @@ def webhook():
       user_data['messenger_uid'] = sender
       user = usr_manager.handle_messenger_user(user_data)
       evey = EveyEngine(user_data["first_name"], user)
-      resp_msgs = evey.understand(msg)
+      resp_msgs = evey.understand(msgs)
       for msg in resp_msgs:
         payload = {'recipient': {'id': sender}, 'message': msg}
         r = requests.post(MESNGR_API_URL + TOKEN, json=payload) # Lets send it
@@ -91,9 +91,9 @@ def facebook_authorized(resp):
     user_details_params = {'fields':'picture',
                            'access_token':resp['access_token']}
 
+    print("pre fetch")
     r = fetch_user_data(FB_GRAPH_URL + me.data['id'], user_details_params)
-    r = r.json()
-    print(r)
+    print("post_fetch")
     me.data['profile_pic'] = r['picture']['data']['url']
     print(me.data)
     me.data['fb_uid'] = me.data['id']

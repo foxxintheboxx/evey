@@ -13,7 +13,7 @@ from const import EXAMPLE_0, EXAMPLE_1, EXAMPLE_2, \
 
 
 
-class WitEngine():
+class WitEngine(object):
 
   def __init__(self, app_token, server_token, content_type='application/json'):
     self.app_token = app_token
@@ -67,7 +67,7 @@ WAIT = 'OK %s, Thanks for registering. I\'m not totally developed\
 class EveyEngine(WitEngine):
 
   def __init__(self, first_name, user):
-    super(self.__class__, self).__init__(WIT_APP_ID, WIT_SERVER)
+    super(EveyEngine, self).__init__(WIT_APP_ID, WIT_SERVER)
     self.user_name = first_name
     self.user = user
 
