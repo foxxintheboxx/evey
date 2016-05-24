@@ -54,12 +54,13 @@ class WitEngine(object):
   def remove_space(self, query):
     return query.replace(' ', '%20')
 
-PLZ_SLOWDOWN = "I'm sorry %s, but currently I am wayy better \
-at understanding one request at a time. So \
-plz only text me 1 thing at a time"
-SIGNUP = 'Hey %s, signing up with facebook helps me connect you with your friends. Plz link fb at https://eveyai.herokuapp.com'
-WAIT = 'OK %s, Thanks for registering. I\'m not totally developed\
-        yet -- Stay Tuned'
+PLZ_SLOWDOWN = "I'm sorry %s, but currently I am wayy better " +
+               "at understanding one request at a time. So " +
+               "plz only text me 1 thing at a time"
+SIGNUP = "Hey %s, signing up with facebook helps me connect you " +
+         "with your friends. Plz link fb at https://eveyai.herokuapp.com"
+WAIT = "OK %s, Thanks for registering. I\'m not totally developed" +
+       "yet -- Stay Tuned"
 
 class EveyEngine(WitEngine):
 
