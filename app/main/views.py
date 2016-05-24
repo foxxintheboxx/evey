@@ -98,16 +98,16 @@ def facebook_authorized(resp):
     me.data['fb_uid'] = me.data['id']
     me.data['first_name'] = me.data['name'].split()[0]
     me.data['last_name'] = me.data['name'].split()[1]
-#    user = usr_manager.handle_fb_user(me.data)
-#    print(user)
-#    if user != None:
-#      messenger_uid = user.messenger_uid
-#      resp_text = WAIT % me.data['first_name']
-#      print("messneger" + " " + messenger_uid)
+    user = usr_manager.handle_fb_user(me.data)
+    print(user)
+    if user != None:
+      messenger_uid = user.messenger_uid
+      resp_text = WAIT % me.data['first_name']
+      print("messneger" + " " + messenger_uid)
 #      payload = {'recipient': {'id': messenger_uid}, 'message': {'text': resp_text}}
 #      r = requests.post(MESNGR_API_URL + TOKEN, json=payload)
 #      print(r.json())
-#    print(r)
+    print(r)
     return render_template("index.html")
     #return redirect("http://www.messenger.com/t/helloimjarvis", code=302)
 
