@@ -58,7 +58,7 @@ def webhook():
 #        resp_msgs = evey.understand(msgs)
 #        for msg in resp_msgs:
         payload = {'recipient': {'id': sender}, 'message': {"text": "hello world"}}
-        r = requests.post(MESNGR_API_URL + TOKEN, json=payload) # Lets send it
+#        r = requests.post(MESNGR_API_URL + TOKEN, json=payload) # Lets send it
     except Exception as e:
       print traceback.format_exc() # something went wrong
   elif request.method == 'GET': # For the initial verification
