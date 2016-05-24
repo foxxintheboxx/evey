@@ -7,7 +7,6 @@ EXAMPLE_2 = "https://raw.githubusercontent.com/foxxintheboxx/evey/master/app/sta
 ABOUT_0 = "https://www.google.com/logos/2012/haring-12-hp.png"
 ABOUT_1 = "https://s-media-cache-ak0.pinimg.com/736x/40/d4/7b/40d47b9ce63fae42b1ed196b11481bf6.jpg"
 
-CALENDAR_IMG = "http://heimshelp.education.gov.au/sites/heimshelp/News/PublishingImages/Icons/Calendar_Reporting-Year_Green.jpg"
-
+CALENDAR_IMG = "https://raw.githubusercontent.com/foxxintheboxx/evey/master/app/static/onboarding_imgs/calendar_flat.png?token=AE7-ypni5exdUwg8vzql1r6zIn3B53Quks5XTSqBwA%3D%3D"
 #POSTBACK
 POSTBACK_TEMPLATE = "USER_PAYLOAD:%s"
