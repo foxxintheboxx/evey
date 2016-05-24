@@ -102,12 +102,10 @@ def facebook_authorized(resp):
     print(user)
     if user != None:
       messenger_uid = user.messenger_uid
-      resp_msg = EveyEngine(user.first_name, user).onboarding()
-      print("resp")
-      #for msg in resp_msg:
-      #  payload = {'recipient': {'id': messenger_uid}, 'message':msg}
-      #  r = requests.post(MESNGR_API_URL + TOKEN, json=payload)
-    print(r)
+      resp_msg = EveyEngine(user.first_name, user).understand(["site visit"])
+      for msg in resp_msg:
+        payload = {'recipient': {'id': messenger_uid}, 'message':msg}
+        r = requests.post(MESNGR_API_URL + TOKEN, json=payload)
     return render_template("index.html")
     #return redirect("http://www.messenger.com/t/helloimjarvis", code=302)
 

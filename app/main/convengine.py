@@ -77,6 +77,8 @@ class EveyEngine(WitEngine):
       return [self.text_message(PLZ_SLOWDOWN % self.user_name)]
     if self.user.did_onboarding == False:
       return self.onboarding()
+    elif msg[0] == "site visit":
+      return [self.text_message("hi %s thanks for visiting my website" % self.user_name)]
     else:
       return [self.text_message(WAIT % self.user_name)]
     resp = self.converse(session_id, msg)
