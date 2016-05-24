@@ -53,11 +53,11 @@ def webhook():
                                     user_details_params)
         user_data['messenger_uid'] = sender
         user = usr_manager.handle_messenger_user(user_data)
-        evey = EveyEngine(user_data["first_name"], user)
+#        evey = EveyEngine(user_data["first_name"], user)
         print("msgs: %s" % str(msgs))
-        resp_msgs = evey.understand(msgs)
+#        resp_msgs = evey.understand(msgs)
         for msg in resp_msgs:
-          payload = {'recipient': {'id': sender}, 'message': msg}
+          payload = {'recipient': {'id': sender}, 'message': {"text": "hello world"}}
           r = requests.post(MESNGR_API_URL + TOKEN, json=payload) # Lets send it
     except Exception as e:
       print traceback.format_exc() # something went wrong
