@@ -1,5 +1,5 @@
 #IMG_ENDPOINTS
-EXAMPLE_0 = "https://raw.githubusercontent.com/foxxintheboxx/evey/master/app/static/onboarding_imgs/ee143.png?token=AE7-ygerebQgUGAXPpeiu-zEqUp0Kcs6ks5XS9lUwA%3D%3D"
+EXAMPLE_0 = "https://raw.githubusercontent.com/foxxintheboxx/evey/master/app/static/onboarding_imgs/ee143.png?token=AE7-ylvIqLEZiA3FiGEzEz_uQBbbs5VWks5XTQvuwA%3D%3D"
 EXAMPLE_1 = "https://raw.githubusercontent.com/foxxintheboxx/evey/master/app/static/onboarding_imgs/got.png?token=AE7-yqB3eovWRUCS1YL2F4C5VVhn6TYfks5XS9bpwA%3D%3D"
 EXAMPLE_2 = "https://raw.githubusercontent.com/foxxintheboxx/evey/master/app/static/onboarding_imgs/econ100.png?token=AE7-ytr0TOB50ZthzYcnBCyaVps0fVJVks5XS9ycwA%3D%3D"
 
