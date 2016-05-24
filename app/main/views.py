@@ -86,22 +86,18 @@ def facebook_authorized(resp):
             request.args['error_reason'],
             request.args['error_description'])
     session['oauth_token'] = (resp['access_token'], '')
-#    print(resp)
-#    me = facebook.get('/me')
-#    print(me.data)
-#    print(facebook.get('/me/friends').data)
-#    user_details_params = {'fields':'picture',
-#                           'access_token':resp['access_token']}
-#
-#    print("pre fetch")
-#    r = fetch_user_data(FB_GRAPH_URL + me.data['id'], user_details_params)
-#    print("post_fetch")
-#    me.data['profile_pic'] = r['picture']['data']['url']
-#    print(me.data)
-#    me.data['fb_uid'] = me.data['id']
-#    me.data['first_name'] = me.data['name'].split()[0]
-#    me.data['last_name'] = me.data['name'].split()[1]
-#    print(me.data)
+    print(resp)
+    me = facebook.get('/me')
+    print(me.data)
+    user_details_params = {'fields':'picture',
+                           'access_token':resp['access_token']}
+
+    r = fetch_user_data(FB_GRAPH_URL + me.data['id'], user_details_params)
+    me.data['profile_pic'] = r['picture']['data']['url']
+    print(me.data)
+    me.data['fb_uid'] = me.data['id']
+    me.data['first_name'] = me.data['name'].split()[0]
+    me.data['last_name'] = me.data['name'].split()[1]
 #    user = usr_manager.handle_fb_user(me.data)
 #    print(user)
 #    if user != None:
