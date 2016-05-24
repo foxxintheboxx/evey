@@ -28,38 +28,41 @@ facebook = oauth.remote_app('facebook',
 )
 usr_manager = UserManager()
 
-SIGNUP = 'Hey %s, signing up with facebook helps me connect you with your friends. Plz sign in https://eveyai.herokuapp.com'
-WAIT = 'OK %s, Thanks for registering. I\'m not totally developed yet -- Stay Tuned'
+def fetch_user_data(user_url, params):
+  return requests.get(user_url, user_details_params).json()
+
 @main.route('/' + WEBHOOK, methods=['GET', 'POST'])
 def webhook():
   if request.method == 'POST':
     try:
       data = json.loads(request.data)
-      print("raw json " + data)
+      print(data)
       msgs = []
+      sender = ""
       for entry in data['entry']:
         for message in entry['messaging']:
           if 'message' in message:
             sender = message['sender']['id'] # Sender ID
-            print("sender: " + sender)
-            user_details_url = FB_GRAPH_URL + sender
-            user_details_params = {'fields':'first_name,last_name,profile_pic', 'access_token':TOKEN}
-            user_data = requests.get(user_details_url, user_details_params).json()
-            user_data['messenger_uid'] = sender
-            user = usr_manager.handle_messenger_user(user_data)
             text = message['message']['text'] # Incoming Message Text
-            resp_text = WAIT % user_data['first_name']
-            if user == None:
-              resp_text = SIGNUP % user_data['first_name']
-            payload = {'recipient': {'id': sender}, 'message': {'text': resp_text}}
-            r = requests.post(MESNGR_API_URL + TOKEN, json=payload) # Lets send it
+            msgs.append(text)
+      user_details_params = {'fields':'first_name,last_name, \
+                                       profile_pic,timezone',
+                                      'access_token':TOKEN}
+      user_data = fetch_user_data(FB_GRAPH_URL + sender,
+                                  user_details_params)
+      user_data['messenger_uid'] = sender
+      user = usr_manager.handle_messenger_user(user_data)
+      evey = EveyEngine(user_data["first_name"], user)
+      resp_msgs = evey.understand(msg)
+      for msg in resp_msgs:
+        payload = {'recipient': {'id': sender}, 'message': msg}
+        r = requests.post(MESNGR_API_URL + TOKEN, json=payload) # Lets send it
     except Exception as e:
       print traceback.format_exc() # something went wrong
   elif request.method == 'GET': # For the initial verification
     if request.args.get('hub.verify_token') == WEBHOOK_TOKEN:
       return request.args.get('hub.challenge')
-    return 'Wrong Verift Token'
-  return 'Hello World'
+    return 'Wrong Verify Token'
 
 
 @main.route('/')
@@ -85,13 +88,12 @@ def facebook_authorized(resp):
     me = facebook.get('/me')
     print(me.data)
     print(facebook.get('/me/friends').data)
-    user_details_url = 'https://graph.facebook.com/v2.6/%s'%me.data['id']
-    user_details_params = {'fields':'picture', 'access_token':resp['access_token']}
+    user_details_params = {'fields':'picture',
+                           'access_token':resp['access_token']}
 
-    r = requests.get(user_details_url, user_details_params)
+    r = fetch_user_data(FB_GRAPH_URL + me.data['id'], user_details_params)
     r = r.json()
     print(r)
-
     me.data['profile_pic'] = r['picture']['data']['url']
     print(me.data)
     me.data['fb_uid'] = me.data['id']
@@ -108,11 +110,10 @@ def facebook_authorized(resp):
       r = requests.post(MESNGR_API_URL + TOKEN, json=payload)
       print(r.json())
     print(r)
-    #return 'Logged in as id=%s name=%s redirect=%s' % \
-    #    (me.data['id'], me.data['name'], request.args.get('next'))
     return render_template("index.html")
     #return redirect("http://www.messenger.com/t/helloimjarvis", code=302)
 
 @facebook.tokengetter
 def get_facebook_oauth_token():
     return session.get('oauth_token')
+

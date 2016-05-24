@@ -1,4 +1,8 @@
 
+from time import mktime
+import time
+from datetime import datetime
+
 from .. import db
 from ..models import User, MessengerUser, FBUser
 
@@ -87,10 +91,16 @@ class UserManager():
 
   def create_evey_user(self, user_data, uids):
     name = user_data["first_name"] + " " + user_data["last_name"]
+    now = datetime.now()
     user = User(name=name, first_name=user_data["first_name"],
                 last_name=user_data["last_name"],
                 fb_uid=uids["fb_uid"],
-                messenger_uid=uids["messenger_uid"])
+                messenger_uid=uids["messenger_uid"],
+                curr_session_id="",
+                did_onboarding=0,
+                last_msg_date=now,
+                date_created=now)
+
     db.session.add(user)
     db.session.commit()
     return user

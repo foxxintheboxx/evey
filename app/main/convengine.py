@@ -5,10 +5,12 @@ import requests
 import traceback
 
 
+from .. import db
 from ..models import User, Message, Event, Calendar, Conversation
 from config import WIT_API, WIT_APP_ID, WIT_SERVER
 from const import EXAMPLE_0, EXAMPLE_1, EXAMPLE_2, \
                    ABOUT_0, ABOUT_1, POSTBACK_TEMPLATE
+
 
 
 class WitEngine():
@@ -52,23 +54,40 @@ class WitEngine():
   def remove_space(self, query):
     return query.replace(' ', '%20')
 
-PLZ_SLOWDOWN = "I'm sorry %s, but I am wayy better at understanding \
-                one request at a time. So plz only text me 1 thing \
-                at a time"
+PLZ_SLOWDOWN = "I'm sorry %s, but currently I am wayy better \
+                at understanding one request at a time. So \
+                plz only text me 1 thing at a time"
+SIGNUP = 'Hey %s, signing up with facebook helps me connect \
+          you with your friends. Plz sign in \
+          https://eveyai.herokuapp.com'
+
+WAIT = 'OK %s, Thanks for registering. I\'m not totally developed\
+        yet -- Stay Tuned'
 
 class EveyEngine(WitEngine):
 
-  def __init__(self, first_name):
+  def __init__(self, first_name, user):
     super(self.__class__, self).__init__(WIT_APP_ID, WIT_SERVER)
     self.user_name = first_name
+    self.user = user
 
-  def understand(self, msgs, session_id):
+  def understand(self, msgs):
+    if self.user == None:
+      return [self.text_message(SIGNUP % self.user_name)]
     if len(msgs) > 1:
-      return self.text_message(PLZ_SLOWDOWN % self.user_name)
+      return [self.text_message(PLZ_SLOWDOWN % self.user_name)]
+    if self.user.did_onboarding == False:
+      self.user.did_onboarding = 1
+      self.save()
+      return self.onboarding()
+    else:
+      return [self.text_message(WAIT % self.user_name)]
     resp = self.converse(session_id, msg)
     while (msg["type"] not in ["msg", "stop"]):
       resp = self.convserse(session_id, None)
     return msg.get("msg")
+
+
 
   def onboarding(self):
     """
@@ -170,3 +189,6 @@ class EveyEngine(WitEngine):
       dict_["payload"] = payload
     return dict_
 
+  def save(self):
+    db.session.add(self.user)
+    db.session.commit()

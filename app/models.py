@@ -31,7 +31,6 @@ class User(db.Model):
   fb_uid = db.Column(db.String(64), index=True, unique=True)
   messenger_uid = db.Column(db.String(64), index=True, unique=True)
 
-
   first_name = db.Column(db.String(64), index=True)
   last_name = db.Column(db.String(64), index=True)
   conversations = db.relationship('Conversation',
@@ -45,7 +44,8 @@ class User(db.Model):
                              back_populates="user")
   curr_session_id = db.Column(db.String(64), index=True)
   last_msg_date = db.Column(db.Date, index=True)
-
+  did_onboarding = db.Column(db.Integer, index=True)
+  date_created = db.Column(db.Date, index=True)
 
   def __repr__(self):
       return '<User %r>' % (self.name)
