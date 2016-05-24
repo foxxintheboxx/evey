@@ -31,6 +31,12 @@ usr_manager = UserManager()
 def fetch_user_data(user_url, params):
   return requests.get(user_url, params).json()
 
+
+def post_response_msgs(msgs, sender):
+  for msg in msgs:
+    payload = {'recipient': {'id': sender}, 'message': msg}
+    r = requests.post(MESNGR_API_URL + TOKEN, json=payload)
+
 @main.route('/' + WEBHOOK, methods=['GET', 'POST'])
 def webhook():
   if request.method == 'POST':
@@ -38,33 +44,46 @@ def webhook():
       data = json.loads(request.data)
       print(data)
       for entry in data['entry']:
-
         sender = ""
         msgs = []
+        postbacks = []
         for message in entry['messaging']:
-          if 'message' in message:
+          if sender == "":
             sender = message['sender']['id'] # Sender ID
-            text = message['message']['text'] # Incoming Message Text
-            msgs.append(text)
-        user_details_params = {'fields':'first_name,last_name, \
-                                         profile_pic,timezone',
-                                        'access_token':TOKEN}
-        user_data = fetch_user_data(FB_GRAPH_URL + sender,
-                                    user_details_params)
-        user_data['messenger_uid'] = sender
+          if 'message' in message:
+            print("messsage")
+            msgs.append(message['message']['text'])
+          if 'postback' in message:
+            print("postback")
+            postbacks.append(message['postback']['payload'])
+
+      user_details_params = {'fields':'first_name,last_name,profile_pic',
+                                      'access_token':TOKEN}
+      user_data = fetch_user_data(FB_GRAPH_URL + sender,
+                                  user_details_params)
+      user_data['messenger_uid'] = sender
+
+      if len(postbacks):
         user = usr_manager.handle_messenger_user(user_data)
-#        evey = EveyEngine(user_data["first_name"], user)
+        evey = EveyEngine(user_data["first_name"], user)
+        resp_msgs = evey.handle_postback(postbacks)
+        post_response_msgs(resp_msgs, sender)
+
+      if len(msgs):
+        user = usr_manager.handle_messenger_user(user_data)
+        evey = EveyEngine(user_data["first_name"], user)
         print("msgs: %s" % str(msgs))
-#        resp_msgs = evey.understand(msgs)
-#        for msg in resp_msgs:
-        payload = {'recipient': {'id': sender}, 'message': {"text": "hello world"}}
-#        r = requests.post(MESNGR_API_URL + TOKEN, json=payload) # Lets send it
+        resp_msgs = evey.understand(msgs)
+        post_response_msgs(resp_msgs, sender)
     except Exception as e:
       print traceback.format_exc() # something went wrong
   elif request.method == 'GET': # For the initial verification
     if request.args.get('hub.verify_token') == WEBHOOK_TOKEN:
       return request.args.get('hub.challenge')
     return 'Wrong Verify Token'
+  return "hello world"
+
+
 
 
 @main.route('/')
@@ -107,7 +126,6 @@ def facebook_authorized(resp):
         payload = {'recipient': {'id': messenger_uid}, 'message':msg}
         r = requests.post(MESNGR_API_URL + TOKEN, json=payload)
     return render_template("index.html")
-    #return redirect("http://www.messenger.com/t/helloimjarvis", code=302)
 
 @facebook.tokengetter
 def get_facebook_oauth_token():
