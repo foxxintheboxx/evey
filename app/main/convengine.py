@@ -133,13 +133,13 @@ class EveyEngine(WitEngine):
   def about(self):
     titles = ["I'll chat with your ppl",
               "Tell you the right time for EVEYbody"]
-    subtitle = ["Evey chat personally the ppl invited & coordinate a free time",
+    subtitles = ["Evey chat personally the ppl invited & coordinate a free time",
                 "Evey will text you back with the details that work eveyone"]
     img_urls = [ABOUT_0, ABOUT_1]
     elements = []
     for i in range(2):
-        elements.append(self.make_generic_element(title[i],
-                                                  subtitles=subtitles[i],
+        elements.append(self.make_generic_element(title=titles[i],
+                                                  subtitle=subtitles[i],
                                                   img_url=img_urls[i]))
     return self.generic_attachment(elements)
 
