@@ -37,26 +37,28 @@ def webhook():
     try:
       data = json.loads(request.data)
       print(data)
-      msgs = []
-      sender = ""
       for entry in data['entry']:
+
+        sender = ""
+        msgs = []
         for message in entry['messaging']:
           if 'message' in message:
             sender = message['sender']['id'] # Sender ID
             text = message['message']['text'] # Incoming Message Text
             msgs.append(text)
-      user_details_params = {'fields':'first_name,last_name, \
-                                       profile_pic,timezone',
-                                      'access_token':TOKEN}
-      user_data = fetch_user_data(FB_GRAPH_URL + sender,
-                                  user_details_params)
-      user_data['messenger_uid'] = sender
-      user = usr_manager.handle_messenger_user(user_data)
-      evey = EveyEngine(user_data["first_name"], user)
-      resp_msgs = evey.understand(msgs)
-      for msg in resp_msgs:
-        payload = {'recipient': {'id': sender}, 'message': msg}
-        r = requests.post(MESNGR_API_URL + TOKEN, json=payload) # Lets send it
+        user_details_params = {'fields':'first_name,last_name, \
+                                         profile_pic,timezone',
+                                        'access_token':TOKEN}
+        user_data = fetch_user_data(FB_GRAPH_URL + sender,
+                                    user_details_params)
+        user_data['messenger_uid'] = sender
+        user = usr_manager.handle_messenger_user(user_data)
+        evey = EveyEngine(user_data["first_name"], user)
+        print("msgs: %s" % str(msgs))
+        resp_msgs = evey.understand(msgs)
+        for msg in resp_msgs:
+          payload = {'recipient': {'id': sender}, 'message': msg}
+          r = requests.post(MESNGR_API_URL + TOKEN, json=payload) # Lets send it
     except Exception as e:
       print traceback.format_exc() # something went wrong
   elif request.method == 'GET': # For the initial verification
