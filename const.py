@@ -7,6 +7,10 @@ EXAMPLE_2 = "https://raw.githubusercontent.com/foxxintheboxx/evey/master/app/sta
 ABOUT_0 = "https://www.google.com/logos/2012/haring-12-hp.png"
 ABOUT_1 = "https://s-media-cache-ak0.pinimg.com/736x/40/d4/7b/40d47b9ce63fae42b1ed196b11481bf6.jpg"
 
+ONBOARDING_IMG_0 = "https://raw.githubusercontent.com/foxxintheboxx/evey/master/app/static/onboarding_imgs/eventlink.png?token=AE7-yp9l5GadM4u2EOFbszkXYMdzODQUks5XUJKpwA%3D%3D"
+ONBOARDING_IMG_1 = "https://raw.githubusercontent.com/foxxintheboxx/evey/master/app/static/onboarding_imgs/coordinate.png?token=AE7-yg_eMyA8pggttSgr5GmkO3Y7iTacks5XUJLLwA%3D%3D"
+ONBOARDING_IMG_2 = "https://raw.githubusercontent.com/foxxintheboxx/evey/master/app/static/onboarding_imgs/gettime.png?token=AE7-ymDdf4vWtFf_VgI-IzN-Ggtk9iZTks5XUJJ1wA%3D%3D"
+
 CALENDAR_IMG = "https://raw.githubusercontent.com/foxxintheboxx/evey/master/app/static/onboarding_imgs/calendar_flat.png?token=AE7-ypni5exdUwg8vzql1r6zIn3B53Quks5XTSqBwA%3D%3D"
 #POSTBACK
 POSTBACK_TEMPLATE = "USER_PAYLOAD:%s"

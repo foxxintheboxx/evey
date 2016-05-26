@@ -7,7 +7,9 @@ from .. import db
 from ..models import User, Message, Event, Calendar, Conversation
 from config import WIT_API, WIT_APP_ID, WIT_SERVER
 from const import EXAMPLE_0, EXAMPLE_1, EXAMPLE_2, \
-                   ABOUT_0, ABOUT_1, POSTBACK_TEMPLATE
+                   ABOUT_0, ABOUT_1, POSTBACK_TEMPLATE, \
+                   ONBOARDING_IMG_0, ONBOARDING_IMG_1, \
+                   ONBOARDING_IMG_2
 
 
 class WitEngine(object):
@@ -63,17 +65,13 @@ WAIT = ("OK %s, Thanks for registering.")
 ONBOARDING_0 = ("Lets get started with how I work! exciting.")
 ONBOARDING_1 = ("To make an event text me a sentence starting with "
                 "make' or 'schedule'. Like these examples:")
-ONBOARDING_2 = ("OK %s, now that we have an event. I can help "
+ONBOARDING_2 = ("OK %s, after you make an event. I can help "
                 "schedule a time that works for both you and your ppl")
-ONBOARDING_3 = ("I'll send you a link associated with you event"
-                " and you can share w/ your ppl.")
-ONBOARDING_4 = ("I'll chat with your friends who accessed the event link "
-                 "and coordinate every1's schedules")
-ONBOARDING_5 = ("Then after a little magic, I'll tell you the perf time!")
-ONBOARDING_7 = ("Oh oops, I forgot something! if you want see your events,"
+ONBOARDING_3 = ("I'll send you a link associated with you event and you"
+                " can share w/ your ppl.")
+ONBOARDING_4 = ("Oh oops, I forgot something! if you want see your events,"
                 " just text me 'events', and if you need any help doing"
                 " anything just text me 'help'")
-ONBOARDING_7 = ("Cool, feel free to hmu whenever you want make a event")
 
 
 ONBOARDING_POSTBACK_1 = POSTBACK_TEMPLATE % "ONBOARD:1"
@@ -172,27 +170,11 @@ class EveyEngine(WitEngine):
                             self.make_button(type_="postback",
                                              title="Ok, lets try it",
                                              payload=TUTORIAL_POSTBACK_1)]
+        tutorial = self.button_attachment(text=tutorial_text,
+                                          buttons=tutorial_buttons)]
+        onboarding_imgs = self.onboarding_imgs()
         return [self.text_message(ONBOARDING_3),
-                self.text_message(ONBOARDING_4),
-                self.text_message(ONBOARDING_5),
-                self.button_attachment(text=tutorial_text,
-                                       buttons=tutorial_buttons)]
-
-    def tutorial_0(self):
-        return [self.text_message(ONBOARDING_6),
-                self.text_message(ONBOARDING_7)]
-
-    def tutorial_1(self):
-        evey_dialogue = ["ok now send me this fake event",
-                         "(talking to your ppl",
-                         ".",
-                         "..",
-                         "...30 min later)",
-                         ]
-
-        pretend_event = "make a dolores homie picnic"
-        return [self.text_message(evey_dialogue[0]),
-                self.text_message(pretend_event)]
+                onboarding_imgs, self.text_message(ONBOARDING_4)]]
 
 
     def usage_examples(self):
@@ -200,6 +182,19 @@ class EveyEngine(WitEngine):
                   "...or, like this ...",
                   "... or this"]
         img_urls = [EXAMPLE_0, EXAMPLE_1, EXAMPLE_2]
+        elements = []
+        for i in range(3):
+           elements.append(self.make_generic_element(titles[i],
+                                                    img_url=img_urls[i]))
+        return self.generic_attachment(elements)
+
+    def onboarding_attachments(self):
+        titles = ["event link to share with your friends",
+                  "stop worrying about choosing a time",
+                  "I'll let you know the best time"]
+        img_urls = [ONBOARDING_IMG_0,
+                    ONBOARDING_IMG_1,
+                    ONBOARDING_IMG_2]
         elements = []
         for i in range(3):
            elements.append(self.make_generic_element(titles[i],
