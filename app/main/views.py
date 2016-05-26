@@ -125,7 +125,8 @@ def facebook_authorized(resp):
       for msg in resp_msg:
         payload = {'recipient': {'id': messenger_uid}, 'message':msg}
         r = requests.post(MESNGR_API_URL + TOKEN, json=payload)
-    return render_template("index.html")
+    #return render_template("index.html")
+    return "Great You signed in"
 
 @facebook.tokengetter
 def get_facebook_oauth_token():

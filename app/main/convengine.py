@@ -9,7 +9,7 @@ from config import WIT_API, WIT_APP_ID, WIT_SERVER
 from const import EXAMPLE_0, EXAMPLE_1, EXAMPLE_2, \
                    ABOUT_0, ABOUT_1, POSTBACK_TEMPLATE, \
                    ONBOARDING_IMG_0, ONBOARDING_IMG_1, \
-                   ONBOARDING_IMG_2
+                   ONBOARDING_IMG_2, CALENDAR_IMG
 
 
 class WitEngine(object):
@@ -46,7 +46,7 @@ class WitEngine(object):
 
 
     def __add_params__(self, params, query_url):
-        for key in params.key():
+        for key in params.keys():
             query_url += "&%s=%s" % (key, self.remove_space(str(params[key])))
         return query_url
 
@@ -70,15 +70,27 @@ ONBOARDING_2 = ("OK %s, after you make an event. I can help "
 ONBOARDING_3 = ("I'll send you a link associated with you event and you"
                 " can share w/ your ppl.")
 ONBOARDING_4 = ("Oh oops, I forgot something! if you want see your events,"
-                " just text me 'events', and if you need any help doing"
-                " anything just text me 'help'")
+                " just text me 'events', and if you need any instructions"
+                " again just text me 'help'")
 
+HELP_MSG_0 = ("Hi %s, \n" + ONBOARDING_1)
+HELP_MSG_1 = ("to see your events just text me 'events' or 'e'")
+
+NON_EVENT_RESPONSE = ("I'm sorry %s, I didnt understand your msg."
+                      " if you're trying to make an event, plz"
+                      " start your sentence with 'make' or 'schedule'"
+                      " otherwise text 'events' to see your events,"
+                      " and 'help' for more info")
 
 ONBOARDING_POSTBACK_1 = POSTBACK_TEMPLATE % "ONBOARD:1"
 ONBOARDING_POSTBACK_2 = POSTBACK_TEMPLATE % "ONBOARD:2"
 TUTORIAL_POSTBACK_0 = POSTBACK_TEMPLATE % "TUTORIAL:0"
 TUTORIAL_POSTBACK_1 = POSTBACK_TEMPLATE % "TUTORIAL:1"
 
+MSG_BODY = "message_body"
+MSG_SUBJ = "message_subject"
+LOCAL = "local_search_query"
+DATE = "datetime"
 
 class EveyEngine(WitEngine):
 
@@ -98,7 +110,6 @@ class EveyEngine(WitEngine):
             return [self.text_message(SIGNUP % self.user_name)]
         if len(msgs) > 1:
             return [self.text_message(PLZ_SLOWDOWN % self.user_name)]
-        print(self.user.did_onboarding)
         if self.user.did_onboarding == 0:
             return self.onboarding_0()
         elif msgs[0] == "site visit":
@@ -118,13 +129,65 @@ class EveyEngine(WitEngine):
             msgs = [self.text_message(msg0)]
             msgs.extend(self.onboarding_1())
             return msgs
+        msg = msgs[0]
+        if msg == "e" or msg == "events":
+            text = ("hi %s, gimme a second to fetch your events for this"
+                   " week")
+            return [self.text_message(text % self.user.user_name)]
+        if msg == "h" or msg == "help":
+            return [self.text_message(HELP_MSG_0),
+                    self.usage_examples(),
+                    self.text_message(HELP_MSG_1)]
+        msg_data = self.message(msgs[0])
+        return self.determine_response(msg_data)
+
+    def determine_response(self, msg_data):
+        entities = msg_data["entities"]
+        print(entities)
+        if "event" not in entities:
+            return [self.text_message(NON_EVENT_RESPONSE)]
+        if (entities.get("message_body") is None and
+            entities.get("message_subject") is None):
+            return [self.text_message("What do you wanna call the event?")]
+        return self.event_creation(entities)
+
+    def event_creation(self, entities):
+        title = entities.get(MSG_SUBJ)
+        if title is None:
+            title = entities.get(MSG_BODY)
+        title = title[0]["value"]
+        buttons_msg0 = [self.make_button("postback",
+                                         "share",
+                                         "SHARE")]
+        buttons_msg1 = [self.make_button("postback",
+                                         "cancel",
+                                         "CANCEL")]
+        subtitle = ""
+        if LOCAL in entities:
+            subtitle = "Where: %s" % entities[LOCAL][0]["value"]
         else:
-            return [self.text_message(WAIT % self.user_name)]
-        session_id = self.user.session_id
-        resp = self.converse(session_id, msgs[0])
-        while (resp["type"] not in ["msg", "stop"]):
-            resp = self.convserse(session_id, None)
-        return [resp.get("msg")] if (resp.get("msg") is not None) else []
+            buttons_msg1.append(self.make_button("postback",
+                                                 "add location",
+                                                 "ADD_LOCATION"))
+        date_exists = False
+        if DATE in entities:
+            date_exists = True
+            subtitle += " When: %s" % entities[DATE][0]["value"]
+            buttons_msg1.append(self.make_button("postback",
+                                                 "change date",
+                                                  "CHANGE_DATE"))
+
+        msg_elements = [self.make_generic_element(title=title,
+                                                 subtitle=subtitle,
+                                                 img_url=CALENDAR_IMG,
+                                                 buttons=buttons_msg0),
+                        self.make_generic_element("options",
+                                                  buttons=buttons_msg1)]
+        evey_resp = [self.generic_attachment(msg_elements)]
+        if date_exists is False:
+            text = "What times are you free for %s" % title
+            evey_resp.append(self.text_message(text))
+        return evey_resp
 
     def handle_postback(self, keys):
         if len(keys) > 1:
@@ -162,6 +225,8 @@ class EveyEngine(WitEngine):
 
 
     def onboarding_2(self):
+        self.user.did_onboarding = 3
+        self.save()
 
         tutorial_text = "Do you want to try making an example event?"
         tutorial_buttons = [self.make_button(type_="postback",
