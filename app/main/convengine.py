@@ -87,9 +87,9 @@ class EveyEngine(WitEngine):
         self.user_name = first_name
         self.user = user
         self.postback_func = {ONBOARDING_POSTBACK_1: self.onboarding_1,
-                              ONBOARDING_POSTBACK_2: self.onboarding_2,
-                              TUTORIAL_POSTBACK_0: self.tutorial_0,
-                              TUTORIAL_POSTBACK_1: self.tutorial_1}
+                              ONBOARDING_POSTBACK_2: self.onboarding_2}
+
+
 
     def understand(self, msgs):
         if len(msgs) == 0:
@@ -171,10 +171,10 @@ class EveyEngine(WitEngine):
                                              title="Ok, lets try it",
                                              payload=TUTORIAL_POSTBACK_1)]
         tutorial = self.button_attachment(text=tutorial_text,
-                                          buttons=tutorial_buttons)]
-        onboarding_imgs = self.onboarding_imgs()
+                                          buttons=tutorial_buttons)
+        onboarding_imgs = self.onboarding_attachments()
         return [self.text_message(ONBOARDING_3),
-                onboarding_imgs, self.text_message(ONBOARDING_4)]]
+                onboarding_imgs, self.text_message(ONBOARDING_4)]
 
 
     def usage_examples(self):
