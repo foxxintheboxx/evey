@@ -55,14 +55,14 @@ class WitEngine(object):
 PLZ_SLOWDOWN = ("I'm sorry %s, but currently I am wayy better "
                 "at understanding one request at a time. So "
                 "plz only text me 1 thing at a time")
-SIGNUP = ("Hey %s, signing up with facebook helps me connect you "
-         "with your friends. Plz link fb at https://eveyai.herokuapp.com")
+SIGNUP = ("Hey %s, my name is Evey. I help ppl make, schedule and manage"
+          " their events. First off can you login with facebook. It helps"
+          " me manage you and your friend's events."
+          "Plz do this here: https://eveyai.herokuapp.com")
 WAIT = ("OK %s, Thanks for registering.")
-ONBOARDING_0 = ("Lets get started with how I work! (wow im excited).")
-ONBOARDING_1 = ("Part 1, make an event.")
-ONBOARDING_2 = ("To make an event with me is super easy!")
-ONBOARDING_3 = ("text me a sentence starting with 'make' or 'schedule'."
-               "checkout these examples")
+ONBOARDING_0 = ("Lets get started with how I work! exciting.")
+ONBOARDING_1 = ("To make an event text me a sentence starting with"
+                "make' or 'schedule'. like these examples:")
 ONBOARDING_4 = ("OK %s, now that we have an event. Can I tell you "
                 "about what my real specialty is?")
 ONBOARDING_5 = ("scheduling a time that works for you and your ppl to meet!")
@@ -158,11 +158,10 @@ class EveyEngine(WitEngine):
                                                      title="Ok let's go",
                                                      payload=payloads[0])]
 
-        part_2_msg = self.button_attachment(ONBOARDING_4, onboarding_part2_button)
+        part_2_msg = self.button_attachment(ONBOARDING_4 % self.user_name,
+                                            onboarding_part2_button)
         usage_msg = self.usage_examples()
         return [self.text_message(ONBOARDING_1),
-                self.text_message(ONBOARDING_2),
-                self.text_message(ONBOARDING_3),
                 usage_msg, part_2_msg]
 
 
