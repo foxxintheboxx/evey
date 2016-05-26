@@ -56,26 +56,24 @@ PLZ_SLOWDOWN = ("I'm sorry %s, but currently I am wayy better "
                 "at understanding one request at a time. So "
                 "plz only text me 1 thing at a time")
 SIGNUP = ("Hey %s, my name is Evey. I help ppl make, schedule and manage"
-          " their events. First off can you login with facebook. It helps"
+          " their events! First off can you login with facebook? It helps"
           " me manage you and your friend's events."
           "Plz do this here: https://eveyai.herokuapp.com")
 WAIT = ("OK %s, Thanks for registering.")
 ONBOARDING_0 = ("Lets get started with how I work! exciting.")
-ONBOARDING_1 = ("To make an event text me a sentence starting with"
-                "make' or 'schedule'. like these examples:")
-ONBOARDING_4 = ("OK %s, now that we have an event. Can I tell you "
-                "about what my real specialty is?")
-ONBOARDING_5 = ("scheduling a time that works for you and your ppl to meet!")
-ONBOARDING_6 = ("After youve made the event, I'll return you a link to your "
-                "event you can share w/ your ppl.")
-ONBOARDING_7 = ("If you didn't specify an event time, I'll chat"
-                " with everybody who accesses the link and figure out"
-                "their schedules")
-ONBOARDING_8 = ("Then voila, I will return u the right time for everybody")
-ONBOARDING_10 = ("Oh oops, I forgot something! if you want see your events,"
+ONBOARDING_1 = ("To make an event text me a sentence starting with "
+                "make' or 'schedule'. Like these examples:")
+ONBOARDING_2 = ("OK %s, now that we have an event. I can help "
+                "schedule a time that works for both you and your ppl")
+ONBOARDING_3 = ("I'll send you a link associated with you event"
+                " and you can share w/ your ppl.")
+ONBOARDING_4 = ("I'll chat with your friends who accessed the event link "
+                 "and coordinate every1's schedules")
+ONBOARDING_5 = ("Then after a little magic, I'll tell you the perf time!")
+ONBOARDING_7 = ("Oh oops, I forgot something! if you want see your events,"
                 " just text me 'events', and if you need any help doing"
                 " anything just text me 'help'")
-ONBOARDING_9 = ("Cool, feel free to hmu whenever you want make a event")
+ONBOARDING_7 = ("Cool, feel free to hmu whenever you want make a event")
 
 
 ONBOARDING_POSTBACK_1 = POSTBACK_TEMPLATE % "ONBOARD:1"
@@ -155,10 +153,10 @@ class EveyEngine(WitEngine):
         usage_msg = self.usage_examples()
         payloads = [ONBOARDING_POSTBACK_2]
         onboarding_part2_button  = [self.make_button(type_="postback",
-                                                     title="Ok let's go",
+                                                     title="How?",
                                                      payload=payloads[0])]
 
-        part_2_msg = self.button_attachment(ONBOARDING_4 % self.user_name,
+        part_2_msg = self.button_attachment(ONBOARDING_2 % self.user_name,
                                             onboarding_part2_button)
         usage_msg = self.usage_examples()
         return [self.text_message(ONBOARDING_1),
@@ -174,16 +172,15 @@ class EveyEngine(WitEngine):
                             self.make_button(type_="postback",
                                              title="Ok, lets try it",
                                              payload=TUTORIAL_POSTBACK_1)]
-        return [self.text_message(ONBOARDING_5),
-                self.text_message(ONBOARDING_6),
-                self.text_message(ONBOARDING_7),
-                self.text_message(ONBOARDING_8),
+        return [self.text_message(ONBOARDING_3),
+                self.text_message(ONBOARDING_4),
+                self.text_message(ONBOARDING_5),
                 self.button_attachment(text=tutorial_text,
                                        buttons=tutorial_buttons)]
 
     def tutorial_0(self):
-        return [self.text_message(ONBOARDING_9),
-                self.text_message(ONBOARDING_10)]
+        return [self.text_message(ONBOARDING_6),
+                self.text_message(ONBOARDING_7)]
 
     def tutorial_1(self):
         evey_dialogue = ["ok now send me this fake event",
