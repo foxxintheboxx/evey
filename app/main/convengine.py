@@ -130,11 +130,11 @@ class EveyEngine(WitEngine):
             msgs.extend(self.onboarding_1())
             return msgs
         msg = msgs[0]
-        if msg == "e" or msg == "events":
+        if msg.lower() == "e" or msg.lower() == "events":
             text = ("hi %s, gimme a second to fetch your events for this"
                    " week")
             return [self.text_message(text % self.user.user_name)]
-        if msg == "h" or msg == "help":
+        if msg.lower() == "h" or msg.lower() == "help":
             return [self.text_message(HELP_MSG_0),
                     self.usage_examples(),
                     self.text_message(HELP_MSG_1)]

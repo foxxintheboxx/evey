@@ -7,6 +7,12 @@ else:
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
 SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
 SQLALCHEMY_TRACK_MODIFICATIONS = False
+OAUTH_CREDENTIALS = {
+    'facebook': {
+              'id': '1719347811640199',
+              'secret': '04d030e82620967b0109f9fec8a36592'
+     }
+}
 
 SECRET_KEY = 'development key'
 # messenger access toke

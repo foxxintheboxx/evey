@@ -9,8 +9,11 @@ import json
 import traceback
 
 from ..models import User, Conversation, Message, MessengerUser
-from .. import db
+from .. import db, lm
 from usermanager import UserManager
+from flask.ext.login import LoginManager, UserMixin, login_user, logout_user,\
+       current_user
+from ..oauth import OAuthSignIn
 
 
 main.secret_key = SECRET_KEY
@@ -36,6 +39,7 @@ def post_response_msgs(msgs, sender):
   for msg in msgs:
     payload = {'recipient': {'id': sender}, 'message': msg}
     r = requests.post(MESNGR_API_URL + TOKEN, json=payload)
+
 
 @main.route('/' + WEBHOOK, methods=['GET', 'POST'])
 def webhook():
@@ -84,15 +88,39 @@ def webhook():
   return "hello world"
 
 
+@lm.user_loader
+def load_user(id):
+  return User.query.get(int(id))
+
+@main.route('/authorize/facebook')
+def oauth_authorize():
+
+  if not current_user.is_anonymous:
+    return redirect(url_for('index'))
+  oauth = OAuthSignIn.get_provider('facebook')
+  return oauth.authorize()
+
+@main.route('/callback/facebook')
+def oauth_callback():
+  if not current_user.is_anonymous:
+    return redirect(url_for('index'))
+  oauth = OAuthSignIn.get_provider(provider)
+  user_data = oauth.callback()
+  if user_data.get("fb_uid") is None:
+    return "access Denied"
+  user = usr_manager.handle_fb_user(user_data)
+  if user != None:
+    messenger_uid = user.messenger_uid
+    resp_msg = EveyEngine(user.first_name, user).understand(["site visit"])
+    for msg in resp_msg:
+      payload = {'recipient': {'id': messenger_uid}, 'message':msg}
+      r = requests.post(MESNGR_API_URL + TOKEN, json=payload)
+  return render_template("index.html")
 
 
 @main.route('/')
 def index():
-    #s = facebook.authorize(callback=url_for('main.facebook_authorized',
-    #    next=request.args.get('next') or request.referrer or None,
-    #    _external=True))
-    return "hi"
-
+    return redirect('/authorize/facebook')
 
 @main.route('/login')
 def login():
