@@ -1,5 +1,4 @@
 from flask import redirect, url_for, session, request, render_template
-from flask_oauth import OAuth
 from . import main
 from .convengine import EveyEngine
 from config import SECRET_KEY, TOKEN, WEBHOOK, WEBHOOK_TOKEN
@@ -17,18 +16,6 @@ from ..oauth import OAuthSignIn
 
 
 main.secret_key = SECRET_KEY
-oauth = OAuth()
-FACEBOOK_APP_ID = '1719347811640199'
-FACEBOOK_APP_SECRET = '04d030e82620967b0109f9fec8a36592'
-facebook = oauth.remote_app('facebook',
-    base_url='https://graph.facebook.com/',
-    request_token_url=None,
-    access_token_url='/oauth/access_token',
-    authorize_url='https://www.facebook.com/dialog/oauth',
-    consumer_key='1719347811640199',
-    consumer_secret='04d030e82620967b0109f9fec8a36592',
-    request_token_params={'scope': 'public_profile' }
-)
 usr_manager = UserManager()
 
 def fetch_user_data(user_url, params):
@@ -94,7 +81,6 @@ def load_user(id):
 
 @main.route('/authorize/facebook')
 def oauth_authorize():
-
   if not current_user.is_anonymous:
     return redirect(url_for('index'))
   oauth = OAuthSignIn.get_provider('facebook')
@@ -129,39 +115,4 @@ def login():
         _external=True))
     print(s)
     return s
-
-@main.route('/login/authorized')
-@facebook.authorized_handler
-def facebook_authorized(resp):
-    if resp is None:
-      return 'Access denied: reason=%s error=%s' % (
-            request.args['error_reason'],
-            request.args['error_description'])
-    session['oauth_token'] = (resp['access_token'], '')
-    print(resp)
-    me = facebook.get('/me')
-    print(me.data)
-    user_details_params = {'fields':'picture',
-                           'access_token':resp['access_token']}
-
-    r = fetch_user_data(FB_GRAPH_URL + me.data['id'], user_details_params)
-    me.data['profile_pic'] = r['picture']['data']['url']
-    print(me.data)
-    me.data['fb_uid'] = me.data['id']
-    me.data['first_name'] = me.data['name'].split()[0]
-    me.data['last_name'] = me.data['name'].split()[1]
-    user = usr_manager.handle_fb_user(me.data)
-    print(user)
-    if user != None:
-      messenger_uid = user.messenger_uid
-      resp_msg = EveyEngine(user.first_name, user).understand(["site visit"])
-      for msg in resp_msg:
-        payload = {'recipient': {'id': messenger_uid}, 'message':msg}
-        r = requests.post(MESNGR_API_URL + TOKEN, json=payload)
-    #return render_template("index.html")
-    return "Great You signed in"
-
-@facebook.tokengetter
-def get_facebook_oauth_token():
-    return session.get('oauth_token')
 
