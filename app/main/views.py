@@ -88,14 +88,19 @@ def webhook():
 
 @main.route('/')
 def index():
-    return redirect(url_for('main.login'))
+    #s = facebook.authorize(callback=url_for('main.facebook_authorized',
+    #    next=request.args.get('next') or request.referrer or None,
+    #    _external=True))
+    return "hi"
 
 
 @main.route('/login')
 def login():
-    return facebook.authorize(callback=url_for('main.facebook_authorized',
+    s = facebook.authorize(callback=url_for('main.facebook_authorized',
         next=request.args.get('next') or request.referrer or None,
         _external=True))
+    print(s)
+    return s
 
 @main.route('/login/authorized')
 @facebook.authorized_handler
