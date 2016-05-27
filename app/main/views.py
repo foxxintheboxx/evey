@@ -19,7 +19,7 @@ main.secret_key = SECRET_KEY
 usr_manager = UserManager()
 
 def fetch_user_data(user_url, params):
-  return requests.get(user_url, params).json()
+  return requests.get(user_url, params=params).json()
 
 
 def post_response_msgs(msgs, sender):
