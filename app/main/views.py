@@ -104,7 +104,7 @@ def oauth_authorize():
 def oauth_callback():
   if not current_user.is_anonymous:
     return redirect(url_for('index'))
-  oauth = OAuthSignIn.get_provider(provider)
+  oauth = OAuthSignIn.get_provider("facebook")
   user_data = oauth.callback()
   if user_data.get("fb_uid") is None:
     return "access Denied"
