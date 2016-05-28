@@ -30,6 +30,10 @@ class User(db.Model):
   name = db.Column(db.String(120), index=True)
   fb_uid = db.Column(db.String(64), index=True, unique=True)
   messenger_uid = db.Column(db.String(64), index=True, unique=True)
+  username = db.Column(, db.String(20), unique=True , index=True)
+  password = db.Column(db.String(10), index=True)
+  date_created = db.Column(db.Date, index=True)
+  did_onboarding = db.Column(db.Integer, index=True)
 
   first_name = db.Column(db.String(64), index=True)
   last_name = db.Column(db.String(64), index=True)
@@ -42,10 +46,25 @@ class User(db.Model):
   calendar = db.relationship("Calendar",
                              uselist=False,
                              back_populates="user")
-  curr_session_id = db.Column(db.String(64), index=True)
-  last_msg_date = db.Column(db.Date, index=True)
-  did_onboarding = db.Column(db.Integer, index=True)
-  date_created = db.Column(db.Date, index=True)
+
+
+  def __init__(self, username, password, messenger_uid):
+    self.username = username
+    self.password = password
+    self.registered_on = datetime.utcnow()
+    self.messenger_uid = messenger_uid
+
+  def is_authenticated(self):
+    return True
+
+  def is_active(self):
+    return True
+
+  def is_anonymous(self):
+    return False
+
+  def get_id(self):
+    return unicode(self.id)
 
   def __repr__(self):
       return '<User %r>' % (self.name)

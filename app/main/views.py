@@ -1,4 +1,4 @@
-from flask import redirect, url_for, session, request, render_template
+from flask import redirect, url_for, flash, session, request, render_template, g
 from . import main
 from .convengine import EveyEngine
 from config import SECRET_KEY, TOKEN, WEBHOOK, WEBHOOK_TOKEN
@@ -10,8 +10,8 @@ import traceback
 from ..models import User, Conversation, Message, MessengerUser
 from .. import db, lm
 from usermanager import UserManager
-from flask.ext.login import LoginManager, UserMixin, login_user, logout_user,\
-       current_user
+from flask.ext.login import UserMixin, login_user, logout_user, current_user, \
+                            login_required
 from ..oauth import OAuthSignIn
 
 
@@ -74,7 +74,6 @@ def webhook():
     return 'Wrong Verify Token'
   return "hello world"
 
-
 @lm.user_loader
 def load_user(id):
   return User.query.get(int(id))
@@ -105,14 +104,32 @@ def oauth_callback():
 
 
 @main.route('/')
+@login_required
 def index():
-    return redirect('/authorize/facebook')
+    return render_template("index.html")
 
-@main.route('/login')
+@app.route('/register' , methods=['GET','POST'])
+def register():
+    if request.method == 'GET':
+        return render_template('register.html')
+    user = User(request.form['username'] , request.form['password'],request.form['email'])
+    db.session.add(user)
+    db.session.commit()
+    flash('User successfully registered')
+    return redirect(url_for('login'))
+
+@main.route('/login',methods=['GET','POST'])
 def login():
-    s = facebook.authorize(callback=url_for('main.facebook_authorized',
-        next=request.args.get('next') or request.referrer or None,
-        _external=True))
-    print(s)
-    return s
+    if request.method == 'GET':
+        return render_template('login.html')
+    username = request.form['username']
+    password = request.form['password']
+    registered_user = User.query.filter_by(username=username,password=password).first()
+    if registered_user is None:
+        flash('Username or Password is invalid' , 'error')
+        return redirect(url_for('login'))
+    login_user(registered_user, remember = True)
+    flash('Logged in successfully')
+    return redirect(request.args.get('next') or url_for('index'))
+
 
