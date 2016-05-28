@@ -15,7 +15,7 @@ def create_app():
   db.app = app
   lm.init_app(app)
   lm.app = app
-  lm.login_view = 'login'
+  lm.login_view = 'main.login'
 
   from .main import main as main_blueprint
   app.register_blueprint(main_blueprint)

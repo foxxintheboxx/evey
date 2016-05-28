@@ -1,6 +1,8 @@
 
 from . import db
 from sqlalchemy.ext.declarative import declarative_base
+from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
 
 Base = declarative_base()
 
@@ -30,8 +32,8 @@ class User(db.Model):
   name = db.Column(db.String(120), index=True)
   fb_uid = db.Column(db.String(64), index=True, unique=True)
   messenger_uid = db.Column(db.String(64), index=True, unique=True)
-  username = db.Column(, db.String(20), unique=True , index=True)
-  password = db.Column(db.String(10), index=True)
+  username = db.Column(db.String(20), unique=True , index=True)
+  password_hash = db.Column(db.String(128), index=True)
   date_created = db.Column(db.Date, index=True)
   did_onboarding = db.Column(db.Integer, index=True)
 
@@ -65,6 +67,17 @@ class User(db.Model):
 
   def get_id(self):
     return unicode(self.id)
+
+  @property
+  def password(self):
+      raise AttributeError('password is not a readable attribute')
+
+  @password.setter
+  def password(self, password):
+      self.password_hash = generate_password_hash(password)
+
+  def verify_password(self, password):
+      return check_password_hash(self.password_hash, password)
 
   def __repr__(self):
       return '<User %r>' % (self.name)

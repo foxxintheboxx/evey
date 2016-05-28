@@ -81,14 +81,14 @@ def load_user(id):
 @main.route('/authorize/facebook')
 def oauth_authorize():
   if not current_user.is_anonymous:
-    return redirect(url_for('index'))
+    return redirect(url_for('main.index'))
   oauth = OAuthSignIn.get_provider('facebook')
   return oauth.authorize()
 
 @main.route('/callback/facebook')
 def oauth_callback():
   if not current_user.is_anonymous:
-    return redirect(url_for('index'))
+    return redirect(url_for('main.index'))
   oauth = OAuthSignIn.get_provider("facebook")
   user_data = oauth.callback()
   if user_data.get("fb_uid") is None:
@@ -108,28 +108,36 @@ def oauth_callback():
 def index():
     return render_template("index.html")
 
-@app.route('/register' , methods=['GET','POST'])
+@main.route('/register' , methods=['GET','POST'])
 def register():
     if request.method == 'GET':
         return render_template('register.html')
-    user = User(request.form['username'] , request.form['password'],request.form['email'])
+    user = User(username=request.form['username'] , 
+                password=request.form['password'],
+                messenger_uid="909043528309")
+    print(user)
     db.session.add(user)
     db.session.commit()
-    flash('User successfully registered')
-    return redirect(url_for('login'))
+    print('User successfully registered')
+    return redirect(url_for('main.login'))
 
 @main.route('/login',methods=['GET','POST'])
 def login():
     if request.method == 'GET':
-        return render_template('login.html')
+        print('hello')
+        x =  render_template('login.html')
+        return x
+    print(request.form)
     username = request.form['username']
     password = request.form['password']
-    registered_user = User.query.filter_by(username=username,password=password).first()
-    if registered_user is None:
+    registered_user = User.query.filter_by(username=username).first()
+    print(registered_user)
+    if (registered_user is None or
+        not registered_user.verify_password(password)):
         flash('Username or Password is invalid' , 'error')
-        return redirect(url_for('login'))
+        return redirect(url_for('main.login'))
     login_user(registered_user, remember = True)
     flash('Logged in successfully')
-    return redirect(request.args.get('next') or url_for('index'))
+    return redirect(request.args.get('next') or url_for('main.index'))
 
 
