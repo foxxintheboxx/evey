@@ -2,7 +2,7 @@ from flask import redirect, url_for, flash, session, request, render_template, g
 from . import main
 from .convengine import EveyEngine
 from config import SECRET_KEY, TOKEN, WEBHOOK, WEBHOOK_TOKEN
-from ..utils import FB_GRAPH_URL, MESNGR_API_URL
+from ..utils import FB_GRAPH_URL, MESNGR_API_URL, fetch_user_data
 import requests
 import json
 import traceback
@@ -17,9 +17,6 @@ from ..oauth import OAuthSignIn
 
 main.secret_key = SECRET_KEY
 usr_manager = UserManager()
-
-def fetch_user_data(user_url, params):
-  return requests.get(user_url, params=params).json()
 
 
 def post_response_msgs(msgs, sender):
@@ -84,7 +81,9 @@ def load_user(id):
 @login_required
 def index():
     if current_user != None:
+      print(current_user)
       messenger_uid = current_user.messenger_uid
+
       resp_msg = EveyEngine(current_user.first_name, user,
                             messenger_uid).understand(["site visit"])
       for msg in resp_msg:

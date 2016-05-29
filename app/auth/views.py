@@ -1,6 +1,8 @@
 from flask import render_template, redirect, request, url_for, flash
 from flask.ext.login import login_user, logout_user, login_required, \
     current_user
+from ..utils import FB_GRAPH_URL, MESNGR_API_URL, fetch_user_data
+from config import TOKEN
 from . import auth
 from .. import db
 from ..models import User
@@ -14,6 +16,12 @@ def register(messenger_uid):
                 password=request.form['password'],
                 messenger_uid=messenger_uid)
     print(user)
+    user_details_params = {'fields':'first_name,last_name,profile_pic',
+                           'access_token':TOKEN}
+    user_data = fetch_user_data(FB_GRAPH_URL + sender,
+                                user_details_params)
+    user.first_name = user_data["first_name"]
+    user.last_name = user_data["last_name"]
     db.session.add(user)
     db.session.commit()
     print('User successfully registered')
