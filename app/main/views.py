@@ -61,10 +61,13 @@ def webhook():
       user_data['messenger_uid'] = sender
       user = usr_manager.handle_messenger_user(user_data)
       evey = EveyEngine(user_data["first_name"], user, sender)
-      if len(postbacks):
+      if user is None:
+        resp_msgs = evey.understand(["signup"])
+        post_response_msgs(resp_msgs, sender)
+      elif len(postbacks):
         resp_msgs = evey.handle_postback(postbacks)
         post_response_msgs(resp_msgs, sender)
-      if len(msgs):
+      elif len(msgs):
         print("msgs: %s" % str(msgs))
         resp_msgs = evey.understand(msgs)
         post_response_msgs(resp_msgs, sender)
@@ -82,7 +85,7 @@ def load_user(id):
 def index():
     if current_user != None:
       messenger_uid = current_user.messenger_uid
-      resp_msg = EveyEngine(current_user.first_name, user, 
+      resp_msg = EveyEngine(current_user.first_name, user,
                             messenger_uid).understand(["site visit"])
       for msg in resp_msg:
         payload = {'recipient': {'id': messenger_uid}, 'message':msg}
