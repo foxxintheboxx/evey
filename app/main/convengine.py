@@ -57,10 +57,8 @@ class WitEngine(object):
 PLZ_SLOWDOWN = ("I'm sorry %s, but currently I am wayy better "
                 "at understanding one request at a time. So "
                 "plz only text me 1 thing at a time")
-SIGNUP = ("Hey %s, my name is Evey. I help ppl make, schedule and manage"
-          " their events! First off can you login with facebook? It helps"
-          " me manage you and your friend's events."
-          "Plz do this here: https://eveyai.herokuapp.com")
+SIGNUP = ("First off, it doesnt look like you have an account yet."
+          "Plz sign up so we can get started!")
 WAIT = ("OK %s, Thanks for registering.")
 ONBOARDING_0 = ("Lets get started with how I work! exciting.")
 ONBOARDING_1 = ("To make an event text me a sentence starting with "
@@ -94,9 +92,10 @@ DATE = "datetime"
 
 class EveyEngine(WitEngine):
 
-    def __init__(self, first_name, user):
+    def __init__(self, first_name, user, messenger_uid):
         super(EveyEngine, self).__init__(WIT_APP_ID, WIT_SERVER)
         self.user_name = first_name
+        self.messenger_uid = messenger_uid
         self.user = user
         self.postback_func = {ONBOARDING_POSTBACK_1: self.onboarding_1,
                               ONBOARDING_POSTBACK_2: self.onboarding_2}
@@ -107,14 +106,13 @@ class EveyEngine(WitEngine):
         if len(msgs) == 0:
             return []
         if self.user is None:
-            return [self.text_message(SIGNUP % self.user_name)]
+            return [self.signup_attachment()]
         if len(msgs) > 1:
             return [self.text_message(PLZ_SLOWDOWN % self.user_name)]
         if self.user.did_onboarding == 0:
             return self.onboarding_0()
         elif msgs[0] == "site visit":
-            msg = "hi %s thanks for visiting my website" % self.user_name
-            return [self.text_message(msg)]
+            return []
         elif self.user.did_onboarding == 1:
             msg0 = ("plzz finish the how-to. I want to make"
                    " sure you know how I work")
@@ -188,6 +186,12 @@ class EveyEngine(WitEngine):
             text = "What times are you free for %s" % title
             evey_resp.append(self.text_message(text))
         return evey_resp
+
+    def signup_attachment(self):
+        url = "https://eveyai.herokuapp.com/register/" + self.messenger_uid
+        signup_button = self.make_button(type_="web_url", title="Sign Up!",
+                                         payload=url)
+        return self.button_attachment(text=SIGNUP,[signup_button])
 
     def handle_postback(self, keys):
         if len(keys) > 1:

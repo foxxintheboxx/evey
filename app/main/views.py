@@ -59,16 +59,12 @@ def webhook():
       user_data = fetch_user_data(FB_GRAPH_URL + sender,
                                   user_details_params)
       user_data['messenger_uid'] = sender
-
+      user = usr_manager.handle_messenger_user(user_data)
+      evey = EveyEngine(user_data["first_name"], user, sender)
       if len(postbacks):
-        user = usr_manager.handle_messenger_user(user_data)
-        evey = EveyEngine(user_data["first_name"], user)
         resp_msgs = evey.handle_postback(postbacks)
         post_response_msgs(resp_msgs, sender)
-
       if len(msgs):
-        user = usr_manager.handle_messenger_user(user_data)
-        evey = EveyEngine(user_data["first_name"], user)
         print("msgs: %s" % str(msgs))
         resp_msgs = evey.understand(msgs)
         post_response_msgs(resp_msgs, sender)
@@ -81,27 +77,15 @@ def load_user(id):
   return User.query.get(int(id))
 
 
-
-# @main.route('/callback/facebook')
-# def oauth_callback():
-#   if not current_user.is_anonymous:
-#     return redirect(url_for('main.index'))
-#   oauth = OAuthSignIn.get_provider("facebook")
-#   user_data = oauth.callback()
-#   if user_data.get("fb_uid") is None:
-#     return "access Denied"
-#   user = usr_manager.handle_fb_user(user_data)
-#   if user != None:
-#     messenger_uid = user.messenger_uid
-#     resp_msg = EveyEngine(user.first_name, user).understand(["site visit"])
-#     for msg in resp_msg:
-#       payload = {'recipient': {'id': messenger_uid}, 'message':msg}
-#       r = requests.post(MESNGR_API_URL + TOKEN, json=payload)
-#   return render_template("index.html")
-
-
 @main.route('/')
 @login_required
 def index():
+    if current_user != None:
+      messenger_uid = current_user.messenger_uid
+      resp_msg = EveyEngine(current_user.first_name, user, 
+                            messenger_uid).understand(["site visit"])
+      for msg in resp_msg:
+        payload = {'recipient': {'id': messenger_uid}, 'message':msg}
+        r = requests.post(MESNGR_API_URL + TOKEN, json=payload)
     return render_template("index.html")
 
