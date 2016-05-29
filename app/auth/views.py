@@ -12,12 +12,12 @@ def register(messenger_uid):
         return render_template('register.html')
     user = User(username=request.form['username'] ,
                 password=request.form['password'],
-                messenger_uid="909043528309")
+                messenger_uid=messenger_uid)
     print(user)
     db.session.add(user)
     db.session.commit()
     print('User successfully registered')
-    return redirect(url_for('main.login'))
+    return redirect(url_for('auth.login'))
 
 @auth.route('/login',methods=['GET','POST'])
 def login():
