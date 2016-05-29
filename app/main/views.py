@@ -84,7 +84,7 @@ def index():
       print(current_user)
       messenger_uid = current_user.messenger_uid
 
-      resp_msg = EveyEngine(current_user.first_name, user,
+      resp_msg = EveyEngine(current_user.first_name, current_user,
                             messenger_uid).understand(["site visit"])
       for msg in resp_msg:
         payload = {'recipient': {'id': messenger_uid}, 'message':msg}
