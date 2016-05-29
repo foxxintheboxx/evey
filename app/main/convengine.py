@@ -191,7 +191,8 @@ class EveyEngine(WitEngine):
         url = "https://eveyai.herokuapp.com/register/" + self.messenger_uid
         signup_button = self.make_button(type_="web_url", title="Sign Up!",
                                          payload=url)
-        return self.button_attachment(text=SIGNUP,[signup_button])
+        return self.button_attachment(text=SIGNUP,
+                                      buttons=[signup_button])
 
     def handle_postback(self, keys):
         if len(keys) > 1:
