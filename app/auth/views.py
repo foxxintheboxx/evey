@@ -17,7 +17,8 @@ def register(messenger_uid):
     db.session.add(user)
     db.session.commit()
     print('User successfully registered')
-    return redirect(url_for('auth.login'))
+    login_user(registered_user, remember = True)
+    return redirect(request.args.get('next') or url_for('main.index'))
 
 @auth.route('/login',methods=['GET','POST'])
 def login():
