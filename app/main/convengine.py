@@ -2,7 +2,7 @@
 
 import requests
 from datetime import datetime
-
+from dateutil.parser import parse
 from .. import db
 from ..models import User, Message, Event, Calendar, Conversation
 from config import WIT_API, WIT_APP_ID, WIT_SERVER
@@ -175,8 +175,7 @@ class EveyEngine(WitEngine):
         date_exists = False
         if DATE in entities:
             date_exists = True
-            date_str = entities[DATE][0]["value"].split(".")[0]
-            dateobj = datetime.strptime(date_str, "%Y-%m-%dT%H:%m:%S")
+            dateobj = parse(entities[DATE][0]["value"])
             date_str = self.format_dateobj(dateobj)
             subtitle += "%s %s\n" % (WHEN_EMOJI, date_str)
 
@@ -357,10 +356,10 @@ class EveyEngine(WitEngine):
             minutes = "0" + minutes
           minute = ":" + minutes
 
-        datestr = d.strftime("%a %m/%d  at %I")
+        datestr = dateobj.strftime("%a %m/%d  at %I")
         datestr.replace("0", "")
         datestr += minute + ampm
-        return format_dateobj
+        return datestr
 
     def save(self):
         db.session.add(self.user)
