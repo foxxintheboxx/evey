@@ -181,7 +181,7 @@ class EveyEngine(WitEngine):
 
 
         if LOCAL in entities:
-            where_str = entities[LOCAL][0]["value"]
+            where_str = str(entities[LOCAL][0]["value"])
             subtitle += "%s %s\n" % (WHERE_EMOJI, where_str)
 
         msg_elements = [self.make_generic_element(title=title,
