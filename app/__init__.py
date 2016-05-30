@@ -21,6 +21,8 @@ def create_app():
   app.register_blueprint(main_blueprint)
   from .auth import auth as auth_blueprint
   app.register_blueprint(auth_blueprint)
+  from .events import events as events_blueprint
+  app.register_blueprint(events_blueprint)
 
   return app
 
