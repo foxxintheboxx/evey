@@ -188,6 +188,7 @@ class EveyEngine(WitEngine):
                                                  img_url=CALENDAR_IMG,
                                                  buttons=buttons_msg0),
                         self.make_generic_element("Deets Preview",
+                                                  subtitle=subtitle,
                                                   buttons=buttons_msg1)]
         evey_resp = [self.generic_attachment(msg_elements)]
 #        if date_exists is False:
