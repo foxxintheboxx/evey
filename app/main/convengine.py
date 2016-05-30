@@ -1,7 +1,7 @@
 
 
 import requests
-
+from datetime import datetime
 
 from .. import db
 from ..models import User, Message, Event, Calendar, Conversation
@@ -9,7 +9,11 @@ from config import WIT_API, WIT_APP_ID, WIT_SERVER
 from const import EXAMPLE_0, EXAMPLE_1, EXAMPLE_2, \
                    ABOUT_0, ABOUT_1, POSTBACK_TEMPLATE, \
                    ONBOARDING_IMG_0, ONBOARDING_IMG_1, \
-                   ONBOARDING_IMG_2, CALENDAR_IMG
+                   ONBOARDING_IMG_2, CALENDAR_IMG, \
+                   WHEN_EMOJI, WHERE_EMOJI, OTHER_EMOJI, \
+                   MSG_BODY, MSG_SUBJ, LOCAL, DATE, \
+                   EVENT_POSTBACKS
+
 
 
 class WitEngine(object):
@@ -85,10 +89,7 @@ ONBOARDING_POSTBACK_2 = POSTBACK_TEMPLATE % "ONBOARD:2"
 TUTORIAL_POSTBACK_0 = POSTBACK_TEMPLATE % "TUTORIAL:0"
 TUTORIAL_POSTBACK_1 = POSTBACK_TEMPLATE % "TUTORIAL:1"
 
-MSG_BODY = "message_body"
-MSG_SUBJ = "message_subject"
-LOCAL = "local_search_query"
-DATE = "datetime"
+
 
 class EveyEngine(WitEngine):
 
@@ -149,43 +150,53 @@ class EveyEngine(WitEngine):
             return [self.text_message("What do you wanna call the event?")]
         return self.event_creation(entities)
 
+
     def event_creation(self, entities):
         title = entities.get(MSG_SUBJ)
         if title is None:
             title = entities.get(MSG_BODY)
         title = title[0]["value"]
+        postbacks = self.format_event_postbacks(EVENT_POSTBACKS,
+                                                      "9384203")
         buttons_msg0 = [self.make_button("postback",
                                          "share",
-                                         "SHARE")]
+                                         postbacks["share"]),
+                        self.make_button("postback",
+                                         "subscribe to changes",
+                                         postbacks["subscribe"])]
+
         buttons_msg1 = [self.make_button("postback",
-                                         "cancel",
-                                         "CANCEL")]
-        subtitle = ""
-        if LOCAL in entities:
-            subtitle = "Where: %s" % entities[LOCAL][0]["value"]
-        else:
-            buttons_msg1.append(self.make_button("postback",
-                                                 "add location",
-                                                 "ADD_LOCATION"))
+                                         "add to " + WHEN_EMOJI + " poll",
+                                         postbacks["where"]),
+                        self.make_button("postback",
+                                         "add to " + WHERE_EMOJI + " poll",
+                                         postbacks["when"])]
+        subtitle = "Top\n"
         date_exists = False
         if DATE in entities:
             date_exists = True
-            subtitle += " When: %s" % entities[DATE][0]["value"]
-            buttons_msg1.append(self.make_button("postback",
-                                                 "change date",
-                                                  "CHANGE_DATE"))
+            date_str = entities[DATE][0]["value"].split(".")[0]
+            dateobj = datetime.strptime(date_str, "%Y-%m-%dT%H:%m:%S")
+            date_str = self.format_dateobj(dateobj)
+            subtitle += "%s %s\n" % (WHEN_EMOJI, date_str)
+
+
+        if LOCAL in entities:
+            where_str = entities[LOCAL][0]["value"]
+            subtitle += "%s %s\n" % (WHERE_EMOJI, where_str)
 
         msg_elements = [self.make_generic_element(title=title,
-                                                 subtitle=subtitle,
                                                  img_url=CALENDAR_IMG,
                                                  buttons=buttons_msg0),
-                        self.make_generic_element("options",
+                        self.make_generic_element("Deets Preview",
                                                   buttons=buttons_msg1)]
         evey_resp = [self.generic_attachment(msg_elements)]
-        if date_exists is False:
-            text = "What times are you free for %s" % title
-            evey_resp.append(self.text_message(text))
+#        if date_exists is False:
+#           text = "What times are you free for %s" % title
+#           evey_resp.append(self.text_message(text))
         return evey_resp
+
+
 
     def signup_attachment(self):
         url = "https://eveyai.herokuapp.com/register/" + self.messenger_uid
@@ -328,6 +339,28 @@ class EveyEngine(WitEngine):
         if type_ == "postback":
             dict_["payload"] = payload
         return dict_
+
+    def format_event_postbacks(self, postbacks, event_id):
+        postbacks = dict(postbacks)
+        for key in postbacks.keys():
+          postbacks[key] = postbacks[key] % event_id
+        return postbacks
+
+    def format_dateobj(self, dateobj):
+        ampm = "am"
+        if dateobj.hour > 12:
+          ampm = "pm"
+        minute = ""
+        if dateobj.minute > 0:
+          minutes = str(dateobj.minute)
+          if len(minute) < 2:
+            minutes = "0" + minutes
+          minute = ":" + minutes
+
+        datestr = d.strftime("%a %m/%d  at %I")
+        datestr.replace("0", "")
+        datestr += minute + ampm
+        return format_dateobj
 
     def save(self):
         db.session.add(self.user)
