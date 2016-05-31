@@ -126,6 +126,7 @@ class Calendar(db.Model):
 class Event(db.Model):
   __tablename__ = 'event'
   id = db.Column(db.Integer, primary_key=True)
+  event_hash = db.Column(db.String, unique=True)
   calendar_id = db.Column(db.Integer, db.ForeignKey('calendar.id'))
   datetime = db.Column(db.Date)
   duration = db.Column(db.Integer)

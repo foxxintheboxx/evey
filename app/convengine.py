@@ -3,8 +3,8 @@
 import requests
 from datetime import datetime
 from dateutil.parser import parse
-from .. import db
-from ..models import User, Message, Event, Calendar, Conversation
+from . import db
+from .models import User, Message, Event, Calendar, Conversation
 from config import WIT_API, WIT_APP_ID, WIT_SERVER
 from const import EXAMPLE_0, EXAMPLE_1, EXAMPLE_2, \
                    ABOUT_0, ABOUT_1, POSTBACK_TEMPLATE, \

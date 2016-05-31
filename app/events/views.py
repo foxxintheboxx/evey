@@ -6,7 +6,7 @@ from config import TOKEN
 from . import events
 from .. import db
 from ..models import User, Event
-from .convengine import EveyEngine
+from ..convengine import EveyEngine
 import requests
 
 
@@ -19,7 +19,8 @@ WELCOME = ("Hey %s, thanks for accessing %s!"
 def access_event(event_id):
     print("accessed event" + event_id)
     messenger_uid = current_user.messenger_uid
-    event = Event.query.filter(id==event_id).first()
+    event = Event.query.filter(Event.event_hash==event_id).first()
+
     if event is None:
         return render_template("404.html")
     title = event.title

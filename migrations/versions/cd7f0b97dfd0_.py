@@ -1,13 +1,13 @@
 """empty message
 
-Revision ID: fb89ccfbfb8c
+Revision ID: cd7f0b97dfd0
 Revises: None
-Create Date: 2016-05-29 03:32:22.939879
+Create Date: 2016-05-30 17:47:43.574743
 
 """
 
 # revision identifiers, used by Alembic.
-revision = 'fb89ccfbfb8c'
+revision = 'cd7f0b97dfd0'
 down_revision = None
 
 from alembic import op
@@ -62,13 +62,13 @@ def upgrade():
     op.create_index(op.f('ix_fb_user_first_name'), 'fb_user', ['first_name'], unique=False)
     op.create_index(op.f('ix_fb_user_last_name'), 'fb_user', ['last_name'], unique=False)
     op.create_index(op.f('ix_fb_user_profile_pic_id'), 'fb_user', ['profile_pic_id'], unique=True)
-    op.create_table('conversation',
+    op.create_table('calendar',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('calendar',
+    op.create_table('conversation',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
@@ -106,8 +106,8 @@ def downgrade():
     op.drop_table('calendar_event_association')
     op.drop_table('message')
     op.drop_table('event')
-    op.drop_table('calendar')
     op.drop_table('conversation')
+    op.drop_table('calendar')
     op.drop_index(op.f('ix_fb_user_profile_pic_id'), table_name='fb_user')
     op.drop_index(op.f('ix_fb_user_last_name'), table_name='fb_user')
     op.drop_index(op.f('ix_fb_user_first_name'), table_name='fb_user')
