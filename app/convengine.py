@@ -157,7 +157,8 @@ class EveyEngine(WitEngine):
         if title is None:
             title = entities.get(MSG_BODY)
         title = title[0]["value"]
-        calendar = current_user.calendar
+        curr_user = User.query.filter(User.messenger_uid==self.messenger_uid).first()
+        calendar = curr_user.calendar
         event = Event(title=title)
         event.event_hash = generate_hash()
         event.calendars.append(calendar)
