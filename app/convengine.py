@@ -3,16 +3,18 @@
 import requests
 from datetime import datetime
 from dateutil.parser import parse
+from flask.ext.login import current_user
 from . import db
 from .models import User, Message, Event, Calendar, Conversation
 from config import WIT_API, WIT_APP_ID, WIT_SERVER
+from .utils import generate_hash
 from const import EXAMPLE_0, EXAMPLE_1, EXAMPLE_2, \
                    ABOUT_0, ABOUT_1, POSTBACK_TEMPLATE, \
                    ONBOARDING_IMG_0, ONBOARDING_IMG_1, \
                    ONBOARDING_IMG_2, CALENDAR_IMG, \
                    WHEN_EMOJI, WHERE_EMOJI, OTHER_EMOJI, \
                    MSG_BODY, MSG_SUBJ, LOCAL, DATE, \
-                   EVENT_POSTBACKS
+                   EVENT_POSTBACKS, PEOPLE_EMOJI
 
 
 
@@ -102,7 +104,6 @@ class EveyEngine(WitEngine):
                               ONBOARDING_POSTBACK_2: self.onboarding_2}
 
 
-
     def understand(self, msgs):
         if len(msgs) == 0:
             return []
@@ -156,6 +157,10 @@ class EveyEngine(WitEngine):
         if title is None:
             title = entities.get(MSG_BODY)
         title = title[0]["value"]
+        calendar = current_user.calendar
+        event = Event(title=title)
+        event.event_hash = generate_hash()
+        event.calendars.append(calendar)
         postbacks = self.format_event_postbacks(EVENT_POSTBACKS,
                                                       "9384203")
         buttons_msg0 = [self.make_button("postback",
@@ -166,11 +171,15 @@ class EveyEngine(WitEngine):
                                          postbacks["subscribe"])]
 
         buttons_msg1 = [self.make_button("postback",
-                                         "add to " + WHEN_EMOJI + " poll",
+                                         "collab on " + WHEN_EMOJI + "s",
                                          postbacks["where"]),
                         self.make_button("postback",
-                                         "add to " + WHERE_EMOJI + " poll",
-                                         postbacks["when"])]
+                                         "collab on " + WHERE_EMOJI + "s",
+                                         postbacks["when"]),
+                        self.make_button("postback",
+                                          PEOPLE_EMOJI,
+                                         postbacks["who"])]
+
         subtitle = "Top\n"
         date_exists = False
         if DATE in entities:

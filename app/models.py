@@ -6,6 +6,24 @@ from datetime import datetime
 
 Base = declarative_base()
 
+calendar_event_association = db.Table(
+    'calendar_event_association', db.Model.metadata,
+    db.Column('calendar_id', db.Integer, db.ForeignKey('calendar.id')),
+    db.Column('event_id', db.Integer, db.ForeignKey('event.id')),
+    )
+
+locationpoll_user_association = db.Table(
+    'locationpoll_user_association', db.Model.metadata,
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('locationpoll_id', db.Integer, db.ForeignKey('locationpoll.id')),
+    )
+
+datepoll_user_association = db.Table(
+    'datepoll_user_association', db.Model.metadata,
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('datepoll_id', db.Integer, db.ForeignKey('datepoll.id')),
+    )
+
 
 class MessengerUser(db.Model):
   id = db.Column(db.Integer, primary_key=True)
@@ -48,6 +66,12 @@ class User(db.Model):
   calendar = db.relationship("Calendar",
                              uselist=False,
                              back_populates="user")
+  location_polls = db.relationship('Locationpoll',
+                                   secondary=locationpoll_user_association,
+                                   backref=db.backref('users'))
+  date_polls = db.relationship('Datepoll',
+                               secondary=datepoll_user_association,
+                               backref=db.backref('users'))
 
 
   def __init__(self, username, password, messenger_uid):
@@ -105,11 +129,6 @@ class Message(db.Model):
 
 ### Calendar Models
 
-calendar_event_association = db.Table(
-    'calendar_event_association', db.Model.metadata,
-    db.Column('calendar_id', db.Integer, db.ForeignKey('calendar.id')),
-    db.Column('event_id', db.Integer, db.ForeignKey('event.id')),
-    )
 
 class Calendar(db.Model):
   __tablename__ = 'calendar'
@@ -134,4 +153,22 @@ class Event(db.Model):
 
   def __repr__(self):
     return '<Event %r>' % self.title
+
+class Locationpoll(db.Model):
+  id = db.Column(db.Integer, primary_key=True)
+  user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+  poll_type = db.Column(db.String)
+  name = db.Column(db.String)
+
+  def votes(self):
+    return len(self.users)
+
+class Datepoll(db.Model):
+  id = db.Column(db.Integer, primary_key=True)
+  user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+  poll_type = db.Column(db.String)
+  datetime = db.Column(db.Date)
+
+  def votes(self):
+    return len(self.users)
 
