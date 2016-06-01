@@ -16,13 +16,11 @@ def register(messenger_uid):
                 password=request.form['password'],
                 messenger_uid=messenger_uid)
     print(user)
-    user_details_params = {'fields':'first_name,last_name,profile_pic',
-                           'access_token':TOKEN}
-    user_data = fetch_user_data(FB_GRAPH_URL + messenger_uid,
-                                user_details_params)
+    user_data = fetch_user_data(messenger_uid)
     print(user_data)
     user.first_name = user_data["first_name"]
     user.last_name = user_data["last_name"]
+    user.name = user.first_name + " " +  user.last_name
     db.session.add(user)
     db.session.commit()
     print('User successfully registered')

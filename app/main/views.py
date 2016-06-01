@@ -2,7 +2,7 @@ from flask import redirect, url_for, flash, session, request, render_template, g
 from . import main
 from ..convengine import EveyEngine
 from config import SECRET_KEY, TOKEN, WEBHOOK, WEBHOOK_TOKEN
-from ..utils import FB_GRAPH_URL, MESNGR_API_URL, fetch_user_data
+from ..utils import MESNGR_API_URL, fetch_user_data
 import requests
 import json
 import traceback
@@ -44,32 +44,33 @@ def webhook():
         for message in entry['messaging']:
           if sender == "":
             sender = message['sender']['id'] # Sender ID
+          if 'delivery' in message:
+            return "hello world"
           if 'message' in message:
             print("messsage")
             msgs.append(message['message']['text'])
           if 'postback' in message:
             print("postback")
             postbacks.append(message['postback']['payload'])
-
-      user_details_params = {'fields':'first_name,last_name,profile_pic',
-                                      'access_token':TOKEN}
-      user_data = fetch_user_data(FB_GRAPH_URL + sender,
-                                  user_details_params)
+      user_data = fetch_user_data(sender)
       user_data['messenger_uid'] = sender
       user = usr_manager.handle_messenger_user(user_data)
       evey = EveyEngine(user_data["first_name"], user, sender)
       if user is None:
         resp_msgs = evey.understand(["signup"])
         post_response_msgs(resp_msgs, sender)
+        print("yo")
       elif len(postbacks):
         resp_msgs = evey.handle_postback(postbacks)
         post_response_msgs(resp_msgs, sender)
       elif len(msgs):
         print("msgs: %s" % str(msgs))
         resp_msgs = evey.understand(msgs)
+        print(resp_msgs)
         post_response_msgs(resp_msgs, sender)
     except Exception as e:
       print traceback.format_exc() # something went wrong
+  print("hello")
   return "hello world"
 
 @lm.user_loader

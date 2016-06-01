@@ -60,6 +60,9 @@ class User(db.Model):
   conversations = db.relationship('Conversation',
                                    backref='user',
                                    lazy='dynamic')
+  date_conv_session = db.Column(db.Integer, index=True)
+  location_conv_session = db.Column(db.Integer, index=True)
+
   messages = db.relationship('Message',
                               backref='user',
                               lazy='dynamic')
@@ -79,6 +82,10 @@ class User(db.Model):
     self.password = password
     self.registered_on = datetime.utcnow()
     self.messenger_uid = messenger_uid
+    self.date_conv_session = 0
+    self.did_onboarding = 0
+    self.location_conv_session = 0
+    self.calendar = Calendar()
 
   def is_authenticated(self):
     return True
@@ -129,7 +136,6 @@ class Message(db.Model):
 
 ### Calendar Models
 
-
 class Calendar(db.Model):
   __tablename__ = 'calendar'
   id = db.Column(db.Integer, primary_key=True)
@@ -140,7 +146,7 @@ class Calendar(db.Model):
                 secondary=calendar_event_association,
                 backref=db.backref('calendars'))
   def __repr__(self):
-    return '<Calendar of %r>' % user.name
+    return '<Calendar of %r>' % self.user.name
 
 class Event(db.Model):
   __tablename__ = 'event'
@@ -150,6 +156,12 @@ class Event(db.Model):
   datetime = db.Column(db.Date)
   duration = db.Column(db.Integer)
   title = db.Column(db.String(64))
+
+  location_polls = db.relationship('Locationpoll',
+                                   backref='event')
+  date_polls = db.relationship('Datepoll',
+                               backref='event')
+
 
   def __repr__(self):
     return '<Event %r>' % self.title

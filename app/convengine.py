@@ -1,64 +1,20 @@
-
-
-import requests
-from datetime import datetime
 from dateutil.parser import parse
-from flask.ext.login import current_user
+import json
 from . import db
+from .witengine import WitEngine
+from .fbapimethods import FBAPI
 from .models import User, Message, Event, Calendar, Conversation
-from config import WIT_API, WIT_APP_ID, WIT_SERVER
+from .utils import fetch_user_data
+from config import WIT_APP_ID, WIT_SERVER
 from .utils import generate_hash
 from const import EXAMPLE_0, EXAMPLE_1, EXAMPLE_2, \
-                   ABOUT_0, ABOUT_1, POSTBACK_TEMPLATE, \
+                   ABOUT_0, ABOUT_1, ONBOARDING_POSTBACK_1, \
                    ONBOARDING_IMG_0, ONBOARDING_IMG_1, \
                    ONBOARDING_IMG_2, CALENDAR_IMG, \
                    WHEN_EMOJI, WHERE_EMOJI, OTHER_EMOJI, \
                    MSG_BODY, MSG_SUBJ, LOCAL, DATE, \
-                   EVENT_POSTBACKS, PEOPLE_EMOJI
-
-
-
-class WitEngine(object):
-
-    def __init__(self, app_token, server_token,
-                 content_type='application/json'):
-        self.app_token = app_token
-        self.server_token = server_token
-        self.content_type = content_type
-
-    def make_header(self, headers={}):
-        default_header = {'Authorization': 'Bearer ' + self.server_token,
-                          'Accept': 'application/json'}
-        for key in headers.keys():
-            default_header[key] = headers[key]
-        return default_header
-
-    def message(self, q, params={}, headers={}):
-
-        query_url = WIT_API + "message"
-        query_url += "?q=%s" % q
-        query_url = self.__add_params__(params, query_url)
-        headers = self.make_header(headers)
-        return requests.get(query_url, headers=headers).json()
-
-    def converse(self, session_id, q, params={}, headers={}):
-        query_url = WIT_API + "converse"
-        query_url += "?session_id=%s" % session_id
-        if q is not None:
-            query_url += "&q=%s" % q
-        query_url = self.__add_params__(params, query_url)
-        headers = self.make_header(headers)
-        return requests.post(query_url, headers=headers).json()
-
-
-    def __add_params__(self, params, query_url):
-        for key in params.keys():
-            query_url += "&%s=%s" % (key, self.remove_space(str(params[key])))
-        return query_url
-
-
-    def remove_space(self, query):
-        return query.replace(' ', '%20')
+                   EVENT_POSTBACKS, PEOPLE_EMOJI, \
+                   ONBOARDING_POSTBACK_2, EVEY_URL
 
 PLZ_SLOWDOWN = ("I'm sorry %s, but currently I am wayy better "
                 "at understanding one request at a time. So "
@@ -86,14 +42,8 @@ NON_EVENT_RESPONSE = ("I'm sorry %s, I didnt understand your msg."
                       " otherwise text 'events' to see your events,"
                       " and 'help' for more info")
 
-ONBOARDING_POSTBACK_1 = POSTBACK_TEMPLATE % "ONBOARD:1"
-ONBOARDING_POSTBACK_2 = POSTBACK_TEMPLATE % "ONBOARD:2"
-TUTORIAL_POSTBACK_0 = POSTBACK_TEMPLATE % "TUTORIAL:0"
-TUTORIAL_POSTBACK_1 = POSTBACK_TEMPLATE % "TUTORIAL:1"
 
-
-
-class EveyEngine(WitEngine):
+class EveyEngine(WitEngine, FBAPI):
 
     def __init__(self, first_name, user, messenger_uid):
         super(EveyEngine, self).__init__(WIT_APP_ID, WIT_SERVER)
@@ -101,8 +51,9 @@ class EveyEngine(WitEngine):
         self.messenger_uid = messenger_uid
         self.user = user
         self.postback_func = {ONBOARDING_POSTBACK_1: self.onboarding_1,
-                              ONBOARDING_POSTBACK_2: self.onboarding_2}
-
+                              ONBOARDING_POSTBACK_2: self.onboarding_2,
+                              EVENT_POSTBACKS["share"]: self.get_event_link,
+                              EVENT_POSTBACKS["who"]: self.see_people_in_event}
 
     def understand(self, msgs):
         if len(msgs) == 0:
@@ -129,6 +80,7 @@ class EveyEngine(WitEngine):
             msgs = [self.text_message(msg0)]
             msgs.extend(self.onboarding_1())
             return msgs
+
         msg = msgs[0]
         if msg.lower() == "e" or msg.lower() == "events":
             text = ("hi %s, gimme a second to fetch your events for this"
@@ -157,20 +109,19 @@ class EveyEngine(WitEngine):
         if title is None:
             title = entities.get(MSG_BODY)
         title = title[0]["value"]
-        curr_user = User.query.filter(User.messenger_uid==self.messenger_uid).first()
+        title_words = self.capitalize_first_letter(title.split(" "))
+        title = " ".join(title_words)
+        curr_user = self.current_user()
         calendar = curr_user.calendar
         event = Event(title=title)
         event.event_hash = generate_hash()
-        event.calendars.append(calendar)
+        calendar.events.append(event)
+        self.save([event, calendar])
         postbacks = self.format_event_postbacks(EVENT_POSTBACKS,
-                                                      "9384203")
+                                                event.event_hash)
         buttons_msg0 = [self.make_button("postback",
                                          "share",
-                                         postbacks["share"]),
-                        self.make_button("postback",
-                                         "subscribe to changes",
-                                         postbacks["subscribe"])]
-
+                                         postbacks["share"])]
         buttons_msg1 = [self.make_button("postback",
                                          "collab on " + WHEN_EMOJI + "s",
                                          postbacks["where"]),
@@ -188,17 +139,21 @@ class EveyEngine(WitEngine):
             dateobj = parse(entities[DATE][0]["value"])
             date_str = self.format_dateobj(dateobj)
             subtitle += "%s %s\n" % (WHEN_EMOJI, date_str)
-
+        else:
+            subtitle += "%s none yet\n" % (WHEN_EMOJI)
 
         if LOCAL in entities:
             where_str = str(entities[LOCAL][0]["value"])
+            words = self.capitalize_first_letter(where_str.split(" "))
+            where_str = " ".join(words)
             subtitle += "%s %s\n" % (WHERE_EMOJI, where_str)
+        else:
+            subtitle += "%s none yet\n" % (WHERE_EMOJI)
 
         msg_elements = [self.make_generic_element(title=title,
-                                                 img_url=CALENDAR_IMG,
+                                                 subtitle=subtitle,
                                                  buttons=buttons_msg0),
                         self.make_generic_element("Deets Preview",
-                                                  subtitle=subtitle,
                                                   buttons=buttons_msg1)]
         evey_resp = [self.generic_attachment(msg_elements)]
 #        if date_exists is False:
@@ -206,10 +161,34 @@ class EveyEngine(WitEngine):
 #           evey_resp.append(self.text_message(text))
         return evey_resp
 
+    def get_event_link(self, event_json):
+        event = self.event_from_hash(event_json["event_hash"])
+        title = event.title
+        url = EVEY_URL + "/events/" + event.event_hash
+        text = "View/Edit details: \"%s\"\n%s" % (title, url)
+        return [self.text_message(text)]
 
+    def see_people_in_event(self, event_json):
+        event = self.event_from_hash(event_json["event_hash"])
+        calendars = event.calendars
+        attendees = [cal.user for cal in event.calendars]
+        ppl_attachments = []
+        for person in attendees:
+            messenger_uid = person.messenger_uid
+            user_data = fetch_user_data(messenger_uid)
+            el = self.make_generic_element(title=person.name,
+                                           img_url=user_data["profile_pic"])
+            ppl_attachments.append(el)
+        evey_rsp = self.text_message(("Np, so far these are the ppl checking out"
+                                      " this event"))
+        return [evey_rsp, self.generic_attachment(ppl_attachments)]
+
+
+    def back_to_event_menu(self, event_hash):
+        pass
 
     def signup_attachment(self):
-        url = "https://eveyai.herokuapp.com/register/" + self.messenger_uid
+        url = EVEY_URL + "/register/" + self.messenger_uid
         signup_button = self.make_button(type_="web_url", title="Sign Up!",
                                          payload=url)
         return self.button_attachment(text=SIGNUP,
@@ -218,7 +197,12 @@ class EveyEngine(WitEngine):
     def handle_postback(self, keys):
         if len(keys) > 1:
             return [self.text_message(PLZ_SLOWDOWN % self.user_name)]
-        return self.postback_func[keys[0]]()
+        print(str(keys[0]))
+        postback_data = str(keys[0]).split('$')
+        if len(postback_data) > 1:
+            data = json.loads(postback_data[1])
+            return self.postback_func[postback_data[0]](data)
+        return self.postback_func[postback_data[0]]()
 
     def onboarding_0(self):
         """
@@ -249,20 +233,15 @@ class EveyEngine(WitEngine):
         return [self.text_message(ONBOARDING_1),
                 usage_msg, part_2_msg]
 
+    def collab_date_postback(self):
+        pass
+
+    def collab_location_postback(self):
+        pass
 
     def onboarding_2(self):
         self.user.did_onboarding = 3
         self.save()
-
-        tutorial_text = "Do you want to try making an example event?"
-        tutorial_buttons = [self.make_button(type_="postback",
-                                             title="No thanks, I got it",
-                                             payload=TUTORIAL_POSTBACK_0),
-                            self.make_button(type_="postback",
-                                             title="Ok, lets try it",
-                                             payload=TUTORIAL_POSTBACK_1)]
-        tutorial = self.button_attachment(text=tutorial_text,
-                                          buttons=tutorial_buttons)
         onboarding_imgs = self.onboarding_attachments()
         return [self.text_message(ONBOARDING_3),
                 onboarding_imgs, self.text_message(ONBOARDING_4)]
@@ -305,73 +284,40 @@ class EveyEngine(WitEngine):
                                                       img_url=img_urls[i]))
         return self.generic_attachment(elements)
 
-    def text_message(self, text):
-      return {"text": text}
-
-    def button_attachment(self, text, buttons):
-        return {"attachment": {
-                  "type": "template",
-                  "payload": {
-                    "template_type": "button",
-                    "text": text,
-                    "buttons": buttons
-                  }
-                }
-              }
-
-    def generic_attachment(self, elements):
-        return {"attachment": {
-                  "type": "template",
-                  "payload": {
-                    "template_type": "generic",
-                    "elements": elements
-                    }
-                  }
-                }
-
-    def make_generic_element(self, title, subtitle="",
-                                    img_url="",
-                                    buttons=[]):
-        element = {"title": title}
-        if len(subtitle) > 0:
-            element["subtitle"] = subtitle
-        if len(img_url) > 0:
-            element["image_url"] = img_url
-        if len(buttons) > 0:
-            element["buttons"] = buttons
-        return element
-
-    def make_button(self, type_, title, payload):
-        dict_ = {"type": type_,
-                 "title": title}
-        if type_ == "web_url":
-            dict_["url"] = payload
-        if type_ == "postback":
-            dict_["payload"] = payload
-        return dict_
-
-    def format_event_postbacks(self, postbacks, event_id):
+    def format_event_postbacks(self, postbacks, event_hash):
         postbacks = dict(postbacks)
         for key in postbacks.keys():
-          postbacks[key] = postbacks[key] % event_id
+          event_data = {"event_hash": event_hash}
+          postbacks[key] = postbacks[key] + "$" +  json.dumps(event_data)
         return postbacks
 
     def format_dateobj(self, dateobj):
         ampm = "am"
         if dateobj.hour > 12:
-          ampm = "pm"
+            ampm = "pm"
         minute = ""
         if dateobj.minute > 0:
-          minutes = str(dateobj.minute)
-          if len(minute) < 2:
-            minutes = "0" + minutes
-          minute = ":" + minutes
-
+            minutes = str(dateobj.minute)
+            if len(minute) < 2:
+                minutes = "0" + minutes
+            minute = ":" + minutes
         datestr = dateobj.strftime("%a %m/%d  at %I")
         datestr.replace("0", "")
         datestr += minute + ampm
         return datestr
 
-    def save(self):
-        db.session.add(self.user)
+    def current_user(self):
+        return User.query.filter(User.messenger_uid==self.messenger_uid).first()
+
+    def save(self, models):
+        for model in models:
+            db.session.add(model)
         db.session.commit()
+
+    def event_from_hash(self, event_hash):
+        return Event.query.filter(Event.event_hash==event_hash).first()
+
+    def capitalize_first_letter(self, words):
+        for i in range(len(words)):
+            words[i] = words[i][0].upper() + words[i][1:]
+        return words

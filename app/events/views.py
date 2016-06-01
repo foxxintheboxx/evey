@@ -11,7 +11,7 @@ import requests
 
 
 WELCOME = ("Hey %s, thanks for accessing %s!"
-           "heres the event's details")
+           " heres the event's details")
 
 
 @events.route('/events/<event_id>', methods=['GET'])
