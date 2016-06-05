@@ -52,7 +52,7 @@ class User(db.Model):
   messenger_uid = db.Column(db.String(64), index=True, unique=True)
   username = db.Column(db.String(20), unique=True , index=True)
   password_hash = db.Column(db.String(128), index=True)
-  date_created = db.Column(db.Date, index=True)
+  date_created = db.Column(db.DateTime, index=True)
   did_onboarding = db.Column(db.Integer, index=True)
 
   first_name = db.Column(db.String(64), index=True)
@@ -148,27 +148,50 @@ class Calendar(db.Model):
   def __repr__(self):
     return '<Calendar of %r>' % self.user.name
 
+
+
 class Event(db.Model):
   __tablename__ = 'event'
   id = db.Column(db.Integer, primary_key=True)
   event_hash = db.Column(db.String, unique=True)
   calendar_id = db.Column(db.Integer, db.ForeignKey('calendar.id'))
-  datetime = db.Column(db.Date)
+  datetime = db.Column(db.DateTime)
   duration = db.Column(db.Integer)
   title = db.Column(db.String(64))
 
   location_polls = db.relationship('Locationpoll',
-                                   backref='event')
+                                   backref='event',
+                                   lazy='dynamic')
   date_polls = db.relationship('Datepoll',
-                               backref='event')
+                               backref='event',
+                               lazy='dynamic')
 
 
   def __repr__(self):
     return '<Event %r>' % self.title
 
+  def get_top_poll(self, poll):
+    votes = -1
+    top_p = None
+    for p in poll:
+      if p.votes() > votes:
+        top_p = p
+        votes = p.votes()
+    return top_p
+
+  def get_top_date(self):
+    return self.get_top_poll(self.date_polls)
+
+  def get_top_local(self):
+    return self.get_top_poll(self.location_polls)
+
+  def attendees(self):
+    return [cal.user for cal in self.calendars]
+
 class Locationpoll(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+  event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
   poll_type = db.Column(db.String)
   name = db.Column(db.String)
 
@@ -178,8 +201,9 @@ class Locationpoll(db.Model):
 class Datepoll(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+  event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
   poll_type = db.Column(db.String)
-  datetime = db.Column(db.Date)
+  datetime = db.Column(db.DateTime)
 
   def votes(self):
     return len(self.users)

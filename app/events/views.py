@@ -14,7 +14,7 @@ WELCOME = ("Hey %s, thanks for accessing %s!"
            " heres the event's details")
 
 
-@events.route('/events/<event_id>', methods=['GET'])
+@events.route('/ev/<event_id>', methods=['GET'])
 @login_required
 def access_event(event_id):
     print("accessed event" + event_id)
@@ -24,12 +24,13 @@ def access_event(event_id):
     if event is None:
         return render_template("404.html")
     title = event.title
-    msg = EveyEngine(current_user.first_name, current_user,
-                     messenger_uid).text_message(WELCOME % (current_user.first_name,
-                                                            title))
-    payload = {'recipient': {'id': messenger_uid}, 'message': msg}
-    r = requests.post(MESNGR_API_URL + TOKEN, json=payload)
-    print(r)
+    evey = EveyEngine(current_user.first_name, current_user, messenger_uid)
+    msgs = [evey.text_message(WELCOME % (current_user.first_name, title)),
+            evey.event_attachment(event.event_hash, event=event)]
+    for msg in msgs:
+        payload = {'recipient': {'id': messenger_uid}, 'message': msg}
+        r = requests.post(MESNGR_API_URL + TOKEN, json=payload)
+        print(r)
     return render_template("event.html",
                            title=title,
                            user=current_user)

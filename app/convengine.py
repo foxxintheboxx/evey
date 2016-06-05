@@ -3,18 +3,16 @@ import json
 from . import db
 from .witengine import WitEngine
 from .fbapimethods import FBAPI
-from .models import User, Message, Event, Calendar, Conversation
+from .models import User, Message, Event, Calendar, Conversation, \
+                    Datepoll, Locationpoll
 from .utils import fetch_user_data
 from config import WIT_APP_ID, WIT_SERVER
 from .utils import generate_hash
-from const import EXAMPLE_0, EXAMPLE_1, EXAMPLE_2, \
-                   ABOUT_0, ABOUT_1, ONBOARDING_POSTBACK_1, \
-                   ONBOARDING_IMG_0, ONBOARDING_IMG_1, \
-                   ONBOARDING_IMG_2, CALENDAR_IMG, \
+from const import EXAMPLE_0, EXAMPLE_1, EXAMPLE_2,\
                    WHEN_EMOJI, WHERE_EMOJI, OTHER_EMOJI, \
                    MSG_BODY, MSG_SUBJ, LOCAL, DATE, \
                    EVENT_POSTBACKS, PEOPLE_EMOJI, \
-                   ONBOARDING_POSTBACK_2, EVEY_URL
+                   EVEY_URL, GUY_EMOJI
 
 PLZ_SLOWDOWN = ("I'm sorry %s, but currently I am wayy better "
                 "at understanding one request at a time. So "
@@ -22,16 +20,12 @@ PLZ_SLOWDOWN = ("I'm sorry %s, but currently I am wayy better "
 SIGNUP = ("First off, it doesnt look like you have an account yet."
           "Plz sign up so we can get started!")
 WAIT = ("OK %s, Thanks for registering.")
-ONBOARDING_0 = ("Lets get started with how I work! exciting.")
 ONBOARDING_1 = ("To make an event text me a sentence starting with "
-                "make' or 'schedule'. Like these examples:")
-ONBOARDING_2 = ("OK %s, after you make an event. I can help "
-                "schedule a time that works for both you and your ppl")
-ONBOARDING_3 = ("I'll send you a link associated with you event and you"
-                " can share w/ your ppl.")
-ONBOARDING_4 = ("Oh oops, I forgot something! if you want see your events,"
-                " just text me 'events', and if you need any instructions"
-                " again just text me 'help'")
+                "'make'. Like this:")
+ONBOARDING_2 = ("I can then help schedule a time that works for both "
+                "you and your ppl")
+ONBOARDING_3 = ("To invite ppl, forward them a link to the event")
+ONBOARDING_4 = ("Thats it!")
 
 HELP_MSG_0 = ("Hi %s, \n" + ONBOARDING_1)
 HELP_MSG_1 = ("to see your events just text me 'events' or 'e'")
@@ -50,10 +44,9 @@ class EveyEngine(WitEngine, FBAPI):
         self.user_name = first_name
         self.messenger_uid = messenger_uid
         self.user = user
-        self.postback_func = {ONBOARDING_POSTBACK_1: self.onboarding_1,
-                              ONBOARDING_POSTBACK_2: self.onboarding_2,
-                              EVENT_POSTBACKS["share"]: self.get_event_link,
-                              EVENT_POSTBACKS["who"]: self.see_people_in_event}
+        self.postback_func = {EVENT_POSTBACKS["share"]: self.get_event_link,
+                              EVENT_POSTBACKS["who"]: self.see_people_in_event,
+                              EVENT_POSTBACKS["back"]: self.back_to_callback}
 
     def understand(self, msgs):
         if len(msgs) == 0:
@@ -62,25 +55,10 @@ class EveyEngine(WitEngine, FBAPI):
             return [self.signup_attachment()]
         if len(msgs) > 1:
             return [self.text_message(PLZ_SLOWDOWN % self.user_name)]
-        if self.user.did_onboarding == 0:
-            return self.onboarding_0()
-        elif msgs[0] == "site visit":
+        if self.user.did_onboarding == 0 or msgs[0] == "help":
+            return self.onboarding_1()
+        if msgs[0] == "site visit":
             return []
-        elif self.user.did_onboarding == 1:
-            msg0 = ("plzz finish the how-to. I want to make"
-                   " sure you know how I work")
-            msg1 = ("it seems your at how to make events. Heres a recap")
-            msgs = [self.text_message(msg0), self.text_message(msg1)]
-            msgs.extend(self.onboarding_1())
-            return msgs
-        elif self.user.did_onboarding == 2:
-            msg0 = ("plzz finish the how-to by clicking the 'Ok let's go'"
-                    "button at the end of the following messages."
-                   " I want to make sure you know how I work")
-            msgs = [self.text_message(msg0)]
-            msgs.extend(self.onboarding_1())
-            return msgs
-
         msg = msgs[0]
         if msg.lower() == "e" or msg.lower() == "events":
             text = ("hi %s, gimme a second to fetch your events for this"
@@ -101,10 +79,11 @@ class EveyEngine(WitEngine, FBAPI):
         if (entities.get("message_body") is None and
             entities.get("message_subject") is None):
             return [self.text_message("What do you wanna call the event?")]
-        return self.event_creation(entities)
+        event = self.create_event(entities)
+        return [self.event_attachment(event.event_hash, event=event)]
 
 
-    def event_creation(self, entities):
+    def create_event(self, entities):
         title = entities.get(MSG_SUBJ)
         if title is None:
             title = entities.get(MSG_BODY)
@@ -116,76 +95,92 @@ class EveyEngine(WitEngine, FBAPI):
         event = Event(title=title)
         event.event_hash = generate_hash()
         calendar.events.append(event)
-        self.save([event, calendar])
+        objects = [event, calendar]
+        if DATE in entities:
+            dateobj = parse(entities[DATE][0]["value"])
+            datepoll = Datepoll()
+            datepoll.users.append(curr_user)
+            datepoll.datetime = dateobj
+            event.date_polls.append(datepoll)
+            objects.append(datepoll)
+        if LOCAL in entities:
+            where_str = str(entities[LOCAL][0]["value"])
+            words = self.capitalize_first_letter(where_str.split(" "))
+            where_str = " ".join(words)
+            locationpoll = Locationpoll()
+            locationpoll.name = where_str
+            locationpoll.users.append(curr_user)
+            event.location_polls.append(locationpoll)
+            objects.append(locationpoll)
+        self.save(objects)
+        return event
+
+
+    def event_attachment(self, event_hash, event=None):
+        if event == None:
+            event = self.event_from_hash(event_hash)
+
+        title = event.title
         postbacks = self.format_event_postbacks(EVENT_POSTBACKS,
                                                 event.event_hash)
-        buttons_msg0 = [self.make_button("postback",
-                                         "share",
-                                         postbacks["share"])]
-        buttons_msg1 = [self.make_button("postback",
-                                         "collab on " + WHEN_EMOJI + "s",
-                                         postbacks["where"]),
-                        self.make_button("postback",
-                                         "collab on " + WHERE_EMOJI + "s",
+        buttons_msg0 = [self.make_button("postback", "share",
+                                         postbacks["share"]),
+                       self.make_button("postback", "avail " + WHEN_EMOJI + "s",
+                                         postbacks["where"])]
+        buttons_msg1 = [self.make_button("postback","edit " + WHERE_EMOJI,
                                          postbacks["when"]),
                         self.make_button("postback",
                                           PEOPLE_EMOJI,
                                          postbacks["who"])]
 
-        subtitle = "Top\n"
+        subtitle = "Best so far"
         date_exists = False
-        if DATE in entities:
-            date_exists = True
-            dateobj = parse(entities[DATE][0]["value"])
+        top_date = event.get_top_date()
+        attendees = event.attendees()
+        if top_date != None:
+            dateobj = top_date.datetime
+            votes = top_date.votes()
+            subtitle += " (%s/%s)" % (votes, len(attendees))
             date_str = self.format_dateobj(dateobj)
-            subtitle += "%s %s\n" % (WHEN_EMOJI, date_str)
+            subtitle += "\n%s %s\n" % (WHEN_EMOJI, date_str)
         else:
-            subtitle += "%s none yet\n" % (WHEN_EMOJI)
-
-        if LOCAL in entities:
-            where_str = str(entities[LOCAL][0]["value"])
-            words = self.capitalize_first_letter(where_str.split(" "))
-            where_str = " ".join(words)
+            subtitle += "\n%s none yet\n" % (WHEN_EMOJI)
+        top_location = event.get_top_local()
+        if top_location != None:
+            where_str = str(top_location.name)
             subtitle += "%s %s\n" % (WHERE_EMOJI, where_str)
         else:
             subtitle += "%s none yet\n" % (WHERE_EMOJI)
-
         msg_elements = [self.make_generic_element(title=title,
                                                  subtitle=subtitle,
                                                  buttons=buttons_msg0),
-                        self.make_generic_element("Deets Preview",
+                        self.make_generic_element("More",
                                                   buttons=buttons_msg1)]
-        evey_resp = [self.generic_attachment(msg_elements)]
-#        if date_exists is False:
-#           text = "What times are you free for %s" % title
-#           evey_resp.append(self.text_message(text))
+        evey_resp = self.generic_attachment(msg_elements)
         return evey_resp
+
+
 
     def get_event_link(self, event_json):
         event = self.event_from_hash(event_json["event_hash"])
         title = event.title
-        url = EVEY_URL + "/events/" + event.event_hash
+        url = EVEY_URL + "/ev/" + event.event_hash
         text = "View/Edit details: \"%s\"\n%s" % (title, url)
         return [self.text_message(text)]
 
     def see_people_in_event(self, event_json):
         event = self.event_from_hash(event_json["event_hash"])
         calendars = event.calendars
-        attendees = [cal.user for cal in event.calendars]
         ppl_attachments = []
-        for person in attendees:
+        for person in event.attendees():
             messenger_uid = person.messenger_uid
             user_data = fetch_user_data(messenger_uid)
             el = self.make_generic_element(title=person.name,
                                            img_url=user_data["profile_pic"])
             ppl_attachments.append(el)
-        evey_rsp = self.text_message(("Np, so far these are the ppl checking out"
-                                      " this event"))
-        return [evey_rsp, self.generic_attachment(ppl_attachments)]
-
-
-    def back_to_event_menu(self, event_hash):
-        pass
+        evey_rsp = self.text_message(("these ppl were invited"))
+        return [evey_rsp, self.generic_attachment(ppl_attachments),
+                self.back_to_button(event.event_hash, event)]
 
     def signup_attachment(self):
         url = EVEY_URL + "/register/" + self.messenger_uid
@@ -204,53 +199,39 @@ class EveyEngine(WitEngine, FBAPI):
             return self.postback_func[postback_data[0]](data)
         return self.postback_func[postback_data[0]]()
 
-    def onboarding_0(self):
-        """
-          this is only called once during onboarding
-        """
-        self.user.did_onboarding = 1
-        self.save()
-        payloads = [ONBOARDING_POSTBACK_1]
-        onboarding_part1_button  = [self.make_button(type_="postback",
-                                                     title="OK",
-                                                     payload=payloads[0])]
-
-        return [self.text_message(WAIT % self.user_name),
-                self.button_attachment(ONBOARDING_0, onboarding_part1_button)]
 
     def onboarding_1(self):
         self.user.did_onboarding = 2
-        self.save()
+        self.save([self.user])
         usage_msg = self.usage_examples()
-        payloads = [ONBOARDING_POSTBACK_2]
-        onboarding_part2_button  = [self.make_button(type_="postback",
-                                                     title="How?",
-                                                     payload=payloads[0])]
-
-        part_2_msg = self.button_attachment(ONBOARDING_2 % self.user_name,
-                                            onboarding_part2_button)
-        usage_msg = self.usage_examples()
-        return [self.text_message(ONBOARDING_1),
-                usage_msg, part_2_msg]
+        return [self.text_message(ONBOARDING_1), usage_msg]
 
     def collab_date_postback(self):
         pass
 
-    def collab_location_postback(self):
-        pass
+    def back_to_button(self, event_hash, event=None):
+        if event == None:
+            event = self.event_from_hash(event_hash)
+        text = "Back to \"%s\"" % event.title
+        title = event.title
+        if len(event.title) > 20:
+            title = title[:17] + "..."
+        postbacks = self.format_event_postbacks(dict(EVENT_POSTBACKS),
+                                                event.event_hash)
 
-    def onboarding_2(self):
-        self.user.did_onboarding = 3
-        self.save()
-        onboarding_imgs = self.onboarding_attachments()
-        return [self.text_message(ONBOARDING_3),
-                onboarding_imgs, self.text_message(ONBOARDING_4)]
+        back_button = self.make_button(type_="postback", title=title,
+                                         payload=postbacks["back"])
+        return self.button_attachment(text=text,
+                                      buttons=[back_button])
+    def back_to_callback(self, event_json):
+        event = self.event_from_hash(event_json["event_hash"])
+        return [self.event_attachment(event.event_hash, event)]
 
 
     def usage_examples(self):
-        titles = ["Tell me about event like this...",
-                  "...or, like this ...",
-                  "... or this"]
+        titles = [ONBOARDING_2,
+                  ONBOARDING_3,
+                  ONBOARDING_4,]
         img_urls = [EXAMPLE_0, EXAMPLE_1, EXAMPLE_2]
         elements = []
         for i in range(3):
@@ -258,31 +239,7 @@ class EveyEngine(WitEngine, FBAPI):
                                                     img_url=img_urls[i]))
         return self.generic_attachment(elements)
 
-    def onboarding_attachments(self):
-        titles = ["event link to share with your friends",
-                  "stop worrying about choosing a time",
-                  "I'll let you know the best time"]
-        img_urls = [ONBOARDING_IMG_0,
-                    ONBOARDING_IMG_1,
-                    ONBOARDING_IMG_2]
-        elements = []
-        for i in range(3):
-           elements.append(self.make_generic_element(titles[i],
-                                                    img_url=img_urls[i]))
-        return self.generic_attachment(elements)
 
-    def about(self):
-        titles = ["I'll chat with your ppl",
-                  "Tell you the right time for EVEYbody"]
-        subtitles = ["Evey chat personally the ppl invited & coordinate a free time",
-                    "Evey will text you back with the details that work eveyone"]
-        img_urls = [ABOUT_0, ABOUT_1]
-        elements = []
-        for i in range(2):
-            elements.append(self.make_generic_element(title=titles[i],
-                                                      subtitle=subtitles[i],
-                                                      img_url=img_urls[i]))
-        return self.generic_attachment(elements)
 
     def format_event_postbacks(self, postbacks, event_hash):
         postbacks = dict(postbacks)
