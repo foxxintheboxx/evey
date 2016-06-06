@@ -138,7 +138,10 @@ class EveyEngine(WitEngine, FBAPI):
                                          postbacks["where"]),
                         self.make_button("postback",
                                           PEOPLE_EMOJI,
-                                         postbacks["who"])]
+                                         postbacks["who"]),
+                        self.make_button("postback",
+                                          "add to Google Cal",
+                                          "TODO")]
 
         subtitle = "Best so far"
         date_exists = False
@@ -161,7 +164,7 @@ class EveyEngine(WitEngine, FBAPI):
         msg_elements = [self.make_generic_element(title=title,
                                                  subtitle=subtitle,
                                                  buttons=buttons_msg0),
-                        self.make_generic_element("More",
+                        self.make_generic_element("... More",
                                                   buttons=buttons_msg1)]
         evey_resp = self.generic_attachment(msg_elements)
         return evey_resp
@@ -273,7 +276,9 @@ class EveyEngine(WitEngine, FBAPI):
         self.user.is_editing_location = ""
         event = self.event_from_hash(event_hash)
         last_poll = event.location_polls.first()
-        self.delete([last_poll])
+        if last_poll:
+          self.delete([last_poll])
+
         new_poll = Locationpoll()
         new_poll.name = name
         event.location_polls.append(new_poll)
