@@ -54,7 +54,7 @@ class User(db.Model):
   password_hash = db.Column(db.String(128), index=True)
   date_created = db.Column(db.DateTime, index=True)
   did_onboarding = db.Column(db.Integer, index=True)
-
+  is_editing_location = db.Column(db.String, index=True)
   first_name = db.Column(db.String(64), index=True)
   last_name = db.Column(db.String(64), index=True)
   conversations = db.relationship('Conversation',
@@ -84,6 +84,7 @@ class User(db.Model):
     self.messenger_uid = messenger_uid
     self.date_conv_session = 0
     self.did_onboarding = 0
+    self.is_editing_location = 0
     self.location_conv_session = 0
     self.calendar = Calendar()
 
