@@ -31,11 +31,10 @@ ONBOARDING_4 = ("Thats it!")
 HELP_MSG_0 = ("Hi %s, \n" + ONBOARDING_1)
 HELP_MSG_1 = ("to see your events just text me 'events' or 'e'")
 
-NON_EVENT_RESPONSE = ("I'm sorry %s, I didnt understand your msg."
-                      " if you're trying to make an event, plz"
-                      " start your sentence with 'make' or 'schedule'"
-                      " otherwise text 'events' to see your events,"
-                      " and 'help' for more info")
+NON_EVENT_RESPONSE = ("I didn't quite get that.\n"
+                      "> 'make' to make an event\n"
+                      "> 'find' <event name>\n"
+                      "> 'events' to see all your events")
 
 
 class EveyEngine(WitEngine, FBAPI):
