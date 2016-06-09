@@ -11,12 +11,48 @@ MSG_SUBJ = "message_subject"
 LOCAL = "local_search_query"
 DATE = "datetime"
 
+# PARSING
+
+DAY_ABRV = {"sun": "Sunday",
+            "tues": "Tuesday",
+            "tue": "Tuesday",
+            "tu": "Tuesday",
+            "th": "Thursday",
+            "thu": "Thursday",
+            "thur": "Thursday",
+            "thurs": "Thursday",
+            "wed": "Wednesday",
+            "fri": "Friday",
+            "sat": "Saturday",
+            "mon": "Monday",}
+
 #EMOJIS
 WHEN_EMOJI = "🕐"
 WHERE_EMOJI = "📍"
 OTHER_EMOJI = "🔴"
 GUY_EMOJI = "👦"
 PEOPLE_EMOJI = GUY_EMOJI + "👩"
+EMOJI_1 = "1️⃣"
+EMOJI_2 = "2️⃣"
+EMOJI_3 = "3️⃣"
+EMOJI_4 = "4️⃣"
+EMOJI_5 = "5️⃣"
+EMOJI_6 = "6️⃣"
+EMOJI_7 = "7️⃣"
+EMOJI_8 = "8️⃣"
+EMOJI_9 = "9️⃣"
+
+NUM = {
+  1: EMOJI_1,
+  2: EMOJI_2,
+  3: EMOJI_3,
+  4: EMOJI_4,
+  5: EMOJI_5,
+  6: EMOJI_6,
+  7: EMOJI_7,
+  8: EMOJI_8,
+  9: EMOJI_9
+}
 
 # POSTBACKS
 SUBSCRIBE_POSTBACK = "SUBSCRIBE"
@@ -28,6 +64,10 @@ WHO_POSTBACK = "WHO"
 BACK_POSTBACK = "BACK"
 CONFIRM_POSTBACK = "CONFIRM"
 CANCEL_LOCATION_POSTBACK = "CANCEL_LOCATION"
+CANCEL_ADD_TIME = "CANCEL_ADD_TIME"
+CANCEL_REMOVE_TIME = "CANCEL_REMOVE_TIME"
+ADD_TIME_POSTBACK = "ADD_TIME"
+REMOVE_TIME_POSTBACK = "REMOVE_TIME"
 
 EVENT_POSTBACKS = {
   "subscribe": SUBSCRIBE_POSTBACK,
@@ -36,7 +76,9 @@ EVENT_POSTBACKS = {
   "when": WHEN_POSTBACK,
   "who" : WHO_POSTBACK,
   "other": OTHER_POSTBACK,
-  "back": BACK_POSTBACK
+  "back": BACK_POSTBACK,
+  "add_time": ADD_TIME_POSTBACK,
+  "remove_time": REMOVE_TIME_POSTBACK
 }
 
 #  BASE URL

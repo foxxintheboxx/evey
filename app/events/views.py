@@ -25,6 +25,9 @@ def access_event(event_id):
         return render_template("404.html")
     title = event.title
     evey = EveyEngine(current_user.first_name, current_user, messenger_uid)
+    event.calendars.append(current_user.calendar)
+    db.session.add(event)
+    db.session.commit()
     msgs = [evey.text_message(WELCOME % (current_user.first_name, title)),
             evey.event_attachment(event.event_hash, event=event)]
     for msg in msgs:

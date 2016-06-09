@@ -55,6 +55,9 @@ class User(db.Model):
   date_created = db.Column(db.DateTime, index=True)
   did_onboarding = db.Column(db.Integer, index=True)
   is_editing_location = db.Column(db.String, index=True)
+  is_adding_time = db.Column(db.String, index=True)
+  is_setting_time = db.Column(db.String, index=True)
+  is_removing_time = db.Column(db.String, index=True)
   first_name = db.Column(db.String(64), index=True)
   last_name = db.Column(db.String(64), index=True)
   conversations = db.relationship('Conversation',
@@ -84,7 +87,10 @@ class User(db.Model):
     self.messenger_uid = messenger_uid
     self.date_conv_session = 0
     self.did_onboarding = 0
-    self.is_editing_location = 0
+    self.is_editing_location = ""
+    self.is_adding_time = ""
+    self.is_removing_time = ""
+    self.is_setting_time = ""
     self.location_conv_session = 0
     self.calendar = Calendar()
 
@@ -186,6 +192,13 @@ class Event(db.Model):
   def get_top_local(self):
     return self.get_top_poll(self.location_polls)
 
+  def user_added_time(self, user):
+    for p in self.date_polls:
+      for u in p.users:
+        if u.messenger_uid == user.messenger_uid:
+          return True
+    return False
+
   def attendees(self):
     return [cal.user for cal in self.calendars]
 
@@ -205,6 +218,8 @@ class Datepoll(db.Model):
   event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
   poll_type = db.Column(db.String)
   datetime = db.Column(db.DateTime)
+  end_datetime = db.Column(db.DateTime)
+  poll_number = db.Column(db.Integer)  # to use when choosing
 
   def votes(self):
     return len(self.users)
