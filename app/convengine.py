@@ -347,7 +347,7 @@ class EveyEngine(WitEngine, FBAPI):
             if poll.votes() > 2:
               votes = "%sx%s" % (poll.votes(), GUY_EMOJI)
             else:
-              votes = GUY_EMOJI * poll.votes() * 3
+              votes = GUY_EMOJI * poll.votes()
             dateobj = poll.datetime
             date_str = self.format_dateobj(dateobj)
             text += "%s %s, %s\n" % (NUM[count], date_str, votes)

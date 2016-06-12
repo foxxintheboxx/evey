@@ -60,6 +60,7 @@ class User(db.Model):
   is_removing_time = db.Column(db.String, index=True)
   first_name = db.Column(db.String(64), index=True)
   last_name = db.Column(db.String(64), index=True)
+  last_msg = db.Column(db.String)
   conversations = db.relationship('Conversation',
                                    backref='user',
                                    lazy='dynamic')
@@ -136,6 +137,8 @@ class Message(db.Model):
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
   body = db.Column(db.Text())
   conversation_id = db.Column(db.Integer, db.ForeignKey('conversation.id'))
+  message_uid = db.Column(db.String)
+  time = db.Column(db.String)
 
   def __repr__(self):
       return '<Message from %r>' % self.user.name

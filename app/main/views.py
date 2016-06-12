@@ -18,7 +18,10 @@ from ..oauth import OAuthSignIn
 main.secret_key = SECRET_KEY
 usr_manager = UserManager()
 
-
+def save(objs):
+  for obj in objs:
+    db.session.add(obj)
+  db.session.commit()
 def post_response_msgs(msgs, sender):
   for msg in msgs:
     payload = {'recipient': {'id': sender}, 'message': msg}
@@ -41,9 +44,12 @@ def webhook():
         sender = ""
         msgs = []
         postbacks = []
+        message_uid = entry["id"]
+
         for message in entry['messaging']:
           if sender == "":
             sender = message['sender']['id'] # Sender ID
+            timestamp = message['timestamp']
           if 'delivery' in message:
             return "hello world"
           if 'message' in message:
@@ -55,6 +61,17 @@ def webhook():
       user_data = fetch_user_data(sender)
       user_data['messenger_uid'] = sender
       user = usr_manager.handle_messenger_user(user_data)
+      if user and user.last_msg:
+        prev_time = int(user.last_msg)
+        user.last_msg = str(timestamp)
+        save([user])
+        print(int(prev_time))
+        print(timestamp)
+        if (int(timestamp) - prev_time) < 10:
+          return "rapid"
+      elif user:
+        user.last_msg = str(timestamp)
+        save([user])
       evey = EveyEngine(user_data["first_name"], user, sender)
       if user is None:
         resp_msgs = evey.understand(["signup"])
