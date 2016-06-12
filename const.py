@@ -31,7 +31,11 @@ WHEN_EMOJI = "🕐"
 WHERE_EMOJI = "📍"
 OTHER_EMOJI = "🔴"
 GUY_EMOJI = "👦"
+RED_A_EMOJI = ""
+RED_X_EMOJI = "❌"
 PEOPLE_EMOJI = GUY_EMOJI + "👩"
+GREEN_CHECK_EMOJI = "✅"
+CAL_EMOJI = "📅"
 EMOJI_1 = "1️⃣"
 EMOJI_2 = "2️⃣"
 EMOJI_3 = "3️⃣"
@@ -41,7 +45,7 @@ EMOJI_6 = "6️⃣"
 EMOJI_7 = "7️⃣"
 EMOJI_8 = "8️⃣"
 EMOJI_9 = "9️⃣"
-
+ELLIPSE = "🔸🔹🔸"
 NUM = {
   1: EMOJI_1,
   2: EMOJI_2,
@@ -53,6 +57,9 @@ NUM = {
   8: EMOJI_8,
   9: EMOJI_9
 }
+
+# FREQ USED
+CANCEL = RED_X_EMOJI
 
 # POSTBACKS
 SUBSCRIBE_POSTBACK = "SUBSCRIBE"

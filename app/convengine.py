@@ -15,7 +15,8 @@ from const import EXAMPLE_0, EXAMPLE_1, EXAMPLE_2,\
                    EVEY_URL, GUY_EMOJI, CONFIRM_POSTBACK,\
                    CANCEL_LOCATION_POSTBACK, ADD_TIME_POSTBACK, \
                    REMOVE_TIME_POSTBACK, NUM, DAY_ABRV, CANCEL_ADD_TIME, \
-                   CANCEL_REMOVE_TIME
+                   CANCEL_REMOVE_TIME, GREEN_CHECK_EMOJI, CAL_EMOJI, \
+                   RED_X_EMOJI, CANCEL, ELLIPSE
 
 PLZ_SLOWDOWN = ("I'm sorry %s, but currently I am wayy better "
                 "at understanding one request at a time. So "
@@ -137,7 +138,7 @@ class EveyEngine(WitEngine, FBAPI):
         if event == None:
             event = self.event_from_hash(event_hash)
 
-        title = event.title
+        title = "%s %s" % (CAL_EMOJI, str(event.title))
         postbacks = self.format_event_postbacks(EVENT_POSTBACKS,
                                                 event.event_hash)
         buttons_msg0 = [self.make_button("postback", "share",
@@ -150,10 +151,10 @@ class EveyEngine(WitEngine, FBAPI):
                                           PEOPLE_EMOJI,
                                          postbacks["who"]),
                         self.make_button("postback",
-                                          "add to Google Cal",
+                                          "sync to Google" + CAL_EMOJI,
                                           "TODO")]
 
-        subtitle = "Best so far"
+        subtitle = GUY_EMOJI
         date_exists = False
         top_date = event.get_top_date()
         attendees = event.attendees()
@@ -174,7 +175,7 @@ class EveyEngine(WitEngine, FBAPI):
         msg_elements = [self.make_generic_element(title=title,
                                                  subtitle=subtitle,
                                                  buttons=buttons_msg0),
-                        self.make_generic_element("... More",
+                        self.make_generic_element(ELLIPSE + " More",
                                                   buttons=buttons_msg1)]
         evey_resp = self.generic_attachment(msg_elements)
         return evey_resp
@@ -183,9 +184,9 @@ class EveyEngine(WitEngine, FBAPI):
 
     def get_event_link(self, event_json):
         event = self.event_from_hash(event_json["event_hash"])
-        title = event.title
-        url = EVEY_URL + "ev/" + event.event_hash
-        text = "\"%s\" details\n %s" % (title, url)
+        title = str(event.title)
+        url = str(EVEY_URL + "ev/" + event.event_hash)
+        text = CAL_EMOJI + " \"%s\" details\n %s" % (title, url)
 
         return [self.text_message(text)]
 
@@ -242,7 +243,7 @@ class EveyEngine(WitEngine, FBAPI):
         self.user.is_adding_time = ""
         self.save(polls)
         self.save([self.user, event])
-        text = "ok! I added your times"
+        text = GREEN_CHECK_EMOJI + " I added your times!"
         text2 = self.event_times_text(event)
         return [self.text_message(text),
                 self.text_message(text2),
@@ -295,15 +296,15 @@ class EveyEngine(WitEngine, FBAPI):
         buttons = []
         remove_button = self.make_button(type_="postback", title="remove " + WHEN_EMOJI,
                                        payload=postbacks["remove_time"])
-        text2 = ("to add when you're free:\n"
-                 "> text me an above number\n"
+        text2 = ("To add your " + WHEN_EMOJI +  " :\n"
+                 "> text me a number i.e." + NUM[1] +  ", " +  NUM[2]  + "\n"
                  "> or, a new time i.e. Thu 3-4pm")
         self.user.is_adding_time = event_json["event_hash"]
         print(event_json["event_hash"])
         self.save([self.user])
         if event.user_added_time(self.user):
           buttons.append(remove_button)
-        back_button = self.make_button(type_="postback", title="cancel",
+        back_button = self.make_button(type_="postback", title=CANCEL,
                                        payload=CANCEL_ADD_TIME)
         buttons.append(back_button)
         return [self.text_message(text), self.button_attachment(text=text2, buttons=buttons)]
@@ -325,7 +326,7 @@ class EveyEngine(WitEngine, FBAPI):
         text2 = ("Text me:\n"
                  "> a number correspond to an above time\n"
                  "> a time within one of the above times\n")
-        cancel_button = self.make_button(type_="postback", title="cancel",
+        cancel_button = self.make_button(type_="postback", title=CANCEL,
                                          payload=CANCEL_REMOVE_TIME)
 
         return [self.text_message(text1), self.text_message(text=text2,
@@ -356,13 +357,13 @@ class EveyEngine(WitEngine, FBAPI):
     def edit_location(self, event_json):
         event = self.event_from_hash(event_json["event_hash"])
         location_poll = event.location_polls.first()
-        text = "Text me the new location you want. Or, press cancel"
+        text = "Text me a new " + WHERE_EMOJI + ". Or, press " + CANCEL
         self.user.is_editing_location = event.event_hash
         self.save([self.user])
         postbacks = self.format_event_postbacks(dict(EVENT_POSTBACKS),
                                                 event.event_hash)
 
-        cancel_button = self.make_button(type_="postback", title="cancel",
+        cancel_button = self.make_button(type_="postback", title=CANCEL,
                                          payload=CANCEL_LOCATION_POSTBACK)
         return [self.button_attachment(text=text, buttons=[cancel_button])]
 
@@ -422,8 +423,8 @@ class EveyEngine(WitEngine, FBAPI):
     def back_to_button(self, event_hash, event=None):
         if event == None:
             event = self.event_from_hash(event_hash)
-        text = "Back to \"%s\"" % event.title
-        title = event.title
+        text = "Back to"
+        title = "%s %s" % (CAL_EMOJI, str(event.title))
         if len(event.title) > 20:
             title = title[:17] + "..."
         postbacks = self.format_event_postbacks(dict(EVENT_POSTBACKS),
