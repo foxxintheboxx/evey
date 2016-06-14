@@ -1,6 +1,9 @@
 import requests
+from dateutil.parser import parse
 from config import WIT_API
-
+import re
+from .utils import format_ampm, string_to_day
+from const import DATE
 
 class WitEngine(object):
 
@@ -40,3 +43,30 @@ class WitEngine(object):
 
     def remove_space(self, query):
         return query.replace(' ', '%20')
+
+    def extract_intervals(self, msg, look_ahead=2):
+        tokens = msg.split(" ")
+        tokens  = [el.replace(",", "") for el in tokens]
+        pattern = "\d\d?:?\d?\d?[APap]?[mM]?-\d\d?:?\d?\d?[APap]?[mM]?"
+        matches = re.findall(pattern, msg)
+        intervals = []
+        for i in range(len(matches)):
+            m = matches[i]
+            j = tokens.index(m)
+            m = format_ampm(m)
+            day = None
+            if j > 0:
+                string = tokens[j - 1]
+                day = string_to_day(string)
+            if not day and j > 1:
+                string = tokens[j - 2]
+                day = string_to_day(string)
+            if not day:
+                continue
+            start_time, end_time = m.split("-")
+            query = "%s %s to %s %s" % (day, start_time, day, end_time)
+            wit_resp = self.message(query)["entities"][DATE][0]
+            interval = {"from": parse(wit_resp["from"]["value"]),
+                        "to": parse(wit_resp["to"]["value"])}
+            intervals.append(interval)
+        return intervals

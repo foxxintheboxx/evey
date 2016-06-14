@@ -7,9 +7,9 @@ from .models import User, Message, Event, Calendar, Conversation, \
                     Datepoll, Locationpoll
 from .utils import fetch_user_data, format_ampm, string_to_day
 from config import WIT_APP_ID, WIT_SERVER
+from .onboardengine import OnboardEngine
 from .utils import generate_hash
-from const import EXAMPLE_0, EXAMPLE_1, EXAMPLE_2,\
-                   WHEN_EMOJI, WHERE_EMOJI, OTHER_EMOJI, \
+from const import  WHEN_EMOJI, WHERE_EMOJI, OTHER_EMOJI, \
                    MSG_BODY, MSG_SUBJ, LOCAL, DATE, \
                    EVENT_POSTBACKS, PEOPLE_EMOJI, \
                    EVEY_URL, GUY_EMOJI, CONFIRM_POSTBACK,\
@@ -23,22 +23,11 @@ PLZ_SLOWDOWN = ("I'm sorry %s, but currently I am wayy better "
                 "plz only text me 1 thing at a time")
 SIGNUP = ("First off, it doesnt look like you have an account yet."
           "Plz sign up so we can get started!")
-WAIT = ("OK %s, Thanks for registering.")
-ONBOARDING_1 = ("To make an event text me a sentence starting with "
-                "'make'. Like this:")
-ONBOARDING_2 = ("I can then help schedule a time that works for both "
-                "you and your ppl")
-ONBOARDING_3 = ("To invite ppl, forward them a link to the event")
-ONBOARDING_4 = ("Thats it!")
-
-HELP_MSG_0 = ("Hi %s, \n" + ONBOARDING_1)
-HELP_MSG_1 = ("to see your events just text me 'events' or 'e'")
 
 NON_EVENT_RESPONSE = ("I didn't quite get that.\n"
                       "> 'make' to make an event\n"
                       "> 'find' <event name>\n"
                       "> 'events' to see all your events")
-
 
 
 class EveyEngine(WitEngine, FBAPI):
@@ -48,6 +37,7 @@ class EveyEngine(WitEngine, FBAPI):
         self.user_name = first_name
         self.messenger_uid = messenger_uid
         self.user = user
+        self.onboarder = OnboardEngine(first_name, user)
         self.postback_func = {EVENT_POSTBACKS["share"]: self.get_event_link,
                               EVENT_POSTBACKS["who"]: self.see_people_in_event,
                               EVENT_POSTBACKS["back"]: self.back_to_callback,
@@ -68,7 +58,7 @@ class EveyEngine(WitEngine, FBAPI):
         if len(msgs) > 1:
             return [self.text_message(PLZ_SLOWDOWN % self.user_name)]
         if self.user.did_onboarding == 0 or msgs[0].lower() == "help":
-            return self.onboarding_1()
+            return self.onboarder.onboarding_1()
         if len(self.user.is_editing_location) > 0:
             return self.handle_edit_location(msgs[0])
         if len(self.user.is_adding_time) > 0:
@@ -82,10 +72,6 @@ class EveyEngine(WitEngine, FBAPI):
             text = ("hi %s, gimme a second to fetch your events for this"
                    " week")
             return [self.text_message(text % self.user.user_name)]
-        if msg.lower() == "h" or msg.lower() == "help":
-            return [self.text_message(HELP_MSG_0),
-                    self.usage_examples(),
-                    self.text_message(HELP_MSG_1)]
         msg_data = self.message(msgs[0])
         return self.determine_response(msg_data)
 
@@ -134,7 +120,6 @@ class EveyEngine(WitEngine, FBAPI):
         self.save(objects)
         return event
 
-
     def event_attachment(self, event_hash, event=None):
         if event == None:
             event = self.event_from_hash(event_hash)
@@ -143,7 +128,6 @@ class EveyEngine(WitEngine, FBAPI):
         postbacks = self.format_event_postbacks(EVENT_POSTBACKS,
                                                 event.event_hash)
 
-        subtitle = GUY_EMOJI
         date_exists = False
         top_date = event.get_top_date()
         attendees = len(event.attendees())
@@ -151,22 +135,17 @@ class EveyEngine(WitEngine, FBAPI):
         if top_date != None:
             dateobj = top_date.datetime
             votes = top_date.votes()
-            subtitle += " (%s/%s)" % (votes, attendees)
             date_str = self.format_dateobj(dateobj)
             date  = "%s %s" % (WHEN_EMOJI, date_str)
-            subtitle += "\n%s\n" % (date)
         else:
             date = "%s none yet" % (WHEN_EMOJI)
-            subtitle += "\n%s\n" % (date)
         top_location = event.get_top_local()
         where = ""
         if top_location != None:
             where_str = str(top_location.name)
             where = "%s %s" % (WHERE_EMOJI, where_str)
-            subtitle += "%s\n" % where
         else:
             where = "%s none yet" % (WHERE_EMOJI)
-            subtile += "%s\n" % where
         buttons_msg0 = [self.make_button("postback", date,
                                          postbacks["when"]),
                         self.make_button("postback",
@@ -259,40 +238,6 @@ class EveyEngine(WitEngine, FBAPI):
     def handle_remove_time(self, msg):
         pass
 
-    def extract_intervals(self, msg, look_ahead=2):
-        tokens = msg.split(" ")
-        tokens  = [el.replace(",", "") for el in tokens]
-        pattern = "\d\d?:?\d?\d?[APap]?[mM]?-\d\d?:?\d?\d?[APap]?[mM]?"
-        matches = re.findall(pattern, msg)
-        intervals = []
-        for i in range(len(matches)):
-             m = matches[i]
-             j = tokens.index(m)
-             m = format_ampm(m)
-             day = None
-             if j > 0:
-                  string = tokens[j - 1]
-                  day = string_to_day(string)
-             if not day and j > 1:
-                  string = tokens[j - 2]
-                  day = string_to_day(string)
-             if not day:
-                  continue
-             start_time, end_time = m.split("-")
-             query = "%s %s to %s %s" % (day, start_time, day, end_time)
-             wit_resp = self.message(query)["entities"][DATE][0]
-             interval = {"from": parse(wit_resp["from"]["value"]),
-                         "to": parse(wit_resp["to"]["value"])}
-             intervals.append(interval)
-        return intervals
-
-
-    def onboarding_1(self):
-        self.user.did_onboarding = 2
-        self.save([self.user])
-        usage_msg = self.usage_examples()
-        return [self.text_message(ONBOARDING_1), usage_msg]
-
     def collab_date_callback(self, event_json):
         event = self.event_from_hash(event_json["event_hash"])
         text = self.event_times_text(event)
@@ -320,8 +265,6 @@ class EveyEngine(WitEngine, FBAPI):
         self.save([self.user])
         event = self.event_from_hash(event_json["event_hash"])
         text1 = self.event_times_text(event)
-
-
         return [self.text_message(text1)]
 
     def remove_date_callback(self, event_json):
@@ -334,7 +277,6 @@ class EveyEngine(WitEngine, FBAPI):
                  "> a time within one of the above times\n")
         cancel_button = self.make_button(type_="postback", title=CANCEL,
                                          payload=CANCEL_REMOVE_TIME)
-
         return [self.text_message(text1), self.text_message(text=text2,
                                                             buttons=[cancel_button])]
 
@@ -367,7 +309,6 @@ class EveyEngine(WitEngine, FBAPI):
         self.save([self.user])
         postbacks = self.format_event_postbacks(dict(EVENT_POSTBACKS),
                                                 event.event_hash)
-
         cancel_button = self.make_button(type_="postback", title=CANCEL,
                                          payload=CANCEL_LOCATION_POSTBACK)
         return [self.button_attachment(text=text, buttons=[cancel_button])]
@@ -393,12 +334,10 @@ class EveyEngine(WitEngine, FBAPI):
         last_poll = event.location_polls.first()
         if last_poll:
           self.delete([last_poll])
-
         new_poll = Locationpoll()
         new_poll.name = name
         event.location_polls.append(new_poll)
         self.save([self.user, event, new_poll])
-
         p1, p2 = self.event_attachment(event_hash, event)
         return [self.text_message(text="success!"), p1, p2]
 
@@ -446,20 +385,6 @@ class EveyEngine(WitEngine, FBAPI):
         self.clear_user()
         p1, p2 = self.event_attachment(event.event_hash, event)
         return [p1, p2]
-
-
-    def usage_examples(self):
-        titles = [ONBOARDING_2,
-                  ONBOARDING_3,
-                  ONBOARDING_4,]
-        img_urls = [EXAMPLE_0, EXAMPLE_1, EXAMPLE_2]
-        elements = []
-        for i in range(3):
-           elements.append(self.make_generic_element(titles[i],
-                                                    img_url=img_urls[i]))
-        return self.generic_attachment(elements)
-
-
 
     def format_event_postbacks(self, postbacks, event_hash):
         postbacks = dict(postbacks)

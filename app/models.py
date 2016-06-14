@@ -211,12 +211,13 @@ class Event(db.Model):
 
   def sort_datepolls(self):
     datepoll_list = self.get_datepolls()
-    for i in range(datepoll_list):
+    for i in range(len(datepoll_list)):
       datepoll_list[i].poll_number = i + 1
 
   def get_datepolls(self):
     datepoll_list = self.date_polls.all()
     datepoll_list.sort(key=lambda x: x.votes(), reverse=True)
+    return datepoll_list
 
 class Locationpoll(db.Model):
   id = db.Column(db.Integer, primary_key=True)
