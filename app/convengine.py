@@ -120,7 +120,7 @@ class EveyEngine(WitEngine, FBAPI):
             datepoll = Datepoll()
             datepoll.users.append(curr_user)
             datepoll.datetime = dateobj
-            event.date_polls.append(datepoll)
+            event.append_datepoll(datepoll)
             objects.append(datepoll)
         if LOCAL in entities:
             where_str = str(entities[LOCAL][0]["value"])
@@ -173,7 +173,7 @@ class EveyEngine(WitEngine, FBAPI):
                                           PEOPLE_EMOJI + "(%s)" % attendees,
                                          postbacks["who"]),
                         self.make_button("postback", where,
-                                         postbacks["where"])]
+                                          postbacks["where"])]
 
         buttons_msg1 = [self.make_button("postback", "event link",
                                          postbacks["share"])]
@@ -244,8 +244,9 @@ class EveyEngine(WitEngine, FBAPI):
             poll.datetime = i.get("from")
             poll.end_datetime = i.get("to")
             poll.users.append(self.user)
-            event.date_polls.append(poll)
+            event.append_datepoll(poll)
             polls.append(poll)
+        event.sort_datepolls()
         self.user.is_adding_time = ""
         self.save(polls)
         self.save([self.user, event])
@@ -294,8 +295,6 @@ class EveyEngine(WitEngine, FBAPI):
 
     def collab_date_callback(self, event_json):
         event = self.event_from_hash(event_json["event_hash"])
-        date_polls = event.date_polls.all()
-
         text = self.event_times_text(event)
         postbacks = self.format_event_postbacks(dict(EVENT_POSTBACKS),
                                                 event.event_hash)
@@ -340,15 +339,13 @@ class EveyEngine(WitEngine, FBAPI):
                                                             buttons=[cancel_button])]
 
     def event_times_text(self, event, user=None):
-        date_polls = event.date_polls.all()
-        print(date_polls)
+        date_polls = event.get_datepolls()
         text = ""
         if len(date_polls) == 0:
           text = "Looks like no one has added any of their availabilities yet"
         else:
-          count = 1
           for poll in date_polls:
-            if count == 2:
+            if poll.poll_number == 2:
               text += "-"*min(len(text), 25) + "\n"
             if user != None and user not in poll.users:
               continue
@@ -359,8 +356,7 @@ class EveyEngine(WitEngine, FBAPI):
               votes = GUY_EMOJI * poll.votes()
             dateobj = poll.datetime
             date_str = self.format_dateobj(dateobj)
-            text += "%s %s, %s\n" % (NUM[count], date_str, votes)
-            count += 1
+            text += "%s %s, %s\n" % (NUM[poll.poll_number], date_str, votes)
         return text
 
     def edit_location(self, event_json):

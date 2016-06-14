@@ -202,8 +202,21 @@ class Event(db.Model):
           return True
     return False
 
+  def append_datepoll(self, poll):
+    self.date_polls.append(poll)
+    poll.poll_number = len(self.date_polls.all())
+
   def attendees(self):
     return [cal.user for cal in self.calendars]
+
+  def sort_datepolls(self):
+    datepoll_list = self.get_datepolls()
+    for i in range(datepoll_list):
+      datepoll_list[i].poll_number = i + 1
+
+  def get_datepolls(self):
+    datepoll_list = self.date_polls.all()
+    datepoll_list.sort(key=lambda x: x.votes(), reverse=True)
 
 class Locationpoll(db.Model):
   id = db.Column(db.Integer, primary_key=True)
