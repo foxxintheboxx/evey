@@ -229,6 +229,8 @@ class Event(db.Model):
         continue # TODO
       print("to " + str(to_dateobj))
       print("db " + str(poll.datetime))
+      print("from " + str(from_dateobj))
+      print("db end" + str(poll.end_datetime))
       time0 = min(to_dateobj, poll.datetime)
       time1 = max(to_dateobj, poll.datetime)
       time2 = min(poll.end_datetime, from_dateobj)
@@ -243,7 +245,7 @@ class Event(db.Model):
         inner_interval.end_datetime = time2
         outer_interval.datetime = time2
         outer_interval.end_datetime = time3
-        users = poll.users.all()
+        users = poll.users
         if (time2 == from_dateobj):
           outer_interval.add_users(users)
           users.append(user)
@@ -286,7 +288,7 @@ class Datepoll(db.Model):
   event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
   poll_type = db.Column(db.String)
   datetime = db.Column(db.DateTime(timezone=True))
-  end_datetime = db.Column(db.DateTime)
+  end_datetime = db.Column(db.DateTime(timezone=True))
   poll_number = db.Column(db.Integer)  # to use when choosing
 
   def votes(self):

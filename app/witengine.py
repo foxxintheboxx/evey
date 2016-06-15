@@ -1,5 +1,6 @@
 import requests
 from dateutil.parser import parse
+from dateutil.tz import *
 from config import WIT_API
 import re
 from .utils import format_ampm, string_to_day
@@ -66,7 +67,10 @@ class WitEngine(object):
             start_time, end_time = m.split("-")
             query = "%s %s to %s %s" % (day, start_time, day, end_time)
             wit_resp = self.message(query)["entities"][DATE][0]
-            interval = {"from": parse(wit_resp["from"]["value"]),
-                        "to": parse(wit_resp["to"]["value"])}
+            from_ = parse(wit_resp["from"]["value"]).astimezone(tzutc())
+            to =  parse(wit_resp["to"]["value"]).astimezone(tzutc())
+            interval = {"from": from_, "to": to}
+            print(interval)
             intervals.append(interval)
         return intervals
+

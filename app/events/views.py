@@ -28,8 +28,9 @@ def access_event(event_id):
     event.calendars.append(current_user.calendar)
     db.session.add(event)
     db.session.commit()
+    pkt0, pkt1 = evey.event_attachment(event.event_hash, event=event)
     msgs = [evey.text_message(WELCOME % (current_user.first_name, title)),
-            evey.event_attachment(event.event_hash, event=event)]
+            pkt0, pkt1]
     for msg in msgs:
         payload = {'recipient': {'id': messenger_uid}, 'message': msg}
         r = requests.post(MESNGR_API_URL + TOKEN, json=payload)

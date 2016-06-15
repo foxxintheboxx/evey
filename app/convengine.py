@@ -1,4 +1,5 @@
 from dateutil.parser import parse
+from dateutil.tz import *
 import json, re
 from . import db
 from .witengine import WitEngine
@@ -99,7 +100,7 @@ class EveyEngine(WitEngine, FBAPI):
         calendar.events.append(event)
         objects = [event, calendar]
         if DATE in entities:
-            dateobj = parse(entities[DATE][0]["value"])
+            dateobj = parse(entities[DATE][0]["value"]).astimezone(tzutc())
             datepoll = Datepoll()
             datepoll.users.append(curr_user)
             datepoll.datetime = dateobj
