@@ -9,10 +9,9 @@ from .utils import fetch_user_data, format_ampm, string_to_day
 from config import WIT_APP_ID, WIT_SERVER
 from .onboardengine import OnboardEngine
 from .utils import generate_hash
-from const import  WHEN_EMOJI, WHERE_EMOJI, OTHER_EMOJI, \
-                   MSG_BODY, MSG_SUBJ, LOCAL, DATE, \
-                   EVENT_POSTBACKS, PEOPLE_EMOJI, \
-                   EVEY_URL, GUY_EMOJI, CONFIRM_POSTBACK,\
+from const import  WHEN_EMOJI, WHERE_EMOJI, OTHER_EMOJI, EVEY_URL, \
+                   MSG_BODY, MSG_SUBJ, LOCAL, DATE, EVENT_POSTBACKS, \
+                   PEOPLE_EMOJI, GUY_EMOJI, CONFIRM_POSTBACK,\
                    CANCEL_LOCATION_POSTBACK, ADD_TIME_POSTBACK, \
                    REMOVE_TIME_POSTBACK, NUM, DAY_ABRV, CANCEL_ADD_TIME, \
                    CANCEL_REMOVE_TIME, GREEN_CHECK_EMOJI, CAL_EMOJI, \
@@ -21,9 +20,6 @@ from const import  WHEN_EMOJI, WHERE_EMOJI, OTHER_EMOJI, \
 PLZ_SLOWDOWN = ("I'm sorry %s, but currently I am wayy better "
                 "at understanding one request at a time. So "
                 "plz only text me 1 thing at a time")
-SIGNUP = ("First off, it doesnt look like you have an account yet."
-          "Plz sign up so we can get started!")
-
 NON_EVENT_RESPONSE = ("I didn't quite get that.\n"
                       "> 'make' to make an event\n"
                       "> 'find' <event name>\n"
@@ -54,7 +50,7 @@ class EveyEngine(WitEngine, FBAPI):
         if len(msgs) == 0:
             return []
         if self.user is None:
-            return [self.signup_attachment()]
+            return [self.onboarder.signup_attachment()]
         if len(msgs) > 1:
             return [self.text_message(PLZ_SLOWDOWN % self.user_name)]
         if self.user.did_onboarding == 0 or msgs[0].lower() == "help":
@@ -86,7 +82,6 @@ class EveyEngine(WitEngine, FBAPI):
         event = self.create_event(entities)
         p1, p2 = self.event_attachment(event.event_hash, event=event)
         return [p1, p2]
-
 
     def create_event(self, entities):
         title = entities.get(MSG_SUBJ)
@@ -127,7 +122,6 @@ class EveyEngine(WitEngine, FBAPI):
         title = "%s %s" % (CAL_EMOJI, str(event.title))
         postbacks = self.format_event_postbacks(EVENT_POSTBACKS,
                                                 event.event_hash)
-
         date_exists = False
         top_date = event.get_top_date()
         attendees = len(event.attendees())
@@ -165,8 +159,6 @@ class EveyEngine(WitEngine, FBAPI):
         evey_resp1 = self.generic_attachment(msg_elements1)
         return evey_resp, evey_resp1
 
-
-
     def get_event_link(self, event_json):
         event = self.event_from_hash(event_json["event_hash"])
         title = str(event.title)
@@ -189,17 +181,9 @@ class EveyEngine(WitEngine, FBAPI):
         return [self.generic_attachment(ppl_attachments),
                 self.back_to_button(event.event_hash, event)]
 
-    def signup_attachment(self):
-        url = EVEY_URL + "/register/" + self.messenger_uid
-        signup_button = self.make_button(type_="web_url", title="Sign Up!",
-                                         payload=url)
-        return self.button_attachment(text=SIGNUP,
-                                      buttons=[signup_button])
-
     def handle_postback(self, keys):
         if len(keys) > 1:
             return [self.text_message(PLZ_SLOWDOWN % self.user_name)]
-        print(str(keys[0]))
         postback_data = str(keys[0]).split('$')
         if len(postback_data) > 1:
             data = json.loads(postback_data[1])
@@ -251,7 +235,6 @@ class EveyEngine(WitEngine, FBAPI):
                  NUM[1] +  ", " +  NUM[2]  + "\n" +
                  BLACK_CIRCLE + " or, a new time i.e. Thu 3-4pm")
         self.user.is_adding_time = event_json["event_hash"]
-        print(event_json["event_hash"])
         self.save([self.user])
         if event.user_added_time(self.user):
           buttons.append(remove_button)
@@ -353,8 +336,6 @@ class EveyEngine(WitEngine, FBAPI):
     def cancel_date_edit(self):
         add_time = self.user.is_adding_time
         remove_time = self.user.is_removing_time
-        print(add_time)
-        print(remove_time)
         msgs = [self.text_message("Ok canceled")]
         self.user.is_adding_time = ""
         self.user.is_removing_time = ""

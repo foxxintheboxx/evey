@@ -2,7 +2,7 @@ from . import db
 from .witengine import WitEngine
 from .fbapimethods import FBAPI
 from config import WIT_APP_ID, WIT_SERVER
-from const import EXAMPLE_0, EXAMPLE_1, EXAMPLE_2
+from const import EXAMPLE_0, EXAMPLE_1, EXAMPLE_2, EVEY_URL
 
 ONBOARDING_1 = ("To make an event text me a sentence starting with "
                 "'make'. Like this:")
@@ -10,6 +10,8 @@ ONBOARDING_2 = ("I can then help schedule a time that works for both "
                 "you and your ppl")
 ONBOARDING_3 = ("To invite ppl, forward them a link to the event")
 ONBOARDING_4 = ("Thats it!")
+SIGNUP = ("First off, it doesnt look like you have an account yet."
+          "Plz sign up so we can get started!")
 
 class OnboardEngine(WitEngine, FBAPI):
 
@@ -39,3 +41,11 @@ class OnboardEngine(WitEngine, FBAPI):
     for model in models:
       db.session.add(model)
     db.session.commit()
+
+  def signup_attachment(self):
+    url = EVEY_URL + "/register/" + self.messenger_uid
+    signup_button = self.make_button(type_="web_url", title="Sign Up!",
+                                      payload=url)
+    return self.button_attachment(text=SIGNUP,
+                                  buttons=[signup_button])
+
