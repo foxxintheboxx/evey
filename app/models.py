@@ -3,6 +3,7 @@ from . import db
 from sqlalchemy.ext.declarative import declarative_base
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+from .utils import save, delete
 
 Base = declarative_base()
 
@@ -219,6 +220,56 @@ class Event(db.Model):
     datepoll_list.sort(key=lambda x: x.votes(), reverse=True)
     return datepoll_list
 
+  def add_new_interval(self, to_dateobj, from_dateobj, user):
+    date_polls = self.get_datepolls()
+    intersecting_polls = []
+    old_polls = []
+    for poll in date_polls:
+      if poll.end_datetime == None and from_dateobj != None:
+        continue # TODO
+      print("to " + str(to_dateobj))
+      print("db " + str(poll.datetime))
+      time0 = min(to_dateobj, poll.datetime)
+      time1 = max(to_dateobj, poll.datetime)
+      time2 = min(poll.end_datetime, from_dateobj)
+      time3 = max(poll.end_datetime, from_dateobj)
+      if (time0 == time1 and time2 == time3):
+        poll.users.append(user)
+        return [poll]
+      elif (time0 == time1 and time2 < time3): # 1
+        inner_interval = Datepoll()
+        outer_interval = Datepoll()
+        inner_interval.datetime = time0
+        inner_interval.end_datetime = time2
+        outer_interval.datetime = time2
+        outer_interval.end_datetime = time3
+        users = poll.users.all()
+        if (time2 == from_dateobj):
+          outer_interval.add_users(users)
+          users.append(user)
+          inner_interval.add_users(users)
+        else:
+          outer_interval.add_users([user])
+          inner_interval.add_users(users)
+        intersecting_polls.extend([inner_interval, outer_interval])
+        old_polls.append(poll)
+#      elif (time0 < time1 and time2 == time3):
+#        if (time1 =
+#     elif (poll.datetime <= from_dateobj and from_dateobj <= poll.end_datetime):
+    if len(intersecting_polls) == 0:
+      poll = Datepoll()
+      poll.datetime = to_dateobj
+      poll.end_datetime = from_dateobj
+      poll.add_users([user])
+      intersecting_polls.append(poll)
+    for poll in intersecting_polls:
+      self.append_datepoll(poll)
+    delete(old_polls)
+    save(intersecting_polls)
+
+
+
+
 class Locationpoll(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -234,10 +285,14 @@ class Datepoll(db.Model):
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
   event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
   poll_type = db.Column(db.String)
-  datetime = db.Column(db.DateTime)
+  datetime = db.Column(db.DateTime(timezone=True))
   end_datetime = db.Column(db.DateTime)
   poll_number = db.Column(db.Integer)  # to use when choosing
 
   def votes(self):
     return len(self.users)
+
+  def add_users(self, users_):
+    for user in users_:
+      self.users.append(user)
 

@@ -1,11 +1,12 @@
 import requests
 import random
 import re
+from . import db
 
 FB_GRAPH_URL = "https://graph.facebook.com/v2.6/"
 MESNGR_API_URL = 'https://graph.facebook.com/v2.6/me/messages/?access_token='
 from config import TOKEN
-from const import DAY_ABRV
+import const as c
 
 user_details_params =  {'fields':'first_name,last_name,profile_pic',
                         'access_token':TOKEN}
@@ -49,7 +50,21 @@ def format_ampm(string):
   return "%s%s-%s%s" % (start_val, start_zone, end_val, end_zone)
 
 def string_to_day(string):
-  fullnames = DAY_ABRV.values()
+  fullnames = c.DAY_ABRV.values()
   if string in fullnames:
     return string
-  return DAY_ABRV.get(string.lower())
+  return c.DAY_ABRV.get(string.lower())
+
+def encode_unicode(unicode_string):
+  return unicode_string.encode("utf-8")
+
+def save(models):
+  for model in models:
+    db.session.add(model)
+  db.session.commit()
+
+def delete(models):
+  for model in models:
+    db.session.delete(model)
+  db.session.commit()
+

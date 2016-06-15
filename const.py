@@ -58,6 +58,9 @@ NUM = {
   8: EMOJI_8,
   9: EMOJI_9
 }
+
+EMOJI_NUM = dict((v,k) for k,v in NUM.iteritems())
+
 DOWN_ARROW = "⬇️"
 BLACK_CIRCLE = "●"
 # FREQ USED

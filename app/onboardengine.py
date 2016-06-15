@@ -15,10 +15,11 @@ SIGNUP = ("First off, it doesnt look like you have an account yet."
 
 class OnboardEngine(WitEngine, FBAPI):
 
-  def __init__(self, first_name, user):
+  def __init__(self, first_name, user, messenger_uid):
     super(OnboardEngine, self).__init__(WIT_APP_ID, WIT_SERVER)
     self.user_name = first_name
     self.user = user
+    self.messenger_uid = messenger_uid
 
   def onboarding_1(self):
     self.user.did_onboarding = 2
