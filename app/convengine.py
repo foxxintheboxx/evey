@@ -132,7 +132,7 @@ class EveyEngine(WitEngine, FBAPI):
         if top_date != None:
             dateobj = top_date.datetime
             votes = top_date.votes()
-            date_str = self.format_dateobj(dateobj)
+            date_str = self.format_dateobj(dateobj, top_date.end_datetime)
             date  = "%s %s" % (WHEN_EMOJI, date_str)
         else:
             date = "%s none yet" % (WHEN_EMOJI)
@@ -277,7 +277,7 @@ class EveyEngine(WitEngine, FBAPI):
             else:
               votes = GUY_EMOJI * poll.votes()
             dateobj = poll.datetime
-            date_str = self.format_dateobj(dateobj)
+            date_str = self.format_dateobj(dateobj, poll.end_datetime)
             text += "%s %s, %s\n" % (NUM[poll.poll_number], date_str, votes)
         return text
 
@@ -374,17 +374,27 @@ class EveyEngine(WitEngine, FBAPI):
     def format_postback(self, postback, data_dict):
         return postback + "$" +  json.dumps(data_dict)
 
-    def format_dateobj(self, dateobj):
+    def format_dateobj(self, dateobj, to_dateobj=None):
         ampm = "am"
         if dateobj.hour > 12:
             ampm = "pm"
         minute = ""
         if dateobj.minute > 0:
             minutes = str(dateobj.minute)
-            if len(minute) < 2:
+            if len(minutes) < 2:
                 minutes = "0" + minutes
             minute = ":" + minutes
         hrs = dateobj.strftime("%I")
+        to_hrs = ""
+        to_minute = ""
+        if to_dateobj:
+          to_hrs = to_dateobj.strftime("%I")
+          if to_dateobj.minute > 0:
+              minutes = str(to_dateobj.minute)
+              if len(minutes) < 2:
+                  to_minutes = "0" + minutes
+              to_minute = ":" + to_minutes
+
         if ":" in hrs:
           start, end = hrs.split(":")
           end.replace("0", "")
@@ -393,7 +403,10 @@ class EveyEngine(WitEngine, FBAPI):
           hrs = start + "-" + end
         datestr = dateobj.strftime("%a %m/%d @ ")
         datestr += hrs
-        datestr += minute + ampm
+        datestr += minute
+        if len(to_hrs) > 0:
+          datestr += "-" + to_hrs + to_minute # TODO
+        datestr += ampm
         return datestr
 
     def current_user(self):
