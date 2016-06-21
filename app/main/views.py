@@ -28,13 +28,13 @@ def post_response_msgs(msgs, sender):
     r = requests.post(MESNGR_API_URL + TOKEN, json=payload)
 
 
-@main.route('/' + WEBHOOK, methods=['GET'])
+@main.route('/webhook/' + WEBHOOK, methods=['GET'])
 def verification():
   if request.args.get('hub.verify_token') == WEBHOOK_TOKEN:
     return request.args.get('hub.challenge')
   return 'Wrong Verify Token'
 
-@main.route('/' + WEBHOOK, methods=['POST'])
+@main.route('/webhook/' + WEBHOOK, methods=['POST'])
 def webhook():
   if request.method == 'POST':
     try:

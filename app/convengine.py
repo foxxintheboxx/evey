@@ -83,8 +83,8 @@ class EveyEngine(WitEngine, FBAPI):
             entities.get("message_subject") is None):
             return [self.text_message("What do you wanna call the event?")]
         event = self.create_event(entities)
-        p1, p2 = self.event_attachment(event.event_hash, event=event)
-        return [p1, p2]
+        p1 = self.event_attachment(event.event_hash, event=event)
+        return [p1]
 
     def create_event(self, entities):
         title = entities.get(MSG_SUBJ)
@@ -143,29 +143,25 @@ class EveyEngine(WitEngine, FBAPI):
             where = "%s %s" % (WHERE_EMOJI, where_str)
         else:
             where = "%s none yet" % (WHERE_EMOJI)
+        people = GUY_EMOJI * attendees
+        if attendees > 3:
+          people = "%sx%s" % (GUY_EMOJI, attendees)
         buttons_msg0 = [self.make_button("postback", date,
                                          postbacks["when"]),
-                        self.make_button("postback",
-                                          PEOPLE_EMOJI + "(%s)" % attendees,
+                        self.make_button("postback", people,
                                          postbacks["who"]),
-                        self.make_button("postback", where,
-                                          postbacks["where"])]
-
-        buttons_msg1 = [self.make_button("postback", "event link",
+                        self.make_button("postback", "invite ppl to this",
                                          postbacks["share"])]
 
         msg_elements0 = [self.make_generic_element(title=title,
                                                  buttons=buttons_msg0)]
-        msg_elements1 = [self.make_generic_element(title="invite friends",
-                                                  buttons=buttons_msg1)]
         evey_resp = self.generic_attachment(msg_elements0)
-        evey_resp1 = self.generic_attachment(msg_elements1)
-        return evey_resp, evey_resp1
+        return evey_resp
 
     def get_event_link(self, event_json):
         event = self.event_from_hash(event_json["event_hash"])
         title = str(event.title)
-        url = str(EVEY_URL + "ev/" + event.event_hash)
+        url = str(EVEY_URL +  event.event_hash)
         text = CAL_EMOJI + " \"%s\" details\n %s" % (title, url)
 
         return [self.text_message("forward this link" + DOWN_ARROW),
@@ -318,8 +314,8 @@ class EveyEngine(WitEngine, FBAPI):
         new_poll.name = name
         event.location_polls.append(new_poll)
         save([self.user, event, new_poll])
-        p1, p2 = self.event_attachment(event_hash, event)
-        return [self.text_message(text="success!"), p1, p2]
+        p1 = self.event_attachment(event_hash, event)
+        return [self.text_message(text="success!"), p1]
 
     def cancel_location_edit(self):
         event_hash = self.user.is_editing_location
@@ -327,8 +323,8 @@ class EveyEngine(WitEngine, FBAPI):
           return [self.text_message("Ok canceled")]
         self.user.is_editing_location = ""
         save([self.user])
-        p1, p2 = self.event_attachment(event_hash)
-        return [self.text_message("Ok canceled"), p1, p2]
+        p1 = self.event_attachment(event_hash)
+        return [self.text_message("Ok canceled"), p1]
 
     def cancel_date_edit(self):
         add_time = self.user.is_adding_time
@@ -361,8 +357,8 @@ class EveyEngine(WitEngine, FBAPI):
     def back_to_callback(self, event_json):
         event = self.event_from_hash(event_json["event_hash"])
         self.clear_user()
-        p1, p2 = self.event_attachment(event.event_hash, event)
-        return [p1, p2]
+        p1 = self.event_attachment(event.event_hash, event)
+        return [p1]
 
     def format_event_postbacks(self, postbacks, event_hash):
         postbacks = dict(postbacks)

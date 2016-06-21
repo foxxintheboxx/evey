@@ -94,4 +94,5 @@ EVENT_POSTBACKS = {
 }
 
 #  BASE URL
-EVEY_URL = "https://eveyai.herokuapp.com/"
+HEROKU_URL = "https://eveyai.herokuapp.com/"
+EVEY_URL = "www.evey.ai/"

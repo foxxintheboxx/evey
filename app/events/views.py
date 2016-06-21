@@ -14,7 +14,7 @@ WELCOME = ("Hey %s, thanks for accessing %s!"
            " heres the event's details")
 
 
-@events.route('/ev/<event_id>', methods=['GET'])
+@events.route('/<event_id>', methods=['GET'])
 @login_required
 def access_event(event_id):
     print("accessed event" + event_id)
@@ -28,9 +28,8 @@ def access_event(event_id):
     event.calendars.append(current_user.calendar)
     db.session.add(event)
     db.session.commit()
-    pkt0, pkt1 = evey.event_attachment(event.event_hash, event=event)
-    msgs = [evey.text_message(WELCOME % (current_user.first_name, title)),
-            pkt0, pkt1]
+    pkt0 = evey.event_attachment(event.event_hash, event=event)
+    msgs = [evey.text_message(WELCOME % (current_user.first_name, title)), pkt0]
     for msg in msgs:
         payload = {'recipient': {'id': messenger_uid}, 'message': msg}
         r = requests.post(MESNGR_API_URL + TOKEN, json=payload)
