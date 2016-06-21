@@ -3,11 +3,12 @@ from dateutil.tz import *
 import json, re
 from . import db
 from .witengine import WitEngine
+
 from .fbapimethods import FBAPI
 from .models import User, Message, Event, Calendar, Conversation, \
                     Datepoll, Locationpoll
 from .utils import fetch_user_data, format_ampm, string_to_day, save, delete, \
-                   encode_unicode
+                   encode_unicode, format_dateobj, format_event_postbacks
 from config import WIT_APP_ID, WIT_SERVER
 from .onboardengine import OnboardEngine
 from .utils import generate_hash
@@ -123,8 +124,8 @@ class EveyEngine(WitEngine, FBAPI):
             event = self.event_from_hash(event_hash)
 
         title = "%s %s" % (CAL_EMOJI, str(event.title))
-        postbacks = self.format_event_postbacks(EVENT_POSTBACKS,
-                                                event.event_hash)
+        postbacks = format_event_postbacks(EVENT_POSTBACKS,
+                                           event.event_hash)
         date_exists = False
         top_date = event.get_top_date()
         attendees = len(event.attendees())
@@ -132,7 +133,7 @@ class EveyEngine(WitEngine, FBAPI):
         if top_date != None:
             dateobj = top_date.datetime
             votes = top_date.votes()
-            date_str = self.format_dateobj(dateobj, top_date.end_datetime)
+            date_str = format_dateobj(dateobj, top_date.end_datetime)
             date  = "%s %s" % (WHEN_EMOJI, date_str)
         else:
             date = "%s none yet" % (WHEN_EMOJI)
@@ -218,7 +219,7 @@ class EveyEngine(WitEngine, FBAPI):
     def collab_date_callback(self, event_json):
         event = self.event_from_hash(event_json["event_hash"])
         text = self.event_times_text(event)
-        postbacks = self.format_event_postbacks(dict(EVENT_POSTBACKS),
+        postbacks = format_event_postbacks(dict(EVENT_POSTBACKS),
                                                 event.event_hash)
         buttons = []
         remove_button = self.make_button(type_="postback", title="remove " + WHEN_EMOJI,
@@ -273,7 +274,7 @@ class EveyEngine(WitEngine, FBAPI):
             else:
               votes = GUY_EMOJI * poll.votes()
             dateobj = poll.datetime
-            date_str = self.format_dateobj(dateobj, poll.end_datetime)
+            date_str = format_dateobj(dateobj, poll.end_datetime)
             text += "%s %s, %s\n" % (NUM[poll.poll_number], date_str, votes)
         return text
 
@@ -283,8 +284,8 @@ class EveyEngine(WitEngine, FBAPI):
         text = "Text me a new " + WHERE_EMOJI + ". Or, press " + RED_X_EMOJI
         self.user.is_editing_location = event.event_hash
         save([self.user])
-        postbacks = self.format_event_postbacks(dict(EVENT_POSTBACKS),
-                                                event.event_hash)
+        postbacks = format_event_postbacks(dict(EVENT_POSTBACKS),
+                                           event.event_hash)
         cancel_button = self.make_button(type_="postback", title=CANCEL,
                                          payload=CANCEL_LOCATION_POSTBACK)
         return [self.button_attachment(text=text, buttons=[cancel_button])]
@@ -293,8 +294,8 @@ class EveyEngine(WitEngine, FBAPI):
         words = self.capitalize_first_letter(msg.split(" "))
         location = " ".join(words)
         text = "Is this correct? %s" % location
-        confirm_postback = self.format_postback(CONFIRM_POSTBACK,
-                                                {"name": location})
+        confirm_postback = format_postback(CONFIRM_POSTBACK,
+                                           {"name": location})
         confirm_button = self.make_button(type_="postback", title="Yes",
                                           payload=confirm_postback)
         cancel_button = self.make_button(type_="postback", title="cancel",
@@ -347,7 +348,7 @@ class EveyEngine(WitEngine, FBAPI):
         title = "%s %s" % (CAL_EMOJI, str(event.title))
         if len(event.title) > 20:
             title = title[:17] + "..."
-        postbacks = self.format_event_postbacks(dict(EVENT_POSTBACKS),
+        postbacks = format_event_postbacks(dict(EVENT_POSTBACKS),
                                                 event.event_hash)
 
         back_button = self.make_button(type_="postback", title=title,
@@ -359,51 +360,6 @@ class EveyEngine(WitEngine, FBAPI):
         self.clear_user()
         p1 = self.event_attachment(event.event_hash, event)
         return [p1]
-
-    def format_event_postbacks(self, postbacks, event_hash):
-        postbacks = dict(postbacks)
-        for key in postbacks.keys():
-          event_data = {"event_hash": event_hash}
-          postbacks[key] = self.format_postback(postbacks[key], event_data)
-        return postbacks
-
-    def format_postback(self, postback, data_dict):
-        return postback + "$" +  json.dumps(data_dict)
-
-    def format_dateobj(self, dateobj, to_dateobj=None):
-        ampm = "am"
-        if dateobj.hour > 12:
-            ampm = "pm"
-        minute = ""
-        if dateobj.minute > 0:
-            minutes = str(dateobj.minute)
-            if len(minutes) < 2:
-                minutes = "0" + minutes
-            minute = ":" + minutes
-        hrs = dateobj.strftime("%I")
-        to_hrs = ""
-        to_minute = ""
-        if to_dateobj:
-          to_hrs = to_dateobj.strftime("%I")
-          if to_dateobj.minute > 0:
-              minutes = str(to_dateobj.minute)
-              if len(minutes) < 2:
-                  to_minutes = "0" + minutes
-              to_minute = ":" + to_minutes
-
-        if ":" in hrs:
-          start, end = hrs.split(":")
-          end.replace("0", "")
-          if len(end) == 1:
-            end = "0" + end
-          hrs = start + "-" + end
-        datestr = dateobj.strftime("%a %m/%d @ ")
-        datestr += hrs
-        datestr += minute
-        if len(to_hrs) > 0:
-          datestr += "-" + to_hrs + to_minute # TODO
-        datestr += ampm
-        return datestr
 
     def current_user(self):
         return User.query.filter(User.messenger_uid==self.messenger_uid).first()

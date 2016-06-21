@@ -1,7 +1,9 @@
 import requests
 import random
 import re
+import json
 from . import db
+
 
 FB_GRAPH_URL = "https://graph.facebook.com/v2.6/"
 MESNGR_API_URL = 'https://graph.facebook.com/v2.6/me/messages/?access_token='
@@ -68,3 +70,48 @@ def delete(models):
     db.session.delete(model)
   db.session.commit()
 
+def format_postback(postback, data_dict):
+    return postback + "$" +  json.dumps(data_dict)
+
+def format_event_postbacks(postbacks, event_hash):
+    postbacks = dict(postbacks)
+    for key in postbacks.keys():
+      event_data = {"event_hash": event_hash}
+      postbacks[key] = format_postback(postbacks[key], event_data)
+    return postbacks
+
+
+def format_dateobj(dateobj, to_dateobj=None):
+    ampm = "am"
+    if dateobj.hour > 12:
+        ampm = "pm"
+    minute = ""
+    if dateobj.minute > 0:
+        minutes = str(dateobj.minute)
+        if len(minutes) < 2:
+            minutes = "0" + minutes
+        minute = ":" + minutes
+    hrs = dateobj.strftime("%I")
+    to_hrs = ""
+    to_minute = ""
+    if to_dateobj:
+      to_hrs = to_dateobj.strftime("%I")
+      if to_dateobj.minute > 0:
+          minutes = str(to_dateobj.minute)
+          if len(minutes) < 2:
+              to_minutes = "0" + minutes
+          to_minute = ":" + to_minutes
+
+    if ":" in hrs:
+      start, end = hrs.split(":")
+      end.replace("0", "")
+      if len(end) == 1:
+        end = "0" + end
+      hrs = start + "-" + end
+    datestr = dateobj.strftime("%a %m/%d @ ")
+    datestr += hrs
+    datestr += minute
+    if len(to_hrs) > 0:
+      datestr += "-" + to_hrs + to_minute # TODO
+    datestr += ampm
+    return datestr
