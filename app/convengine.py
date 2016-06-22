@@ -134,7 +134,8 @@ class EveyEngine(WitEngine, FBAPI):
         if top_date != None:
             dateobj = top_date.datetime
             votes = top_date.votes()
-            date_str = format_dateobj(dateobj, top_date.end_datetime)
+            date_str = format_dateobj(dateobj, top_date.end_datetime,
+                                      self.user.timezone)
             date  = "%s %s" % (WHEN_EMOJI, date_str)
         else:
             date = "%s none yet" % (WHEN_EMOJI)
@@ -286,7 +287,8 @@ class EveyEngine(WitEngine, FBAPI):
             else:
               votes = GUY_EMOJI * poll.votes()
             dateobj = poll.datetime
-            date_str = format_dateobj(dateobj, poll.end_datetime)
+            date_str = format_dateobj(dateobj, poll.end_datetime,
+                                      self.user.timezone)
             text += "%s %s, %s\n" % (NUM[poll.poll_number], date_str, votes)
         return text
 

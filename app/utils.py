@@ -2,6 +2,7 @@ import requests
 import random
 import re
 import json
+from datetime import timedelta
 from . import db
 
 
@@ -10,7 +11,7 @@ MESNGR_API_URL = 'https://graph.facebook.com/v2.6/me/messages/?access_token='
 from config import TOKEN
 import const as c
 
-user_details_params =  {'fields':'first_name,last_name,profile_pic',
+user_details_params =  {'fields':'first_name,last_name,profile_pic,timezone',
                         'access_token':TOKEN}
 
 def fetch_user_data(user_url, params=user_details_params):
@@ -81,7 +82,7 @@ def format_event_postbacks(postbacks, event_hash):
     return postbacks
 
 
-def format_dateobj(dateobj, to_dateobj=None):
+def format_dateobj(dateobj, to_dateobj=None, offset=0):
     ampm = "am"
     if dateobj.hour > 12:
         ampm = "pm"
@@ -91,11 +92,11 @@ def format_dateobj(dateobj, to_dateobj=None):
         if len(minutes) < 2:
             minutes = "0" + minutes
         minute = ":" + minutes
-    hrs = dateobj.strftime("%I")
+    hrs = (dateobj + timedelta(hours=offset)).strftime("%I")
     to_hrs = ""
     to_minute = ""
     if to_dateobj:
-      to_hrs = to_dateobj.strftime("%I")
+      to_hrs = (to_dateobj + timedelta(hours=offset)).strftime("%I")
       if to_dateobj.minute > 0:
           minutes = str(to_dateobj.minute)
           if len(minutes) < 2:

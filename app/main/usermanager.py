@@ -11,7 +11,7 @@ class UserManager():
 
   def handle_messenger_user(self, user_data):
     return self.evey_user_exists(user_data)
-  
+
   def handle_website_user(self, user_data):
     return self.evey_user_exists(user_data)
 

@@ -62,6 +62,7 @@ class User(db.Model):
   first_name = db.Column(db.String(64), index=True)
   last_name = db.Column(db.String(64), index=True)
   last_msg = db.Column(db.String)
+  timezone = db.Column(db.Integer)
   conversations = db.relationship('Conversation',
                                    backref='user',
                                    lazy='dynamic')

@@ -64,6 +64,7 @@ def webhook():
       if user and user.last_msg:
         prev_time = int(user.last_msg)
         user.last_msg = str(timestamp)
+        user.timezone = int(user_data["timezone"])
         save([user])
         print(int(prev_time))
         print(timestamp)

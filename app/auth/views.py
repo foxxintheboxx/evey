@@ -21,6 +21,7 @@ def register(messenger_uid):
     user.first_name = user_data["first_name"]
     user.last_name = user_data["last_name"]
     user.name = user.first_name + " " +  user.last_name
+    user.timezone = user_data["timezone"]
     db.session.add(user)
     db.session.commit()
     print('User successfully registered')
