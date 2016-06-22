@@ -8,7 +8,8 @@ from .fbapimethods import FBAPI
 from .models import User, Message, Event, Calendar, Conversation, \
                     Datepoll, Locationpoll
 from .utils import fetch_user_data, format_ampm, string_to_day, save, delete, \
-                   encode_unicode, format_dateobj, format_event_postbacks
+                   encode_unicode, format_dateobj, format_event_postbacks, \
+                   format_postback
 from config import WIT_APP_ID, WIT_SERVER
 from .onboardengine import OnboardEngine
 from .utils import generate_hash
@@ -198,12 +199,23 @@ class EveyEngine(WitEngine, FBAPI):
         numbers = []
         for t in tokens:
             try:
-                numbers.append(int(t))
+                t = t.encode("utf-8")
+                value = EMOJI_NUM.get(t)
+                if value:
+                    numbers.append(value)
+                else:
+                    numbers.append(int(t))
             except:
                 continue
         polls = []
         for i in intervals:
             inter_polls = event.add_new_interval(i.get("from"), i.get("to"), self.user)
+        datepolls = event.get_datepolls()
+        for n in set(numbers):
+            if n > len(datepolls) or n < 1:
+              continue # add some degradation
+            datepolls[n - 1].users.append(self.user)
+
         event.sort_datepolls()
         save(event.get_datepolls())
         save([self.user, event])
