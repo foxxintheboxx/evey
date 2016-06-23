@@ -69,6 +69,7 @@ class WitEngine(object):
             wit_resp = self.message(query)["entities"][DATE][0]
             from_ = parse(wit_resp["from"]["value"]).astimezone(tzutc())
             to =  parse(wit_resp["to"]["value"]).astimezone(tzutc())
+            to = to.replace(hour=to.hour - 1)
             interval = {"from": from_, "to": to}
             print(interval)
             intervals.append(interval)
