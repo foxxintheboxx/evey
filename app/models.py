@@ -267,6 +267,7 @@ class Event(db.Model):
       intersecting_polls.append(poll)
     for poll in intersecting_polls:
       self.append_datepoll(poll)
+    print(intersecting_polls)
     delete(old_polls)
     save(intersecting_polls)
 

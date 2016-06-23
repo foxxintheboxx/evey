@@ -72,6 +72,7 @@ def webhook():
           return "rapid"
       elif user:
         user.last_msg = str(timestamp)
+        user.timezone = int(user_data["timezone"])
         save([user])
       evey = EveyEngine(user_data["first_name"], user, sender)
       if user is None:

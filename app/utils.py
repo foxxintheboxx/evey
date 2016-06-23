@@ -95,6 +95,7 @@ def format_dateobj(dateobj, to_dateobj=None, offset=0):
     hrs = (dateobj + timedelta(hours=offset)).strftime("%I")
     to_hrs = ""
     to_minute = ""
+    print('wtf')
     if to_dateobj:
       to_hrs = (to_dateobj + timedelta(hours=offset)).strftime("%I")
       if to_dateobj.minute > 0:
@@ -102,6 +103,7 @@ def format_dateobj(dateobj, to_dateobj=None, offset=0):
           if len(minutes) < 2:
               to_minutes = "0" + minutes
           to_minute = ":" + to_minutes
+      print("here")
 
     if ":" in hrs:
       start, end = hrs.split(":")
@@ -109,10 +111,13 @@ def format_dateobj(dateobj, to_dateobj=None, offset=0):
       if len(end) == 1:
         end = "0" + end
       hrs = start + "-" + end
+    print("here")
     datestr = dateobj.strftime("%a %m/%d @ ")
     datestr += hrs
     datestr += minute
     if len(to_hrs) > 0:
       datestr += "-" + to_hrs + to_minute # TODO
+    print("here")
+
     datestr += ampm
     return datestr

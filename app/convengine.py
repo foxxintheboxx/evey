@@ -134,11 +134,15 @@ class EveyEngine(WitEngine, FBAPI):
         if top_date != None:
             dateobj = top_date.datetime
             votes = top_date.votes()
+
+
             date_str = format_dateobj(dateobj, top_date.end_datetime,
                                       self.user.timezone)
             date  = "%s %s" % (WHEN_EMOJI, date_str)
         else:
             date = "%s none yet" % (WHEN_EMOJI)
+
+
         top_location = event.get_top_local()
         where = ""
         if top_location != None:
@@ -147,6 +151,7 @@ class EveyEngine(WitEngine, FBAPI):
         else:
             where = "%s none yet" % (WHERE_EMOJI)
         people = GUY_EMOJI * attendees
+
         if attendees > 3:
           people = "%sx%s" % (GUY_EMOJI, attendees)
         buttons_msg0 = [self.make_button("postback", date,
@@ -210,7 +215,8 @@ class EveyEngine(WitEngine, FBAPI):
                 continue
         polls = []
         for i in intervals:
-            inter_polls = event.add_new_interval(i.get("from"), i.get("to"), self.user)
+            polls.append(event.add_new_interval(i.get("from"), i.get("to"), self.user))
+
         datepolls = event.get_datepolls()
         for n in set(numbers):
             if n > len(datepolls) or n < 1:

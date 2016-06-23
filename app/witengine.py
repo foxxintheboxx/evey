@@ -2,6 +2,7 @@ import requests
 from dateutil.parser import parse
 from dateutil.tz import *
 from config import WIT_API
+from datetime import timedelta, datetime
 import re
 from .utils import format_ampm, string_to_day
 from const import DATE
@@ -69,7 +70,7 @@ class WitEngine(object):
             wit_resp = self.message(query)["entities"][DATE][0]
             from_ = parse(wit_resp["from"]["value"]).astimezone(tzutc())
             to =  parse(wit_resp["to"]["value"]).astimezone(tzutc())
-            to = to.replace(hour=to.hour - 1)
+            to = to - timedelta(hours = 1)
             interval = {"from": from_, "to": to}
             print(interval)
             intervals.append(interval)
