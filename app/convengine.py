@@ -213,9 +213,8 @@ class EveyEngine(WitEngine, FBAPI):
                     numbers.append(int(t))
             except:
                 continue
-        polls = []
         for i in intervals:
-            polls.append(event.add_new_interval(i.get("from"), i.get("to"), self.user))
+            event.add_new_interval(i.get("from"), i.get("to"), self.user)
 
         datepolls = event.get_datepolls()
         for n in set(numbers):
