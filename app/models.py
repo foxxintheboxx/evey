@@ -213,14 +213,19 @@ class Event(db.Model):
     def attendees(self):
         return [cal.user for cal in self.calendars]
 
-    def sort_datepolls(self):
-        datepoll_list = self.get_datepolls()
+    def sort_datepolls(self, datepoll_list):
+        datepoll_list.sort(key=lambda x: x.votes(), reverse=True)
+        first_poll = datepoll_list[0]
+        first_poll.poll_number = 1
+        datepoll_list.remove(first_poll)
+        datepoll_list.sort(key=lambda x: x.datetime, reverse=True)
         for i in range(len(datepoll_list)):
-            datepoll_list[i].poll_number = i + 1
+            datepoll_list[i].poll_number = i + 2
+        datepoll_list.insert(0, first_poll)
 
     def get_datepolls(self):
         datepoll_list = self.date_polls.all()
-        datepoll_list.sort(key=lambda x: x.votes(), reverse=True)
+        self.sort_datepolls(datepoll_list)
         return datepoll_list
 
     def user_has_voted(self, user):
