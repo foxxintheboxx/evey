@@ -1,26 +1,25 @@
 from dateutil.parser import parse
 from dateutil.tz import *
-import json, re
+import json
+import re
 from . import db
 from .witengine import WitEngine
 
 from .fbapimethods import FBAPI
 from .models import User, Message, Event, Calendar, Conversation, \
-                    Datepoll, Locationpoll
+    Datepoll, Locationpoll
 from .utils import fetch_user_data, format_ampm, string_to_day, save, delete, \
-                   encode_unicode, format_dateobj, format_event_postbacks, \
-                   format_postback
+    encode_unicode, format_dateobj, format_event_postbacks, \
+    format_postback
 from config import WIT_APP_ID, WIT_SERVER
 from .onboardengine import OnboardEngine
 from .utils import generate_hash
-from const import  WHEN_EMOJI, WHERE_EMOJI, OTHER_EMOJI, EVEY_URL, \
-                   MSG_BODY, MSG_SUBJ, LOCAL, DATE, EVENT_POSTBACKS, \
-                   PEOPLE_EMOJI, GUY_EMOJI, CONFIRM_POSTBACK,\
-                   CANCEL_LOCATION_POSTBACK, ADD_TIME_POSTBACK, \
-                   REMOVE_TIME_POSTBACK, NUM, DAY_ABRV, CANCEL_ADD_TIME, \
-                   CANCEL_REMOVE_TIME, GREEN_CHECK_EMOJI, CAL_EMOJI, \
-                   RED_X_EMOJI, CANCEL, ELLIPSE, DOWN_ARROW, BLACK_CIRCLE, \
-                   EMOJI_NUM
+from const import WHEN_EMOJI, WHERE_EMOJI, OTHER_EMOJI, EVEY_URL, MSG_BODY, \
+    MSG_SUBJ, LOCAL, DATE, EVENT_POSTBACKS, PEOPLE_EMOJI, GUY_EMOJI, \
+    CONFIRM_POSTBACK, CANCEL_LOCATION_POSTBACK, ADD_TIME_POSTBACK, \
+    REMOVE_TIME_POSTBACK, NUM, DAY_ABRV, CANCEL_ADD_TIME, CANCEL_REMOVE_TIME, \
+    GREEN_CHECK_EMOJI, CAL_EMOJI, RED_X_EMOJI, CANCEL, ELLIPSE, DOWN_ARROW, \
+    BLACK_CIRCLE, EMOJI_NUM
 
 PLZ_SLOWDOWN = ("I'm sorry %s, but currently I am wayy better "
                 "at understanding one request at a time. So "
@@ -39,17 +38,18 @@ class EveyEngine(WitEngine, FBAPI):
         self.messenger_uid = messenger_uid
         self.user = user
         self.onboarder = OnboardEngine(first_name, user, messenger_uid)
-        self.postback_func = {EVENT_POSTBACKS["share"]: self.get_event_link,
-                              EVENT_POSTBACKS["who"]: self.see_people_in_event,
-                              EVENT_POSTBACKS["back"]: self.back_to_callback,
-                              EVENT_POSTBACKS["when"]: self.collab_date_callback,
-                              EVENT_POSTBACKS["where"]: self.edit_location,
-                              EVENT_POSTBACKS["add_time"]: self.add_date_callback,
-                              EVENT_POSTBACKS["remove_time"]: self.remove_date_callback,
-                              CONFIRM_POSTBACK: self.confirm_location_change,
-                              CANCEL_REMOVE_TIME: self.cancel_date_edit,
-                              CANCEL_ADD_TIME: self.cancel_date_edit,
-                              CANCEL_LOCATION_POSTBACK: self.cancel_location_edit}
+        self.postback_func = {
+            EVENT_POSTBACKS["share"]: self.get_event_link,
+            EVENT_POSTBACKS["who"]: self.see_people_in_event,
+            EVENT_POSTBACKS["back"]: self.back_to_callback,
+            EVENT_POSTBACKS["when"]: self.collab_date_callback,
+            EVENT_POSTBACKS["where"]: self.edit_location,
+            EVENT_POSTBACKS["add_time"]: self.add_date_callback,
+            EVENT_POSTBACKS["remove_time"]: self.remove_date_callback,
+            CONFIRM_POSTBACK: self.confirm_location_change,
+            CANCEL_REMOVE_TIME: self.cancel_date_edit,
+            CANCEL_ADD_TIME: self.cancel_date_edit,
+            CANCEL_LOCATION_POSTBACK: self.cancel_location_edit}
 
     def understand(self, msgs):
         if len(msgs) == 0:
@@ -71,7 +71,7 @@ class EveyEngine(WitEngine, FBAPI):
         msg = msgs[0]
         if msg.lower() == "e" or msg.lower() == "events":
             text = ("hi %s, gimme a second to fetch your events for this"
-                   " week")
+                    " week")
             return [self.text_message(text % self.user.user_name)]
         msg_data = self.message(msgs[0])
         return self.determine_response(msg_data)
@@ -82,7 +82,7 @@ class EveyEngine(WitEngine, FBAPI):
         if "event" not in entities:
             return [self.text_message(NON_EVENT_RESPONSE)]
         if (entities.get("message_body") is None and
-            entities.get("message_subject") is None):
+                entities.get("message_subject") is None):
             return [self.text_message("What do you wanna call the event?")]
         event = self.create_event(entities)
         p1 = self.event_attachment(event.event_hash, event=event)
@@ -121,7 +121,7 @@ class EveyEngine(WitEngine, FBAPI):
         return event
 
     def event_attachment(self, event_hash, event=None):
-        if event == None:
+        if event is None:
             event = self.event_from_hash(event_hash)
 
         title = "%s %s" % (CAL_EMOJI, str(event.title))
@@ -131,21 +131,19 @@ class EveyEngine(WitEngine, FBAPI):
         top_date = event.get_top_date()
         attendees = len(event.attendees())
         date = ""
-        if top_date != None:
+        if top_date is not None:
             dateobj = top_date.datetime
             votes = top_date.votes()
 
-
             date_str = format_dateobj(dateobj, top_date.end_datetime,
                                       self.user.timezone)
-            date  = "%s %s" % (WHEN_EMOJI, date_str)
+            date = "%s %s" % (WHEN_EMOJI, date_str)
         else:
             date = "%s none yet" % (WHEN_EMOJI)
 
-
         top_location = event.get_top_local()
         where = ""
-        if top_location != None:
+        if top_location is not None:
             where_str = str(top_location.name)
             where = "%s %s" % (WHERE_EMOJI, where_str)
         else:
@@ -153,7 +151,7 @@ class EveyEngine(WitEngine, FBAPI):
         people = GUY_EMOJI * attendees
 
         if attendees > 3:
-          people = "%sx%s" % (GUY_EMOJI, attendees)
+            people = "%sx%s" % (GUY_EMOJI, attendees)
         buttons_msg0 = [self.make_button("postback", date,
                                          postbacks["when"]),
                         self.make_button("postback", people,
@@ -162,14 +160,14 @@ class EveyEngine(WitEngine, FBAPI):
                                          postbacks["share"])]
 
         msg_elements0 = [self.make_generic_element(title=title,
-                                                 buttons=buttons_msg0)]
+                                                   buttons=buttons_msg0)]
         evey_resp = self.generic_attachment(msg_elements0)
         return evey_resp
 
     def get_event_link(self, event_json):
         event = self.event_from_hash(event_json["event_hash"])
         title = str(event.title)
-        url = str(EVEY_URL +  event.event_hash)
+        url = str(EVEY_URL + event.event_hash)
         text = CAL_EMOJI + " \"%s\" details\n %s" % (title, url)
 
         return [self.text_message("forward this link" + DOWN_ARROW),
@@ -194,7 +192,7 @@ class EveyEngine(WitEngine, FBAPI):
         postback_data = str(keys[0]).split('$')
         if len(postback_data) > 1:
             data = json.loads(postback_data[1])
-            return  self.postback_func[postback_data[0]](data)
+            return self.postback_func[postback_data[0]](data)
         return self.postback_func[postback_data[0]]()
 
     def handle_add_time(self, msg):
@@ -219,7 +217,7 @@ class EveyEngine(WitEngine, FBAPI):
         datepolls = event.get_datepolls()
         for n in set(numbers):
             if n > len(datepolls) or n < 1:
-              continue # add some degradation
+                continue  # add some degradation
             datepolls[n - 1].users.append(self.user)
 
         event.sort_datepolls()
@@ -238,22 +236,28 @@ class EveyEngine(WitEngine, FBAPI):
         event = self.event_from_hash(event_json["event_hash"])
         text = self.event_times_text(event)
         postbacks = format_event_postbacks(dict(EVENT_POSTBACKS),
-                                                event.event_hash)
+                                           event.event_hash)
         buttons = []
-        remove_button = self.make_button(type_="postback", title="remove " + WHEN_EMOJI,
-                                       payload=postbacks["remove_time"])
-        text2 = ("To add your " + WHEN_EMOJI +  " :\n" +
+        remove_button = self.make_button(
+            type_="postback",
+            title="remove " + WHEN_EMOJI,
+            payload=postbacks["remove_time"])
+        text2 = ("To add your " + WHEN_EMOJI + " :\n" +
                  BLACK_CIRCLE + " text me a number i.e." +
-                 NUM[1] +  ", " +  NUM[2]  + "\n" +
+                 NUM[1] + ", " + NUM[2] + "\n" +
                  BLACK_CIRCLE + " or, a new time i.e. Thu 3-4pm")
         self.user.is_adding_time = event_json["event_hash"]
         save([self.user])
         if event.user_added_time(self.user):
-          buttons.append(remove_button)
+            buttons.append(remove_button)
         back_button = self.make_button(type_="postback", title=CANCEL,
                                        payload=CANCEL_ADD_TIME)
         buttons.append(back_button)
-        return [self.text_message(text), self.button_attachment(text=text2, buttons=buttons)]
+        return [
+            self.text_message(text),
+            self.button_attachment(
+                text=text2,
+                buttons=buttons)]
 
     def add_date_callback(self, event_json):
         self.user.is_adding_time = event_json["event_hash"]
@@ -270,31 +274,36 @@ class EveyEngine(WitEngine, FBAPI):
         text2 = ("Text me:\n"
                  "> a number correspond to an above time\n"
                  "> a time within one of the above times\n")
+        buttons = []
         cancel_button = self.make_button(type_="postback", title=CANCEL,
                                          payload=CANCEL_REMOVE_TIME)
-        return [self.text_message(text1), self.text_message(text=text2,
-                                                            buttons=[cancel_button])]
+        return [
+            self.text_message(text1),
+            self.text_message(
+                text=text2,
+                buttons=[cancel_button])]
 
     def event_times_text(self, event, user=None):
         date_polls = event.get_datepolls()
         text = ""
         if len(date_polls) == 0:
-          text = "Looks like no one has added any of their availabilities yet"
+            text = "Looks like no one has added any of their availabilities yet"
         else:
-          for poll in date_polls:
-            if poll.poll_number == 2:
-              text += "-"*min(len(text), 25) + "\n"
-            if user != None and user not in poll.users:
-              continue
-            votes = ""
-            if poll.votes() > 2:
-              votes = "%sx%s" % (poll.votes(), GUY_EMOJI)
-            else:
-              votes = GUY_EMOJI * poll.votes()
-            dateobj = poll.datetime
-            date_str = format_dateobj(dateobj, poll.end_datetime,
-                                      self.user.timezone)
-            text += "%s %s, %s\n" % (NUM[poll.poll_number], date_str, votes)
+            for poll in date_polls:
+                if poll.poll_number == 2:
+                    text += "-" * min(len(text), 25) + "\n"
+                if user is not None and user not in poll.users:
+                    continue
+                votes = ""
+                if poll.votes() > 2:
+                    votes = "%sx%s" % (poll.votes(), GUY_EMOJI)
+                else:
+                    votes = GUY_EMOJI * poll.votes()
+                dateobj = poll.datetime
+                date_str = format_dateobj(dateobj, poll.end_datetime,
+                                          self.user.timezone)
+                text += "%s %s, %s\n" % (NUM[poll.poll_number],
+                                         date_str, votes)
         return text
 
     def edit_location(self, event_json):
@@ -329,7 +338,7 @@ class EveyEngine(WitEngine, FBAPI):
         event = self.event_from_hash(event_hash)
         last_poll = event.location_polls.first()
         if last_poll:
-          delete([last_poll])
+            delete([last_poll])
         new_poll = Locationpoll()
         new_poll.name = name
         event.location_polls.append(new_poll)
@@ -339,8 +348,8 @@ class EveyEngine(WitEngine, FBAPI):
 
     def cancel_location_edit(self):
         event_hash = self.user.is_editing_location
-        if len(event_hash) == None:
-          return [self.text_message("Ok canceled")]
+        if len(event_hash) is None:
+            return [self.text_message("Ok canceled")]
         self.user.is_editing_location = ""
         save([self.user])
         p1 = self.event_attachment(event_hash)
@@ -355,25 +364,26 @@ class EveyEngine(WitEngine, FBAPI):
         save([self.user])
         event_hash = ""
         if len(add_time):
-          msgs.extend(list(self.event_attachment(add_time)))
+            msgs.extend(list(self.event_attachment(add_time)))
         elif len(remove_time):
-          msgs.extend(list(self.event_attachment(remove_time)))
+            msgs.extend(list(self.event_attachment(remove_time)))
         return msgs
 
     def back_to_button(self, event_hash, event=None):
-        if event == None:
+        if event is None:
             event = self.event_from_hash(event_hash)
         text = "Back to"
         title = "%s %s" % (CAL_EMOJI, str(event.title))
         if len(event.title) > 20:
             title = title[:17] + "..."
         postbacks = format_event_postbacks(dict(EVENT_POSTBACKS),
-                                                event.event_hash)
+                                           event.event_hash)
 
         back_button = self.make_button(type_="postback", title=title,
-                                         payload=postbacks["back"])
+                                       payload=postbacks["back"])
         return self.button_attachment(text=text,
                                       buttons=[back_button])
+
     def back_to_callback(self, event_json):
         event = self.event_from_hash(event_json["event_hash"])
         self.clear_user()
@@ -381,10 +391,11 @@ class EveyEngine(WitEngine, FBAPI):
         return [p1]
 
     def current_user(self):
-        return User.query.filter(User.messenger_uid==self.messenger_uid).first()
+        return User.query.filter(
+            User.messenger_uid == self.messenger_uid).first()
 
     def event_from_hash(self, event_hash):
-        return Event.query.filter(Event.event_hash==event_hash).first()
+        return Event.query.filter(Event.event_hash == event_hash).first()
 
     def capitalize_first_letter(self, words):
         for i in range(len(words)):
