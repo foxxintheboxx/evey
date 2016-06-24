@@ -97,7 +97,6 @@ def format_dateobj(dateobj, to_dateobj=None, offset=0):
       hrs = hrs.replace("0", "")
     to_hrs = ""
     to_minute = ""
-    print('wtf')
     if to_dateobj:
       to_hrs = (to_dateobj + timedelta(hours=offset)).strftime("%I")
       if to_hrs != "10":
@@ -114,7 +113,6 @@ def format_dateobj(dateobj, to_dateobj=None, offset=0):
       if len(end) == 1:
         end = "0" + end
       hrs = start + "-" + end
-    print("here")
     month = dateobj.strftime("%m")
     day = dateobj.strftime("%d")
     if month != "10":
@@ -127,7 +125,29 @@ def format_dateobj(dateobj, to_dateobj=None, offset=0):
     datestr += minute
     if len(to_hrs) > 0:
       datestr += "-" + to_hrs + to_minute # TODO
-    print("here")
-
     datestr += ampm
     return datestr
+
+def numbers_from_tokens(str_tokens):
+    numbers = []
+    for t in str_tokens:
+        try:
+            t = t.encode("utf-8")
+            value = c.EMOJI_NUM.get(t)
+            if value:
+                numbers.append(value)
+            else:
+                numbers.append(int(t))
+        except:
+            continue
+    return numbers
+
+def number_to_emojistr(number):
+    i = 10
+    emojistr = ""
+    while (len(emojistr) == 0 or  (number) > 0):
+        digit = number % i
+        emojistr = c.NUM[digit] + emojistr
+        number /= i
+    return emojistr
+

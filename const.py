@@ -37,6 +37,7 @@ PEOPLE_EMOJI = GUY_EMOJI + "👩"
 PEOPLE_EMOJI = "👨‍👨‍👨"
 GREEN_CHECK_EMOJI = "✅"
 CAL_EMOJI = "📅"
+EMOJI_0 = "0️⃣"
 EMOJI_1 = "1️⃣"
 EMOJI_2 = "2️⃣"
 EMOJI_3 = "3️⃣"
@@ -48,6 +49,7 @@ EMOJI_8 = "8️⃣"
 EMOJI_9 = "9️⃣"
 ELLIPSE = "🔸🔹🔸"
 NUM = {
+  0: EMOJI_0,
   1: EMOJI_1,
   2: EMOJI_2,
   3: EMOJI_3,

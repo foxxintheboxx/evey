@@ -5,10 +5,10 @@ from .witengine import WitEngine
 from .fbapimethods import FBAPI
 from .models import User, Event, Datepoll, Locationpoll
 from .utils import fetch_user_data, save, delete, encode_unicode, \
-    format_dateobj, format_event_postbacks, format_postback
+     format_dateobj, format_event_postbacks, format_postback, \
+     numbers_from_tokens, generate_hash, number_to_emojistr
 from config import WIT_APP_ID, WIT_SERVER
 from .onboardengine import OnboardEngine
-from .utils import generate_hash
 from const import WHEN_EMOJI, WHERE_EMOJI, OTHER_EMOJI, EVEY_URL, MSG_BODY, \
     MSG_SUBJ, LOCAL, DATE, EVENT_POSTBACKS, GUY_EMOJI, \
     CONFIRM_POSTBACK, CANCEL_LOCATION_POSTBACK, ADD_TIME_POSTBACK, \
@@ -59,6 +59,7 @@ class EveyEngine(WitEngine, FBAPI):
         if len(self.user.is_editing_location) > 0:
             return self.handle_edit_location(msgs[0])
         if len(self.user.is_adding_time) > 0:
+            print("adding_time")
             return self.handle_add_time(msgs[0])
         if len(self.user.is_removing_time) > 0:
             return self.handle_remove_time(msgs[0])
@@ -196,20 +197,9 @@ class EveyEngine(WitEngine, FBAPI):
         intervals = self.extract_intervals(msg)
         tokens = msg.split(" ")
         tokens = [encode_unicode(el.replace(",", "")) for el in tokens]
-        numbers = []
-        for t in tokens:
-            try:
-                t = t.encode("utf-8")
-                value = EMOJI_NUM.get(t)
-                if value:
-                    numbers.append(value)
-                else:
-                    numbers.append(int(t))
-            except:
-                continue
+        numbers =  numbers_from_tokens(tokens)
         for i in intervals:
             event.add_new_interval(i.get("from"), i.get("to"), self.user)
-
         datepolls = event.get_datepolls()
         for n in set(numbers):
             if n > len(datepolls) or n < 1:
@@ -225,7 +215,28 @@ class EveyEngine(WitEngine, FBAPI):
                 self.back_to_button(event.event_hash, event)]
 
     def handle_remove_time(self, msg):
-        pass
+        event = self.event_from_hash(self.user.is_removing_time)
+        intervals = self.extract_intervals(msg)
+        print("wtf")
+        tokens = msg.split(" ")
+        tokens = [encode_unicode(el.replace(",", "")) for el in tokens]
+        numbers =  numbers_from_tokens(tokens)
+        for i in intervals:
+            print("yooooo" + str(i))
+            event.remove_interval(i.get("from"), i.get("to"), self.user)
+        datepolls = event.get_datepolls()
+        for n in set(numbers):
+            if n > len(datepolls) or n < 1:
+                continue  # add some degradation
+            datepolls[n - 1].users.append(self.user)
+
+        save(event.get_datepolls())
+        save([self.user, event])
+        text = GREEN_CHECK_EMOJI + " I added your times!"
+        text2 = self.event_times_text(event)
+        return [self.text_message(text),
+                self.text_message(text2),
+                self.back_to_button(event.event_hash, event)]
 
     def collab_date_callback(self, event_json, length=5):
         event = self.event_from_hash(event_json["event_hash"])
@@ -234,15 +245,17 @@ class EveyEngine(WitEngine, FBAPI):
                                            event.event_hash)
 
         buttons = []
-        if len(event.get_datepolls()) > length:
-            more_button = self.make_button(type_="postback",
-                                           title="more %ss" % WHEN_EMOJI,
-                                           payload=postbacks["more_times"])
+        num_polls = len(event.get_datepolls())
+        if num_polls > length:
+            diff = num_polls - length
+            more_button = self.make_button(
+                type_="postback", title=("+%s more %ss" % (diff, WHEN_EMOJI)),
+                payload=postbacks["more_times"])
             buttons.append(more_button)
 
         add_button = self.make_button(
             type_="postback",
-            title="edit" + WHEN_EMOJI,
+            title="edit " + WHEN_EMOJI,
             payload=postbacks["add_time"])
         buttons.append(add_button)
         save([self.user])
@@ -283,29 +296,36 @@ class EveyEngine(WitEngine, FBAPI):
 
     def remove_date_callback(self, event_json):
         self.user.is_removing_time = event_json["event_hash"]
+        self.user.is_adding_time = ""
         save([self.user])
         event = self.event_from_hash(event_json["event_hash"])
-        text1 = self.event_times_text(event, user=self.user)
-        text2 = ("Text me:\n"
-                 "> a number correspond to an above time\n"
-                 "> a time within one of the above times\n")
+        num_polls = len(event.get_datepolls())
+        text = self.event_times_text(event, user=self.user, length=num_polls)
         buttons = []
-        cancel_button = self.make_button(type_="postback", title=CANCEL,
-                                         payload=CANCEL_REMOVE_TIME)
-        return [
-            self.text_message(text1),
-            self.text_message(
-                text=text2,
-                buttons=[cancel_button])]
+        text1 = ("To remove your " + WHEN_EMOJI + " :\n" +
+                 BLACK_CIRCLE + " text me a number i.e." +
+                 NUM[1] + ", " + NUM[2] + "\n" +
+                 BLACK_CIRCLE + " or, a new time i.e. Thu 3-4pm")
+        postbacks = format_event_postbacks(dict(EVENT_POSTBACKS),
+                                           event.event_hash)
+        back_button = self.make_button(
+            type_="postback", title="%s %s" %
+            (CAL_EMOJI, str(event.title)), payload=CANCEL_ADD_TIME)
+        buttons.append(back_button)
+        return [self.text_message(text),
+                self.button_attachment(text=text1, buttons=buttons)]
+
 
     def event_times_text(self, event, user=None, length=5):
         date_polls = event.get_datepolls()
         text = ""
+        if user is not None:
+            text = "Here is your %s:" % WHEN_EMOJI
         if len(date_polls) == 0:
-            text = "Looks like no one has added any of their availabilities yet"
+            text = "Looks like no one has added any of their availabilities yet\n"
         else:
             for poll in date_polls:
-                if poll.poll_number == 2:
+                if poll.poll_number == 2 and user is None:
                     text += "-" * min(len(text), 25) + "\n"
                 if user is not None and user not in poll.users:
                     continue
@@ -317,7 +337,7 @@ class EveyEngine(WitEngine, FBAPI):
                 dateobj = poll.datetime
                 date_str = format_dateobj(dateobj, poll.end_datetime,
                                           self.user.timezone)
-                text += "%s %s, %s\n" % (NUM[poll.poll_number],
+                text += "%s %s, %s\n" % (number_to_emojistr(poll.poll_number),
                                          date_str, votes)
                 length -= 1
                 if length == 0:

@@ -61,7 +61,7 @@ class User(db.Model):
     is_adding_time = db.Column(db.String, index=True)
     is_setting_time = db.Column(db.String, index=True)
     is_removing_time = db.Column(db.String, index=True)
-    first_name = db.Column(db.String(64), index=True)
+    first_name = db.Column(db.String(65), index=True)
     last_name = db.Column(db.String(64), index=True)
     last_msg = db.Column(db.String)
     timezone = db.Column(db.Integer)
@@ -215,10 +215,12 @@ class Event(db.Model):
 
     def sort_datepolls(self, datepoll_list):
         datepoll_list.sort(key=lambda x: x.votes(), reverse=True)
+        if (len(datepoll_list) ==  0):
+            return
         first_poll = datepoll_list[0]
         first_poll.poll_number = 1
         datepoll_list.remove(first_poll)
-        datepoll_list.sort(key=lambda x: x.datetime, reverse=True)
+        datepoll_list.sort(key=lambda x: x.datetime)
         for i in range(len(datepoll_list)):
             datepoll_list[i].poll_number = i + 2
         datepoll_list.insert(0, first_poll)
@@ -300,12 +302,49 @@ class Event(db.Model):
         delete(old_polls)
         save(intersecting_polls)
 
+    def remove_interval(self, from_dateobj, to_dateobj, user):
+        polls = self.get_datepolls()
+        old_polls = []
+        new_polls = []
+        updated_polls = []
+        for p in polls:
+            print(user not in p.users)
+            if user not in p.users:
+                continue
+            print(p.datetime)
+            print(p.end_datetime)
+            if ((from_dateobj == p.datetime or from_dateobj < p.datetime) and
+                (to_dateobj == p.end_datetime or to_dateobj > p.end_datetime)):
+                new_users = p.users
+                print(new_users)
+                new_users.remove(user)
+                print(new_users)
+                p.users = new_users
+                if (len(p.users) == 0):
+                    old_polls.append(p)
+                else:
+                    updated_polls.append(p)
+                continue
+            # TODO
+        for poll in new_polls:
+            self.append_datepoll(poll)
+        save(updated_polls)
+        delete(old_polls)
+
+
+
+
+
+
+
+
     def __interval_times(self, from_dateobj, to_dateobj, poll):
         time0 = min(from_dateobj, poll.datetime)
         time1 = max(from_dateobj, poll.datetime)
         time2 = min(poll.end_datetime, to_dateobj)
         time3 = max(poll.end_datetime, to_dateobj)
         return (time0, time1, time2, time3)
+
 
 
 class Locationpoll(db.Model):
