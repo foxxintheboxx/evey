@@ -14,7 +14,7 @@ from const import WHEN_EMOJI, WHERE_EMOJI, OTHER_EMOJI, EVEY_URL, MSG_BODY, \
     CONFIRM_POSTBACK, CANCEL_LOCATION_POSTBACK, ADD_TIME_POSTBACK, \
     REMOVE_TIME_POSTBACK, NUM, CANCEL_ADD_TIME, CANCEL_REMOVE_TIME, \
     GREEN_CHECK_EMOJI, CAL_EMOJI, RED_X_EMOJI, CANCEL, DOWN_ARROW, \
-    BLACK_CIRCLE, EMOJI_NUM
+    BLACK_CIRCLE, EMOJI_NUM, PAPER_EMOJI, RIGHT_FINGER_EMOJI
 
 PLZ_SLOWDOWN = ("I'm sorry %s, but currently I am wayy better "
                 "at understanding one request at a time. So "
@@ -164,10 +164,11 @@ class EveyEngine(WitEngine, FBAPI):
     def get_event_link(self, event_json):
         event = self.event_from_hash(event_json["event_hash"])
         title = str(event.title)
-        url = str(EVEY_URL + event.event_hash)
-        text = CAL_EMOJI + " \"%s\" details\n %s" % (title, url)
-
-        return [self.text_message("forward this link" + DOWN_ARROW),
+        url = str(event.event_hash)
+        text = CAL_EMOJI + " \"%s\" #%s\n" % (title, url)
+        text += ("%s copy this msg!\n%s click m.me/evey.io"
+                  % (PAPER_EMOJI, RIGHT_FINGER_EMOJI))
+        return [self.text_message("forward this msg" + DOWN_ARROW),
                 self.text_message(text)]
 
     def see_people_in_event(self, event_json):
