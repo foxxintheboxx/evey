@@ -196,14 +196,21 @@ class EveyEngine(WitEngine, FBAPI):
         event = self.event_from_hash(event_json["event_hash"])
         calendars = event.calendars
         ppl_attachments = []
-        for person in event.attendees():
+        attendees =  event.attendees()
+
+        for i in range(len(attendees)):
+            person = attendees[i]
             messenger_uid = person.messenger_uid
             user_data = fetch_user_data(messenger_uid)
+            buttons = None
+            if i == 0 or (i == (len(attendees) - 1) and i > 1):
+                buttons = [self.back_to_button(event.event_hash, event)]
             el = self.make_generic_element(title=person.name,
-                                           img_url=user_data["profile_pic"])
+                                           img_url=user_data["profile_pic"],
+                                           buttons=buttons)
             ppl_attachments.append(el)
-        return [self.generic_attachment(ppl_attachments),
-                self.back_to_button(event.event_hash, event)]
+        return [self.generic_attachment(ppl_attachments)]
+
 
     def handle_postback(self, keys):
         if len(keys) > 1:
@@ -233,8 +240,9 @@ class EveyEngine(WitEngine, FBAPI):
         text = GREEN_CHECK_EMOJI + " I added your times!"
         text2 = self.event_times_text(event)
         return [self.text_message(text),
-                self.text_message(text2),
-                self.back_to_button(event.event_hash, event)]
+                self.button_attachment(
+                    text=text2, buttons=[self.back_to_button(event.event_hash,
+                                                             event)])]
 
     def handle_remove_time(self, msg):
         event = self.event_from_hash(self.user.is_removing_time)
@@ -257,8 +265,10 @@ class EveyEngine(WitEngine, FBAPI):
         text = GREEN_CHECK_EMOJI + " I added your times!"
         text2 = self.event_times_text(event)
         return [self.text_message(text),
-                self.text_message(text2),
-                self.back_to_button(event.event_hash, event)]
+                self.button_attachment(
+                    text=text2, buttons=[self.back_to_button(event.event_hash,
+                                                             event)])]
+
 
     def collab_date_callback(self, event_json, length=5):
         event = self.event_from_hash(event_json["event_hash"])
@@ -446,8 +456,7 @@ class EveyEngine(WitEngine, FBAPI):
 
         back_button = self.make_button(type_="postback", title=title,
                                        payload=postbacks["back"])
-        return self.button_attachment(text=text,
-                                      buttons=[back_button])
+        return  back_button
 
     def back_to_callback(self, event_json):
         event = self.event_from_hash(event_json["event_hash"])
