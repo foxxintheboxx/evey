@@ -50,6 +50,7 @@ EMOJI_7 = "7️⃣"
 EMOJI_8 = "8️⃣"
 EMOJI_9 = "9️⃣"
 ELLIPSE = "🔸🔹🔸"
+
 NUM = {
   0: EMOJI_0,
   1: EMOJI_1,
@@ -85,6 +86,8 @@ CANCEL_REMOVE_TIME = "CANCEL_REMOVE_TIME"
 ADD_TIME_POSTBACK = "ADD_TIME"
 REMOVE_TIME_POSTBACK = "REMOVE_TIME"
 MORE_TIMES_POSTBACK = "MORE_TIMES"
+YES_EVENT_INVITE = "YES_EVENT_INVITE"
+NO_EVENT_INVITE = "NO_EVENT_INVITE"
 
 EVENT_POSTBACKS = {
   "subscribe": SUBSCRIBE_POSTBACK,
@@ -103,3 +106,14 @@ EVENT_POSTBACKS = {
 #  BASE URL
 HEROKU_URL = "https://eveyai.herokuapp.com/"
 EVEY_URL = "www.evey.ai/"
+
+# COMMON MSGS
+PLZ_SLOWDOWN = ("I'm sorry %s, but currently I am wayy better "
+                "at understanding one request at a time. So "
+                "plz only text me 1 thing at a time")
+HELP = ("This is how to use me!"
+        "> 'make' then <event name> to make an event\n"
+        "> 'find' <event name>\n"
+        "> 'events' to see all your events")
+
+

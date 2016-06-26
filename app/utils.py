@@ -23,7 +23,7 @@ def generate_hash():
   possibles = ('0123456789'
                + alpha.upper()
                + alpha.lower())
-  return ''.join(random.choice(possibles) for i in range(10))
+  return ''.join(random.choice(possibles) for i in range(5))
 
 def format_ampm(string):
   opp = {"am":"pm", "pm":"am"}

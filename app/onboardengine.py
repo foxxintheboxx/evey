@@ -2,7 +2,8 @@ from . import db
 from .witengine import WitEngine
 from .fbapimethods import FBAPI
 from config import WIT_APP_ID, WIT_SERVER
-from const import EXAMPLE_0, EXAMPLE_1, EXAMPLE_2, EVEY_URL
+from const import EXAMPLE_0, EXAMPLE_1, EXAMPLE_2, EVEY_URL, HELP
+from .utils import save
 
 ONBOARDING_1 = ("To make an event text me a sentence starting with "
                 "'make'. Like this:")
@@ -23,30 +24,6 @@ class OnboardEngine(WitEngine, FBAPI):
 
   def onboarding_1(self):
     self.user.did_onboarding = 2
-    self.save([self.user])
-    usage_msg = self.usage_examples()
-    return [self.text_message(ONBOARDING_1), usage_msg]
-
-  def usage_examples(self):
-    titles = [ONBOARDING_2,
-              ONBOARDING_3,
-              ONBOARDING_4,]
-    img_urls = [EXAMPLE_0, EXAMPLE_1, EXAMPLE_2]
-    elements = []
-    for i in range(3):
-      elements.append(self.make_generic_element(titles[i],
-                                                img_url=img_urls[i]))
-    return self.generic_attachment(elements)
-
-  def save(self, models):
-    for model in models:
-      db.session.add(model)
-    db.session.commit()
-
-  def signup_attachment(self):
-    url = EVEY_URL + "/register/" + self.messenger_uid
-    signup_button = self.make_button(type_="web_url", title="Sign Up!",
-                                      payload=url)
-    return self.button_attachment(text=SIGNUP,
-                                  buttons=[signup_button])
+    save([self.user])
+    return [self.text_message(HELP)]
 

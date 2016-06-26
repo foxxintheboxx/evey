@@ -14,15 +14,11 @@ from const import WHEN_EMOJI, WHERE_EMOJI, OTHER_EMOJI, EVEY_URL, MSG_BODY, \
     CONFIRM_POSTBACK, CANCEL_LOCATION_POSTBACK, ADD_TIME_POSTBACK, \
     REMOVE_TIME_POSTBACK, NUM, CANCEL_REMOVE_TIME, \
     GREEN_CHECK_EMOJI, CAL_EMOJI, RED_X_EMOJI, CANCEL, DOWN_ARROW, \
-    BLACK_CIRCLE, EMOJI_NUM, PAPER_EMOJI, RIGHT_FINGER_EMOJI
+    BLACK_CIRCLE, EMOJI_NUM, PAPER_EMOJI, RIGHT_FINGER_EMOJI, PLZ_SLOWDOWN, \
+    YES_EVENT_INVITE, NO_EVENT_INVITE \
 
-PLZ_SLOWDOWN = ("I'm sorry %s, but currently I am wayy better "
-                "at understanding one request at a time. So "
-                "plz only text me 1 thing at a time")
-NON_EVENT_RESPONSE = ("I didn't quite get that.\n"
-                      "> 'make' to make an event\n"
-                      "> 'find' <event name>\n"
-                      "> 'events' to see all your events")
+
+NON_EVENT_RESPONSE = ("I didn't quite get that.\n")
 
 
 class EveyEngine(WitEngine, FBAPI):
@@ -45,17 +41,21 @@ class EveyEngine(WitEngine, FBAPI):
             EVENT_POSTBACKS["cancel_time"]: self.cancel_date_edit,
             CONFIRM_POSTBACK: self.confirm_location_change,
             CANCEL_REMOVE_TIME: self.cancel_date_edit,
-            CANCEL_LOCATION_POSTBACK: self.cancel_location_edit}
+            CANCEL_LOCATION_POSTBACK: self.cancel_location_edit,
+            YES_EVENT_INVITE: self.ask_for_event_msg,
+            NO_EVENT_INVITE: self.show_tutorial,
+            }
 
     def understand(self, msgs):
         if len(msgs) == 0:
             return []
-        if self.user is None:
-            return [self.onboarder.signup_attachment()]
         if len(msgs) > 1:
             return [self.text_message(PLZ_SLOWDOWN % self.user_name)]
-        if self.user.did_onboarding == 0 or msgs[0].lower() == "help":
+        if msgs[0].lower() == "help":
             return self.onboarder.onboarding_1()
+        event = self.parse_event_msg(msgs[0])
+        if event != None:
+            return [self.event_attachment(event.event_hash, event)]
         if len(self.user.is_editing_location) > 0:
             return self.handle_edit_location(msgs[0])
         if len(self.user.is_adding_time) > 0:
@@ -73,11 +73,25 @@ class EveyEngine(WitEngine, FBAPI):
         msg_data = self.message(msgs[0])
         return self.determine_response(msg_data)
 
+    def parse_event_msg(self, msg):
+        tokens = [token.split(" ") for token in  msg.splitlines()]
+        tokens = [t for ts in tokens for t in ts]
+        event = None
+        print(tokens)
+        for token in tokens:
+            token = token.replace("#", "")
+            if len(token) == 5:
+                print("enter five")
+                event = self.event_from_hash(token)
+                if event != None:
+                    break
+        return event
+
     def determine_response(self, msg_data):
         entities = msg_data["entities"]
         print(entities)
         if "event" not in entities:
-            return [self.text_message(NON_EVENT_RESPONSE)]
+            return [self.text_message(NON_EVENT_RESPONSE), self.onboarder.onboarding_1()[0]]
         if (entities.get("message_body") is None and
                 entities.get("message_subject") is None):
             return [self.text_message("What do you wanna call the event?")]
@@ -161,12 +175,19 @@ class EveyEngine(WitEngine, FBAPI):
         evey_resp = self.generic_attachment(msg_elements0)
         return evey_resp
 
+    def ask_for_event_msg(self):
+        return [self.text_message(("Great, just paste the msg and send it to me!\n"
+                                    "(P.s. Any future event msgs you can paste to me also!)"))]
+
+    def show_tutorial(self):
+        return self.onboarder.onboarding_1()
+
     def get_event_link(self, event_json):
         event = self.event_from_hash(event_json["event_hash"])
         title = str(event.title)
         url = str(event.event_hash)
         text = CAL_EMOJI + " \"%s\" #%s\n" % (title, url)
-        text += ("%s copy this msg!\n%s click m.me/evey.io"
+        text += ("%s copy this msg!\n%s txt it to evey @ m.me/evey.io"
                   % (PAPER_EMOJI, RIGHT_FINGER_EMOJI))
         return [self.text_message("forward this msg" + DOWN_ARROW),
                 self.text_message(text)]
