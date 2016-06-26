@@ -1,6 +1,7 @@
 from dateutil.parser import parse
 from dateutil.tz import tzutc
 import json
+from datetime import timedelta
 from .witengine import WitEngine
 from .fbapimethods import FBAPI
 from .models import User, Event, Datepoll, Locationpoll
@@ -16,9 +17,6 @@ from const import WHEN_EMOJI, WHERE_EMOJI, OTHER_EMOJI, EVEY_URL, MSG_BODY, \
     GREEN_CHECK_EMOJI, CAL_EMOJI, RED_X_EMOJI, CANCEL, DOWN_ARROW, \
     BLACK_CIRCLE, EMOJI_NUM, PAPER_EMOJI, RIGHT_FINGER_EMOJI, PLZ_SLOWDOWN, \
     YES_EVENT_INVITE, NO_EVENT_INVITE \
-
-
-NON_EVENT_RESPONSE = ("I didn't quite get that.\n")
 
 
 class EveyEngine(WitEngine, FBAPI):
@@ -84,6 +82,8 @@ class EveyEngine(WitEngine, FBAPI):
                 print("enter five")
                 event = self.event_from_hash(token)
                 if event != None:
+                    event.calendars.append(self.user.calendar)
+                    save([event])
                     break
         return event
 
@@ -91,7 +91,7 @@ class EveyEngine(WitEngine, FBAPI):
         entities = msg_data["entities"]
         print(entities)
         if "event" not in entities:
-            return [self.text_message(NON_EVENT_RESPONSE), self.onboarder.onboarding_1()[0]]
+            return [self.onboarder.onboarding_1()[0]]
         if (entities.get("message_body") is None and
                 entities.get("message_subject") is None):
             return [self.text_message("What do you wanna call the event?")]
@@ -197,17 +197,17 @@ class EveyEngine(WitEngine, FBAPI):
         calendars = event.calendars
         ppl_attachments = []
         attendees =  event.attendees()
-
         for i in range(len(attendees)):
             person = attendees[i]
             messenger_uid = person.messenger_uid
             user_data = fetch_user_data(messenger_uid)
-            buttons = None
-            if i == 0 or (i == (len(attendees) - 1) and i > 1):
-                buttons = [self.back_to_button(event.event_hash, event)]
+            buttons =  []
+            print(user_data)
+            buttons = [self.back_to_button(event.event_hash, event)]
             el = self.make_generic_element(title=person.name,
                                            img_url=user_data["profile_pic"],
-                                           buttons=buttons)
+                                           buttons=[])
+
             ppl_attachments.append(el)
         return [self.generic_attachment(ppl_attachments)]
 
@@ -262,7 +262,7 @@ class EveyEngine(WitEngine, FBAPI):
 
         save(event.get_datepolls())
         save([self.user, event])
-        text = GREEN_CHECK_EMOJI + " I added your times!"
+        text = GREEN_CHECK_EMOJI + " I removed your times!"
         text2 = self.event_times_text(event)
         return [self.text_message(text),
                 self.button_attachment(
@@ -300,10 +300,13 @@ class EveyEngine(WitEngine, FBAPI):
         self.user.is_adding_time = event_json["event_hash"]
         save([self.user])
         event = self.event_from_hash(event_json["event_hash"])
-        text1 = ("To add your " + WHEN_EMOJI + " :\n" +
-                 BLACK_CIRCLE + " text me a number i.e." +
-                 NUM[1] + ", " + NUM[2] + "\n" +
-                 BLACK_CIRCLE + " or, a new time i.e. Thu 3-4pm")
+        number_dialog = (BLACK_CIRCLE + " text me a number i.e." +
+                          NUM[1] + ", " + NUM[2] + "\n")
+        reg_dialog = (BLACK_CIRCLE + " or, a new time i.e. Thu 3-4pm")
+        text1 = ("To add your " + WHEN_EMOJI + " :\n")
+        if len(event.get_datepolls()):
+          text1 += number_dialog
+        text1 += reg_dialog
         postbacks = format_event_postbacks(dict(EVENT_POSTBACKS),
                                            event.event_hash)
 
@@ -367,14 +370,14 @@ class EveyEngine(WitEngine, FBAPI):
                     votes = "%sx%s" % (poll.votes(), GUY_EMOJI)
                 else:
                     votes = GUY_EMOJI * poll.votes()
-                dateobj = poll.datetime
+                dateobj = poll.datetime  + timedelta(hours=self.user.timezone)
                 indent = "      "
                 date = dateobj.strftime("%a %m/%d")
                 if prev_date != date:
                     text += date + "\n"
                     prev_date = date
 
-                date_str = format_dateobj(dateobj, poll.end_datetime,
+                date_str = format_dateobj(poll.datetime, poll.end_datetime,
                                           self.user.timezone, use_day=False,
                                           use_at=False)
                 text += "%s%s %s, %s\n" % (indent,

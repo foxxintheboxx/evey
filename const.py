@@ -111,8 +111,8 @@ EVEY_URL = "www.evey.ai/"
 PLZ_SLOWDOWN = ("I'm sorry %s, but currently I am wayy better "
                 "at understanding one request at a time. So "
                 "plz only text me 1 thing at a time")
-HELP = ("This is how to use me!"
-        "> 'make' then <event name> to make an event\n"
+HELP = ("Hi %s! this is how to use me!\n"
+        "> 'make' <event name> \n"
         "> 'find' <event name>\n"
         "> 'events' to see all your events")
 

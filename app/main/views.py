@@ -7,7 +7,7 @@ import requests
 import json
 import traceback
 
-from ..models import User, Conversation, Message, MessengerUser
+from ..models import User, Conversation, Message
 from .. import db, lm
 from usermanager import UserManager
 from flask.ext.login import UserMixin, login_user, logout_user, current_user, \
@@ -26,6 +26,7 @@ def post_response_msgs(msgs, sender):
   for msg in msgs:
     payload = {'recipient': {'id': sender}, 'message': msg}
     r = requests.post(MESNGR_API_URL + TOKEN, json=payload)
+    print(r.json())
 
 
 @main.route('/webhook/' + WEBHOOK, methods=['GET'])
@@ -60,7 +61,9 @@ def webhook():
             postbacks.append(message['postback']['payload'])
       user_data = fetch_user_data(sender)
       user_data['messenger_uid'] = sender
+      print(user_data)
       user = usr_manager.handle_messenger_user(user_data)
+      print(user)
       if user and user.last_msg:
         prev_time = int(user.last_msg)
         user.last_msg = str(timestamp)

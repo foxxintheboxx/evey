@@ -26,28 +26,6 @@ datepoll_user_association = db.Table(
 )
 
 
-class MessengerUser(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    messenger_uid = db.Column(db.String(64), index=True, unique=True)
-    first_name = db.Column(db.String(64), index=True)
-    last_name = db.Column(db.String(64), index=True)
-    profile_pic_id = db.Column(db.String(120), index=True, unique=True)
-
-    def __repr__(self):
-        return '<MessengerUser %r>' % (self.first_name + " " + self.last_name)
-
-
-class FBUser(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    fb_uid = db.Column(db.String(64), index=True, unique=True)
-    first_name = db.Column(db.String(64), index=True)
-    last_name = db.Column(db.String(64), index=True)
-    profile_pic_id = db.Column(db.String(120), index=True, unique=True)
-
-    def __repr__(self):
-        return '<FBUser %r>' % (self.first_name + " " + self.last_name)
-
-
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), index=True)
@@ -92,6 +70,7 @@ class User(db.Model):
         self.is_removing_time = ""
         self.is_setting_time = ""
         self.location_conv_session = 0
+        print("uhh wtf")
         self.calendar = Calendar()
 
     def is_authenticated(self):
@@ -169,7 +148,6 @@ class Event(db.Model):
     datetime = db.Column(db.DateTime)
     duration = db.Column(db.Integer)
     title = db.Column(db.String(64))
-
     location_polls = db.relationship('Locationpoll',
                                      backref='event',
                                      lazy='dynamic')
@@ -240,7 +218,7 @@ class Event(db.Model):
         for poll in date_polls:
             if poll.end_datetime is None and from_dateobj is not None:
                 continue  # TODO
-            if (to_dateobj < poll.datetime or from_dateobj > poll.end_datetime):
+            if (to_dateobj <= poll.datetime or from_dateobj >= poll.end_datetime):
                 continue
             time0, time1, time2, time3 = self.__interval_times(
                 from_dateobj, to_dateobj, poll)
@@ -297,6 +275,50 @@ class Event(db.Model):
         print(intersecting_polls)
         delete(old_polls)
         save(intersecting_polls)
+        self.merge_polls()
+
+    def merge_polls(self):
+        datepoll_list = self.date_polls.all()
+        datepoll_list.sort(key=lambda x: x.datetime)
+        datepoll_list = filter(lambda x: x.end_datetime is not None,
+                               datepoll_list)
+        polls_to_merge= []
+        curr_poll_group = []
+        used_prev = False
+        for i in range(len(datepoll_list)):
+            if i == 0:
+                continue
+            curr = datepoll_list[i]
+            prev = datepoll_list[i - 1]
+            print(self.has_same_users(curr, prev))
+            if (curr.datetime <= prev.end_datetime
+                and self.has_same_users(curr, prev)):
+                if used_prev == False:
+                    used_prev = True
+                    curr_poll_group = [prev]
+                    polls_to_merge.append(curr_poll_group)
+                curr_poll_group.append(curr)
+            else:
+                used_prev = False
+        polls_to_delete = []
+        polls_to_save = []
+        print(polls_to_merge)
+        for group in polls_to_merge:
+            begin = group[0]
+            end = group[len(group) - 1]
+            new_poll = Datepoll(datetime=begin.datetime, end_datetime=end.end_datetime)
+            new_poll.users = begin.users
+            polls_to_save.append(new_poll)
+            polls_to_delete.extend(group)
+        delete(polls_to_delete)
+        for poll in polls_to_save:
+            self.append_datepoll(poll)
+
+        save(polls_to_save)
+
+
+    def has_same_users(self, poll1, poll2):
+        return set(poll1.users) == set(poll2.users)
 
     def remove_interval(self, from_dateobj, to_dateobj, user):
         polls = self.get_datepolls()
@@ -326,13 +348,6 @@ class Event(db.Model):
             self.append_datepoll(poll)
         save(updated_polls)
         delete(old_polls)
-
-
-
-
-
-
-
 
     def __interval_times(self, from_dateobj, to_dateobj, poll):
         time0 = min(from_dateobj, poll.datetime)

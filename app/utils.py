@@ -62,11 +62,17 @@ def encode_unicode(unicode_string):
   return unicode_string.encode("utf-8")
 
 def save(models):
+  print("saving")
+  print(models)
+  models = set(models)
   for model in models:
     db.session.add(model)
   db.session.commit()
 
 def delete(models):
+  print("deleting")
+  print(models)
+  models = set(models)
   for model in models:
     db.session.delete(model)
   db.session.commit()
@@ -85,7 +91,8 @@ def format_event_postbacks(postbacks, event_hash):
 def format_dateobj(dateobj, to_dateobj=None, offset=0, use_day=True,
                    use_at=True):
     ampm = "am"
-    if (dateobj.hour + offset) % 24 > 12:
+    dateobj = (dateobj + timedelta(hours=offset))
+    if dateobj.hour % 24 > 12:
         ampm = "pm"
     minute = ""
     if dateobj.minute > 0:
@@ -93,13 +100,14 @@ def format_dateobj(dateobj, to_dateobj=None, offset=0, use_day=True,
         if len(minutes) < 2:
             minutes = "0" + minutes
         minute = ":" + minutes
-    hrs = (dateobj + timedelta(hours=offset)).strftime("%I")
+    hrs = dateobj.strftime("%I")
     if hrs != "10":
       hrs = hrs.replace("0", "")
     to_hrs = ""
     to_minute = ""
     if to_dateobj:
-      to_hrs = (to_dateobj + timedelta(hours=offset)).strftime("%I")
+      to_dateobj = (to_dateobj + timedelta(hours=offset))
+      to_hrs = to_dateobj.strftime("%I")
       if to_hrs != "10":
         to_hrs = to_hrs.replace("0", "")
       if to_dateobj.minute > 0:
@@ -107,7 +115,6 @@ def format_dateobj(dateobj, to_dateobj=None, offset=0, use_day=True,
           if len(minutes) < 2:
               to_minutes = "0" + minutes
           to_minute = ":" + to_minutes
-
     if ":" in hrs:
       start, end = hrs.split(":")
       end.replace("0", "")
