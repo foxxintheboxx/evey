@@ -96,7 +96,8 @@ EVENT_POSTBACKS = {
   "back": BACK_POSTBACK,
   "add_time": ADD_TIME_POSTBACK,
   "remove_time": REMOVE_TIME_POSTBACK,
-  "more_times": MORE_TIMES_POSTBACK
+  "more_times": MORE_TIMES_POSTBACK,
+  "cancel_time": CANCEL_ADD_TIME,
 }
 
 #  BASE URL

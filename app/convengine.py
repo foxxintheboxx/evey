@@ -12,7 +12,7 @@ from .onboardengine import OnboardEngine
 from const import WHEN_EMOJI, WHERE_EMOJI, OTHER_EMOJI, EVEY_URL, MSG_BODY, \
     MSG_SUBJ, LOCAL, DATE, EVENT_POSTBACKS, GUY_EMOJI, \
     CONFIRM_POSTBACK, CANCEL_LOCATION_POSTBACK, ADD_TIME_POSTBACK, \
-    REMOVE_TIME_POSTBACK, NUM, CANCEL_ADD_TIME, CANCEL_REMOVE_TIME, \
+    REMOVE_TIME_POSTBACK, NUM, CANCEL_REMOVE_TIME, \
     GREEN_CHECK_EMOJI, CAL_EMOJI, RED_X_EMOJI, CANCEL, DOWN_ARROW, \
     BLACK_CIRCLE, EMOJI_NUM, PAPER_EMOJI, RIGHT_FINGER_EMOJI
 
@@ -42,9 +42,9 @@ class EveyEngine(WitEngine, FBAPI):
             EVENT_POSTBACKS["add_time"]: self.add_date_callback,
             EVENT_POSTBACKS["remove_time"]: self.remove_date_callback,
             EVENT_POSTBACKS["more_times"]: self.show_all_times,
+            EVENT_POSTBACKS["cancel_time"]: self.cancel_date_edit,
             CONFIRM_POSTBACK: self.confirm_location_change,
             CANCEL_REMOVE_TIME: self.cancel_date_edit,
-            CANCEL_ADD_TIME: self.cancel_date_edit,
             CANCEL_LOCATION_POSTBACK: self.cancel_location_edit}
 
     def understand(self, msgs):
@@ -261,7 +261,7 @@ class EveyEngine(WitEngine, FBAPI):
         buttons.append(add_button)
         save([self.user])
         back_button = self.make_button(type_="postback", title=CANCEL,
-                                       payload=CANCEL_ADD_TIME)
+                                       payload=postbacks["cancel_time"])
         buttons.append(back_button)
         return [self.button_attachment(text=text, buttons=buttons)]
 
@@ -286,7 +286,7 @@ class EveyEngine(WitEngine, FBAPI):
 
         back_button = self.make_button(
             type_="postback", title="%s %s" %
-            (CAL_EMOJI, str(event.title)), payload=CANCEL_ADD_TIME)
+            (CAL_EMOJI, str(event.title)), payload=postbacks["cancel_time"])
         buttons.append(back_button)
         return [self.button_attachment(text=text1, buttons=buttons)]
 
@@ -311,7 +311,7 @@ class EveyEngine(WitEngine, FBAPI):
                                            event.event_hash)
         back_button = self.make_button(
             type_="postback", title="%s %s" %
-            (CAL_EMOJI, str(event.title)), payload=CANCEL_ADD_TIME)
+            (CAL_EMOJI, str(event.title)), payload=postbacks["cancel_time"])
         buttons.append(back_button)
         return [self.text_message(text),
                 self.button_attachment(text=text1, buttons=buttons)]
@@ -403,18 +403,14 @@ class EveyEngine(WitEngine, FBAPI):
         p1 = self.event_attachment(event_hash)
         return [self.text_message("Ok canceled"), p1]
 
-    def cancel_date_edit(self):
-        add_time = self.user.is_adding_time
-        remove_time = self.user.is_removing_time
+    def cancel_date_edit(self, event_json):
+        event = self.event_from_hash(event_json["event_hash"])
         msgs = [self.text_message("Ok canceled")]
         self.user.is_adding_time = ""
         self.user.is_removing_time = ""
         save([self.user])
         event_hash = ""
-        if len(add_time):
-            msgs.extend(list(self.event_attachment(add_time)))
-        elif len(remove_time):
-            msgs.extend(list(self.event_attachment(remove_time)))
+        msgs.append(self.event_attachment(event.event_hash, event))
         return msgs
 
     def back_to_button(self, event_hash, event=None):
