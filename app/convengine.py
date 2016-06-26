@@ -321,13 +321,14 @@ class EveyEngine(WitEngine, FBAPI):
         date_polls = event.get_datepolls()
         text = ""
         if user is not None:
-            text = "Here is your %s:" % WHEN_EMOJI
+            text = "Here is your %ss:\n" % WHEN_EMOJI
         if len(date_polls) == 0:
             text = "Looks like no one has added any of their availabilities yet\n"
         else:
+            prev_date = ""
             for poll in date_polls:
                 if poll.poll_number == 2 and user is None:
-                    text += "-" * min(len(text), 25) + "\n"
+                    text += "-" * min(len(text), 9) + "\n"
                 if user is not None and user not in poll.users:
                     continue
                 votes = ""
@@ -336,10 +337,18 @@ class EveyEngine(WitEngine, FBAPI):
                 else:
                     votes = GUY_EMOJI * poll.votes()
                 dateobj = poll.datetime
+                indent = "      "
+                date = dateobj.strftime("%a %m/%d")
+                if prev_date != date:
+                    text += date + "\n"
+                    prev_date = date
+
                 date_str = format_dateobj(dateobj, poll.end_datetime,
-                                          self.user.timezone)
-                text += "%s %s, %s\n" % (number_to_emojistr(poll.poll_number),
-                                         date_str, votes)
+                                          self.user.timezone, use_day=False,
+                                          use_at=False)
+                text += "%s%s %s, %s\n" % (indent,
+                                           number_to_emojistr(poll.poll_number),
+                                           date_str, votes)
                 length -= 1
                 if length == 0:
                     break

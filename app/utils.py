@@ -82,7 +82,8 @@ def format_event_postbacks(postbacks, event_hash):
     return postbacks
 
 
-def format_dateobj(dateobj, to_dateobj=None, offset=0):
+def format_dateobj(dateobj, to_dateobj=None, offset=0, use_day=True,
+                   use_at=True):
     ampm = "am"
     if (dateobj.hour + offset) % 24 > 12:
         ampm = "pm"
@@ -119,8 +120,13 @@ def format_dateobj(dateobj, to_dateobj=None, offset=0):
       month = month.replace("0", "")
     if day not in ["10","20", "30"]:
       day = day.replace("0", "")
-    day_name  = dateobj.strftime("%a")
-    datestr = "%s %s/%s @ " % (day_name, month, day)
+    datestr = ""
+    if use_day:
+      day_name  = dateobj.strftime("%a")
+      datestr = "%s %s/%s " % (day_name, month, day)
+    if use_at:
+      datestr = datestr + "@ "
+
     datestr += hrs
     datestr += minute
     if len(to_hrs) > 0:

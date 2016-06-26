@@ -5,7 +5,7 @@ from datetime import datetime
 
 from .. import db
 from ..models import User, MessengerUser, FBUser
-from .utls import save
+from ..utils import save
 
 class UserManager():
 
@@ -20,7 +20,7 @@ class UserManager():
     user = db.session.query(User).filter((User.messenger_uid==uid)).first()
     if user == None:
         user = User()
-        user.messenger_uid = user_data.("messenger_uid")
+        user.messenger_uid = user_data.get("messenger_uid")
         save(user)
     return user
 
