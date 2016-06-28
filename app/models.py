@@ -52,13 +52,16 @@ class User(db.Model):
                                lazy='dynamic')
     calendar = db.relationship("Calendar",
                                uselist=False,
-                               back_populates="user")
+                               back_populates='user')
     location_polls = db.relationship('Locationpoll',
                                      secondary=locationpoll_user_association,
                                      backref=db.backref('users'))
     date_polls = db.relationship('Datepoll',
                                  secondary=datepoll_user_association,
                                  backref=db.backref('users'))
+    created_events = db.relationship('Event',
+                                     backref='creator',
+                                     lazy='dynamic')
 
     def __init__(self, messenger_uid):
         self.registered_on = datetime.utcnow()
@@ -98,30 +101,6 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % (self.name)
-
-
-class Conversation(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    messages = db.relationship('Message',
-                               backref='conversation',
-                               lazy='dynamic')
-
-    def __repr__(self):
-        return '<Conversation between sender: %r recepient: %r>' % (
-            self.sender.name, self.recepient.name)
-
-
-class Message(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    body = db.Column(db.Text())
-    conversation_id = db.Column(db.Integer, db.ForeignKey('conversation.id'))
-    message_uid = db.Column(db.String)
-    time = db.Column(db.String)
-
-    def __repr__(self):
-        return '<Message from %r>' % self.user.name
 
 
 # Calendar Models

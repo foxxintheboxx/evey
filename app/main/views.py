@@ -7,7 +7,7 @@ import requests
 import json
 import traceback
 
-from ..models import User, Conversation, Message
+from ..models import User
 from .. import db, lm
 from usermanager import UserManager
 from flask.ext.login import UserMixin, login_user, logout_user, current_user, \
