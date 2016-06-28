@@ -68,10 +68,10 @@ class EveyEngine(WitEngine, FBAPI):
 
     def parse_event_msg(self, msg):
         tokens = [token.split(" ") for token in  msg.splitlines()]
-        tokens = [t for ts in tokens for t in ts]
+        tokens = [t.encode('utf-8') for ts in tokens for t in ts]
         event = None
         for token in tokens:
-            token = token.replace("#", "")
+            token = token.replace(KEY_EMOJI, "")
             if len(token) == 5:
                 event = self.event_from_hash(token)
                 if event != None:
@@ -175,8 +175,7 @@ class EveyEngine(WitEngine, FBAPI):
         event = self.event_from_hash(event_json["event_hash"])
         title = str(event.title)
         key = str(event.event_hash)
-        text = "txt this %s #%s to evey @ m.me/evey.io to unlock \"%s\"" % (KEY_EMOJI, key, title)
-        text += "(save time & paste this entire msg to her)"
+        text = "txt %s%s%s to m.me/evey.io" % (KEY_EMOJI, key, KEY_EMOJI)
         return [self.text_message("forward this msg" + DOWN_ARROW),
                 self.text_message(text)]
 
@@ -238,10 +237,15 @@ class EveyEngine(WitEngine, FBAPI):
         for i in intervals:
             event.remove_interval(i.get("from"), i.get("to"), self.user)
         datepolls = event.get_datepolls()
+        to_delete = []
         for n in set(numbers):
             if n > len(datepolls) or n < 1:
                 continue  # add some degradation
-            datepolls[n - 1].users.append(self.user)
+            p = datepolls[n - 1]
+            p.users.remove(self.user)
+            if len(p) == 0:
+                to_delete.append(p)
+        delete(to_delete)
 
         save(event.get_datepolls())
         save([self.user, event])
