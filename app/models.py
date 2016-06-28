@@ -40,16 +40,9 @@ class User(db.Model):
     first_name = db.Column(db.String(65), index=True)
     last_name = db.Column(db.String(64), index=True)
     last_msg = db.Column(db.String)
-    timezone = db.Column(db.Integer)
-    conversations = db.relationship('Conversation',
-                                    backref='user',
-                                    lazy='dynamic')
     date_conv_session = db.Column(db.Integer, index=True)
     location_conv_session = db.Column(db.Integer, index=True)
 
-    messages = db.relationship('Message',
-                               backref='user',
-                               lazy='dynamic')
     calendar = db.relationship("Calendar",
                                uselist=False,
                                back_populates='user')
@@ -124,6 +117,7 @@ class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     event_hash = db.Column(db.String, unique=True)
     calendar_id = db.Column(db.Integer, db.ForeignKey('calendar.id'))
+    creator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     datetime = db.Column(db.DateTime)
     duration = db.Column(db.Integer)
     title = db.Column(db.String(64))

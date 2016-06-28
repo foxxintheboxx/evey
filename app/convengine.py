@@ -14,7 +14,7 @@ from const import WHEN_EMOJI, WHERE_EMOJI, OTHER_EMOJI, EVEY_URL, MSG_BODY, \
     MSG_SUBJ, LOCAL, DATE, EVENT_POSTBACKS, GUY_EMOJI, CONFIRM_POSTBACK, \
     ADD_TIME_POSTBACK, REMOVE_TIME_POSTBACK, NUM, CAL_EMOJI, RED_X_EMOJI, CANCEL, DOWN_ARROW, \
     BLACK_CIRCLE, EMOJI_NUM, PAPER_EMOJI, RIGHT_FINGER_EMOJI, PLZ_SLOWDOWN, \
-    YES_EVENT_INVITE, NO_EVENT_INVITE, KEY_EMOJI
+    YES_EVENT_INVITE, NO_EVENT_INVITE, KEY_EMOJI, GREEN_CHECK_EMOJI
 
 
 class EveyEngine(WitEngine, FBAPI):
@@ -270,6 +270,8 @@ class EveyEngine(WitEngine, FBAPI):
             type_="postback",
             title="add " + WHEN_EMOJI,
             payload=postbacks["add_time"])
+
+        buttons.append(add_button)
         remove_button = self.make_button(
             type_="postback",
             title="remove " + WHEN_EMOJI,
@@ -277,7 +279,6 @@ class EveyEngine(WitEngine, FBAPI):
         if event.user_has_voted(self.user):
             buttons.append(remove_button)
 
-        buttons.append(add_button)
         save([self.user])
         back_button = self.make_button(type_="postback", title=CANCEL,
                                        payload=postbacks["cancel_edit"])
