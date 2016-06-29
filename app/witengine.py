@@ -53,9 +53,9 @@ class WitEngine(object):
         matches = re.findall(pattern, msg)
         intervals = []
         for i in range(len(matches)):
-            m = matches[i]
-            j = tokens.index(m)
-            m = format_ampm(m)
+            match = matches[i]
+            j = tokens.index(match)
+            m = format_ampm(match)
             day = None
             if j > 0:
                 string = tokens[j - 1]
@@ -74,5 +74,6 @@ class WitEngine(object):
             interval = {"from": from_, "to": to}
             print(interval)
             intervals.append(interval)
+            tokens.remove(match)
         return intervals
 

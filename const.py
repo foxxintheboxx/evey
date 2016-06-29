@@ -51,6 +51,7 @@ EMOJI_7 = "7️⃣"
 EMOJI_8 = "8️⃣"
 EMOJI_9 = "9️⃣"
 ELLIPSE = "🔸🔹🔸"
+PLUS_SIGN = "➕"
 
 NUM = {
   0: EMOJI_0,

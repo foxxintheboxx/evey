@@ -44,6 +44,8 @@ def format_ampm(string):
         end_zone = "pm"
     if ("am" in end):
         end_zone = "am"
+    else:
+        end_zone = "pm"
     if start_zone is None and start_val < end_val:
         start_zone = end_zone
     elif start_zone is None:

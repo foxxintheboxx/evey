@@ -297,13 +297,14 @@ class EveyEngine(WitEngine, FBAPI):
         self.user.is_adding_time = event_json["event_hash"]
         save([self.user])
         event = self.event_from_hash(event_json["event_hash"])
-        number_dialog = (BLACK_CIRCLE + "or, the numbers i.e." +
+        number_dialog = (BLACK_CIRCLE + "txt me above numbers i.e." +
                           NUM[1] + ", " + NUM[2] + "\n")
-        reg_dialog = (BLACK_CIRCLE + " or, a new time i.e. Thu 3-4pm")
+        reg_dialog = (BLACK_CIRCLE + "txt a chain of free times i.e. \n     Thu 3-4 5-8, Fri 4-5\n")
         text1 = ("To add your " + WHEN_EMOJI + " :\n")
+        text1 += reg_dialog
         if len(event.get_datepolls()):
           text1 += number_dialog
-        text1 += reg_dialog
+
         postbacks = format_event_postbacks(dict(EVENT_POSTBACKS),
                                            event.event_hash)
         buttons = []
