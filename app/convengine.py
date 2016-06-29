@@ -54,21 +54,27 @@ class EveyEngine(WitEngine, FBAPI):
         event = self.parse_event_msg(msgs[0])
         if event != None:
             return [self.event_attachment(event.event_hash, event)]
-        if len(self.user.is_editing_location) > 0:
-            return self.handle_edit_location(msgs[0])
-        if len(self.user.is_adding_time) > 0:
-            return self.handle_add_time(msgs[0])
-        if len(self.user.is_removing_time) > 0:
-            return self.handle_remove_time(msgs[0])
-        if msgs[0] == "site visit":
-            return []
+
         msg = msgs[0]
-        if msg.lower() == "e" or msg.lower() == "events":
-            text = ("hi %s, gimme a second to fetch your events for this"
-                    " week")
-            return [self.text_message(text % self.user.user_name)]
-        msg_data = self.message(msgs[0])
-        return self.determine_response(msg_data)
+        msg_data = self.message(msg)
+        if ("event" not in msg_data["entities"]):
+            if len(self.user.is_editing_location) > 0:
+                return self.handle_edit_location(msgs[0])
+            if len(self.user.is_adding_time) > 0:
+                return self.handle_add_time(msgs[0])
+            if len(self.user.is_removing_time) > 0:
+                return self.handle_remove_time(msgs[0])
+            if msgs[0] == "site visit":
+                return []
+            if msg.lower() == "e" or msg.lower() == "events":
+                text = ("hi %s, gimme a second to fetch your events for this"
+                        " week")
+                return [self.text_message(text % self.user.user_name)]
+            else:
+                return [self.onboarder.onboarding_1()[0]]
+        else:
+            self.clear_user()
+            return self.determine_response(msg_data)
 
     def parse_event_msg(self, msg):
         tokens = [token.split(" ") for token in  msg.splitlines()]
@@ -86,11 +92,13 @@ class EveyEngine(WitEngine, FBAPI):
 
     def determine_response(self, msg_data):
         entities = msg_data["entities"]
-        if "event" not in entities:
-            return [self.onboarder.onboarding_1()[0]]
         if (entities.get("message_body") is None and
                 entities.get("message_subject") is None):
-            return [self.text_message("What do you wanna call the event?")]
+            if entities.get(LOCAL) is not None:
+                entities["message_body"] = entities.get(LOCAL)
+            else:
+                self.user.is_adding_event_name = 1
+                return [self.text_message("What do you wanna call the event?")]
         event = self.create_event(entities)
         p1 = self.event_attachment(event.event_hash, event=event)
         return [p1]
@@ -358,6 +366,8 @@ class EveyEngine(WitEngine, FBAPI):
         text = "Is this correct? %s" % location
         confirm_postback = format_postback(CONFIRM_POSTBACK,
                                            {"name": location})
+        postbacks = format_event_postbacks(dict(EVENT_POSTBACKS),
+                                           event.event_hash)
         confirm_button = self.make_button(type_="postback", title="Yes",
                                           payload=confirm_postback)
         cancel_button = self.make_button(type_="postback", title="cancel",
@@ -418,4 +428,5 @@ class EveyEngine(WitEngine, FBAPI):
         self.user.is_editing_location = ""
         self.user.is_adding_time = ""
         self.user.is_removing_time = ""
+        self.user.is_adding_event_name = 0
         save([self.user])

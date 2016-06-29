@@ -29,6 +29,7 @@ class User(db.Model):
     is_adding_time = db.Column(db.String, index=True)
     is_setting_time = db.Column(db.String, index=True)
     is_removing_time = db.Column(db.String, index=True)
+    is_adding_event_name = db.Column(db.Integer, index=True)
     first_name = db.Column(db.String(65), index=True)
     last_name = db.Column(db.String(64), index=True)
     last_msg = db.Column(db.String)
