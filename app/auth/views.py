@@ -5,7 +5,7 @@ from ..utils import FB_GRAPH_URL, MESNGR_API_URL, fetch_user_data
 from config import TOKEN
 from . import auth
 from .. import db
-from ..models import User
+from ..models.users import User
 
 @auth.route('/register/<messenger_uid>' , methods=['GET','POST'])
 def register(messenger_uid):

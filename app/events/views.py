@@ -5,7 +5,8 @@ from config import TOKEN
 
 from . import events
 from .. import db
-from ..models import User, Event
+from ..models.users import User
+from ..models.events import Event
 from ..convengine import EveyEngine
 import requests
 

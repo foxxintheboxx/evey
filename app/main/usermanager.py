@@ -4,7 +4,7 @@ import time
 from datetime import datetime
 
 from .. import db
-from ..models import User
+from ..models.users import User
 from ..utils import save
 
 class UserManager():

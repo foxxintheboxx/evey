@@ -7,9 +7,10 @@ import requests
 import json
 import traceback
 
-from ..models import User
+from ..models.users import User
 from .. import db, lm
 from usermanager import UserManager
+from datetime import datetime
 from flask.ext.login import UserMixin, login_user, logout_user, current_user, \
                             login_required
 from ..oauth import OAuthSignIn
@@ -64,25 +65,18 @@ def webhook():
       print(user_data)
       user = usr_manager.handle_messenger_user(user_data)
       print(user)
-      if user and user.last_msg:
+      user.last_date_used = datetime.utcnow()
+      user.timezone = int(user_data["timezone"])
+      if user.last_msg:
         prev_time = int(user.last_msg)
         user.last_msg = str(timestamp)
-        user.timezone = int(user_data["timezone"])
-        save([user])
-        print(int(prev_time))
-        print(timestamp)
         if (int(timestamp) - prev_time) < 10:
           return "rapid"
-      elif user:
+      else:
         user.last_msg = str(timestamp)
-        user.timezone = int(user_data["timezone"])
-        save([user])
+      save([user])
       evey = EveyEngine(user_data["first_name"], user, sender)
-      if user is None:
-        resp_msgs = evey.understand(["signup"])
-        post_response_msgs(resp_msgs, sender)
-        print("yo")
-      elif len(postbacks):
+      if len(postbacks):
         resp_msgs = evey.handle_postback(postbacks)
         post_response_msgs(resp_msgs, sender)
       elif len(msgs):

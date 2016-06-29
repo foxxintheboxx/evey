@@ -4,7 +4,11 @@ import json
 from datetime import timedelta
 from .witengine import WitEngine
 from .fbapimethods import FBAPI
-from .models import User, Event, Datepoll, Locationpoll
+from .models.calendars import Calendar
+from .models.events import Event
+from .models.datepolls import Datepoll
+from .models.locationpolls import Locationpoll
+from .models.users import User
 from .utils import fetch_user_data, save, delete, encode_unicode, \
      format_dateobj, format_event_postbacks, format_postback, \
      numbers_from_tokens, generate_hash, number_to_emojistr, event_times_text
@@ -293,7 +297,7 @@ class EveyEngine(WitEngine, FBAPI):
         self.user.is_adding_time = event_json["event_hash"]
         save([self.user])
         event = self.event_from_hash(event_json["event_hash"])
-        number_dialog = (BLACK_CIRCLE + " text me a number i.e." +
+        number_dialog = (BLACK_CIRCLE + "or, the numbers i.e." +
                           NUM[1] + ", " + NUM[2] + "\n")
         reg_dialog = (BLACK_CIRCLE + " or, a new time i.e. Thu 3-4pm")
         text1 = ("To add your " + WHEN_EMOJI + " :\n")
