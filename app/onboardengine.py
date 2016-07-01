@@ -17,5 +17,5 @@ class OnboardEngine(WitEngine, FBAPI):
   def onboarding_1(self):
     self.user.did_onboarding = 2
     save([self.user])
-    return [self.text_message(HELP % self.user_name)]
+    return [self.text_message(HELP % str(self.user_name))]
 

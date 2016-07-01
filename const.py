@@ -24,12 +24,16 @@ DAY_ABRV = {"sun": "Sunday",
             "wed": "Wednesday",
             "fri": "Friday",
             "sat": "Saturday",
-            "mon": "Monday",}
+            "mon": "Monday",
+            "today": "Today",}
 
 #EMOJIS
 WHEN_EMOJI = "🕐"
 WHERE_EMOJI = "📍"
+STAR_EMOJI = "⭐️"
 OTHER_EMOJI = "🔴"
+HOUSE_EMOJI = "🏠"
+SPOTLIGHT_EMOJI = "🔎"
 GUY_EMOJI = "👦"
 RED_A_EMOJI = ""
 RED_X_EMOJI = "❌ "
@@ -52,6 +56,7 @@ EMOJI_8 = "8️⃣"
 EMOJI_9 = "9️⃣"
 ELLIPSE = "🔸🔹🔸"
 PLUS_SIGN = "➕"
+STAR_EMOJI = "⭐️"
 
 NUM = {
   0: EMOJI_0,
@@ -88,8 +93,13 @@ CANCEL_REMOVE_TIME = "CANCEL_REMOVE_TIME"
 ADD_TIME_POSTBACK = "ADD_TIME"
 REMOVE_TIME_POSTBACK = "REMOVE_TIME"
 MORE_TIMES_POSTBACK = "MORE_TIMES"
+GET_STARTED_POSTBACK = "GET_STARTED"
 YES_EVENT_INVITE = "YES_EVENT_INVITE"
 NO_EVENT_INVITE = "NO_EVENT_INVITE"
+VIEW_MY_EVENTS = "VIEW_MY_EVENTS"
+SEARCH_EVENTS = "SEARCH_EVENTS"
+HELP_POSTBACK = "HELP"
+
 
 EVENT_POSTBACKS = {
   "subscribe": SUBSCRIBE_POSTBACK,
@@ -113,9 +123,10 @@ EVEY_URL = "www.evey.ai/"
 PLZ_SLOWDOWN = ("I'm sorry %s, but currently I am wayy better "
                 "at understanding one request at a time. So "
                 "plz only text me 1 thing at a time")
-HELP = ("Hi %s! this is how to use me!\n"
-        "> 'make' <event name> \n"
-        "> 'find' <event name>\n"
-        "> 'events' to see all your events")
-
-
+HELP = ("this is how to use me!\n"
+        "%s 'make' <event name> \n"
+        "%s 'find' <event name>\n"
+        "%s 'events' to see all your events")
+HELP = "Hi %s, " +  (HELP % (BLACK_CIRCLE, BLACK_CIRCLE, BLACK_CIRCLE))
+GET_STARTED_TEXT = "Hi  %s, I help connect calendars! Do you have an event %s###%s?"
+NO_EVENTS_TEXT = "Hi %s, Looks like you dont have any events coming up"

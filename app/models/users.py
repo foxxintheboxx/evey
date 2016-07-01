@@ -24,14 +24,18 @@ class User(db.Model):
     messenger_uid = db.Column(db.String(64), index=True, unique=True)
     date_created = db.Column(db.DateTime, index=True)
     last_date_used = db.Column(db.DateTime, index=True)
+
     did_onboarding = db.Column(db.Integer, index=True)
     is_editing_location = db.Column(db.String, index=True)
     is_adding_time = db.Column(db.String, index=True)
     is_setting_time = db.Column(db.String, index=True)
     is_removing_time = db.Column(db.String, index=True)
     is_adding_event_name = db.Column(db.Integer, index=True)
+
     first_name = db.Column(db.String(65), index=True)
     last_name = db.Column(db.String(64), index=True)
+    timezone = db.Column(db.Integer, index=True)
+
     last_msg = db.Column(db.String)
     date_conv_session = db.Column(db.Integer, index=True)
     location_conv_session = db.Column(db.Integer, index=True)

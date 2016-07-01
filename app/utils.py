@@ -2,7 +2,7 @@ import requests
 import random
 import re
 import json
-from datetime import timedelta
+from datetime import timedelta, datetime
 from . import db
 
 
@@ -100,6 +100,7 @@ def format_event_postbacks(postbacks, event_hash):
 
 def format_dateobj(dateobj, to_dateobj=None, offset=0, use_day=True,
                    use_at=True):
+    today = datetime.utcnow()
     ampm = "am"
     dateobj = (dateobj + timedelta(hours=offset))
     if dateobj.hour % 24 > 12:
@@ -141,6 +142,8 @@ def format_dateobj(dateobj, to_dateobj=None, offset=0, use_day=True,
     if use_day:
         day_name = dateobj.strftime("%a")
         datestr = "%s %s/%s " % (day_name, month, day)
+        if (dateobj.day == today.day and dateobj.month == today.month):
+            datestr = "Today "
     if use_at:
         datestr = datestr + "@ "
 
@@ -177,9 +180,12 @@ def number_to_emojistr(number):
     return emojistr
 
 
-def event_times_text(event, timezone=0, user=None, length=5):
+def event_times_text(event, timezone=0, user=None, length=5, show_title=False):
     date_polls = event.get_datepolls()
+    now = datetime.utcnow()
     text = ""
+    if show_title:
+        text = "%s %s by %s" % (c.CAL_EMOJI, str(event.title), str(event.creator.first_name))
     if user is not None:
         text = "Here is your %ss:\n" % c.WHEN_EMOJI
     if len(date_polls) == 0:
@@ -199,6 +205,8 @@ def event_times_text(event, timezone=0, user=None, length=5):
             dateobj = poll.datetime + timedelta(hours=timezone)
             indent = "      "
             date = dateobj.strftime("%a %m/%d")
+            if (dateobj.day == now.day and dateobj.month == now.month):
+                date = "Today"
             if prev_date != date:
                 text += date + "\n"
                 prev_date = date

@@ -47,18 +47,12 @@ class FBAPI(object):
                 }
               }
 
-    def quick_reply(self, title, payload, type_="text"):
+    def make_quick_reply(self, title, payload, type_="text"):
         return {"content_type": type_,
                 "payload": payload,
                 "title": title}
 
-    def quick_replies(self, quick_replies, button_attachment=None, text=None):
-        obj = None
-        if button_attachment:
-            button_attachment["quick_replies"]  = quick_replies
-            obj = button_attachment
-        if text:
-            text["quick_replies"] = quick_replies
-            obj = text
-        return obj
+    def quick_replies(self, quick_replies, attachment):
+        attachment["quick_replies"] = quick_replies
+        return attachment
 

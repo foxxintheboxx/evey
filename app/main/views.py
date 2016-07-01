@@ -55,18 +55,24 @@ def webhook():
           if 'delivery' in message:
             return "hello world"
           if 'message' in message:
-            print("messsage")
-            msgs.append(message['message']['text'])
+            msg = message.get('message')
+            if 'quick_reply' in msg:
+                postbacks.append(msg['quick_reply']['payload'])
+            else:
+                msgs.append(msg['text'])
           if 'postback' in message:
             print("postback")
             postbacks.append(message['postback']['payload'])
-      user_data = fetch_user_data(sender)
-      user_data['messenger_uid'] = sender
-      print(user_data)
-      user = usr_manager.handle_messenger_user(user_data)
-      print(user)
+      user = usr_manager.handle_messenger_user(sender)
+      if not user.timezone:
+          try:
+              user_data = fetch_user_data(sender)
+              print(user_data)
+              user.timezone = int(user_data["timezone"])
+          except Exception as e:
+              pass
+
       user.last_date_used = datetime.utcnow()
-      user.timezone = int(user_data["timezone"])
       if user.last_msg:
         prev_time = int(user.last_msg)
         user.last_msg = str(timestamp)
@@ -75,7 +81,7 @@ def webhook():
       else:
         user.last_msg = str(timestamp)
       save([user])
-      evey = EveyEngine(user_data["first_name"], user, sender)
+      evey = EveyEngine(user.first_name, user, sender)
       if len(postbacks):
         resp_msgs = evey.handle_postback(postbacks)
         post_response_msgs(resp_msgs, sender)
