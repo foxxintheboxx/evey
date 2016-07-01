@@ -52,28 +52,43 @@ class WitEngine(object):
         pattern = "\d\d?:?\d?\d?[APap]?[mM]?-\d\d?:?\d?\d?[APap]?[mM]?"
         matches = re.findall(pattern, msg)
         intervals = []
-        for i in range(len(matches)):
-            match = matches[i]
-            j = tokens.index(match)
-            m = format_ampm(match)
-            day = None
-            if j > 0:
-                string = tokens[j - 1]
-                day = string_to_day(string)
-            if not day and j > 1:
-                string = tokens[j - 2]
-                day = string_to_day(string)
-            if not day:
-                continue
-            start_time, end_time = m.split("-")
-            query = "%s %s to %s %s" % (day, start_time, day, end_time)
-            wit_resp = self.message(query)["entities"][DATE][0]
-            from_ = parse(wit_resp["from"]["value"]).astimezone(tzutc())
-            to =  parse(wit_resp["to"]["value"]).astimezone(tzutc())
-            to = to - timedelta(hours = 1)
-            interval = {"from": from_, "to": to}
-            print(interval)
-            intervals.append(interval)
-            tokens.remove(match)
+        if len(matches) > 0:
+            for i in range(len(matches)):
+                match = matches[i]
+                j = tokens.index(match)
+                m = format_ampm(match)
+                day = None
+                if j > 0:
+                    string = tokens[j - 1]
+                    day = string_to_day(string)
+                if not day and j > 1:
+                    string = tokens[j - 2]
+                    day = string_to_day(string)
+                if not day:
+                    continue
+                start_time, end_time = m.split("-")
+                query = "%s %s to %s %s" % (day, start_time, day, end_time)
+                wit_resp = self.message(query)["entities"][DATE][0]
+                from_ = parse(wit_resp["from"]["value"]).astimezone(tzutc())
+                to =  parse(wit_resp["to"]["value"]).astimezone(tzutc())
+                to = to - timedelta(hours = 1)
+                interval = {"from": from_, "to": to}
+                print(interval)
+                intervals.append(interval)
+                tokens.remove(match)
+        else:
+            wit_resp = self.message(msg)["entities"]
+            if wit_resp.get(DATE):
+                data = wit_resp.get(DATE)
+                for obj in data:
+                    if obj.get("type") == "value":
+                        intervals.append(
+                            {"from": parse(obj.get("value")).astimezone(tzutc())})
+                    if obj.get("type") == "interval":
+                        from_ = parse(obj["from"]["value"]).astimezone(tzutc())
+                        to =  parse(obj["to"]["value"]).astimezone(tzutc())
+                        to = to - timedelta(hours = 1)
+                        interval = {"from": from_, "to": to}
+                        intervals.append(interval)
         return intervals
 

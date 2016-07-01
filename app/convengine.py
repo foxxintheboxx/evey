@@ -67,6 +67,10 @@ class EveyEngine(WitEngine, FBAPI):
                 return self.handle_add_time(msgs[0])
             if len(self.user.is_removing_time) > 0:
                 return self.handle_remove_time(msgs[0])
+            if self.user.is_adding_event_name == 1:
+                self.user.is_adding_event_name = 0
+                save([self.user])
+                return self.create_event({MSG_SUBJ: msgs[0]})
             if msgs[0] == "site visit":
                 return []
             if msg.lower() == "e" or msg.lower() == "events":
@@ -101,10 +105,12 @@ class EveyEngine(WitEngine, FBAPI):
                 entities["message_body"] = entities.get(LOCAL)
             else:
                 self.user.is_adding_event_name = 1
-                return [self.text_message("What do you wanna call the event?")]
+                return [self.text_message(("I didn't fully understand...\n"
+                                          "What do you wanna call the event?"))]
         event = self.create_event(entities)
         p1 = self.event_attachment(event.event_hash, event=event)
         return [p1]
+
 
     def create_event(self, entities):
         title = entities.get(MSG_SUBJ)

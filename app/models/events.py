@@ -80,8 +80,14 @@ class Event(db.Model):
         intersecting_polls = []
         old_polls = []
         for poll in date_polls:
-            if poll.end_datetime is None and from_dateobj is not None:
-                continue  # TODO
+            if ((poll.end_datetime is None and to_dateobj is not None) or
+                (to_dateobj is None and poll.end_datetime is not None)):
+                continue
+            if (poll.datetime == from_dateobj and
+                poll.end_datetime is None and to_dateobj is None):
+                poll.add_users([user])
+                intersecting_polls.append(poll)
+                break
             if (to_dateobj <= poll.datetime or from_dateobj >= poll.end_datetime):
                 continue
             time0, time1, time2, time3 = self.__interval_times(
@@ -193,20 +199,86 @@ class Event(db.Model):
             print(user not in p.users)
             if user not in p.users:
                 continue
-            print(p.datetime)
-            print(p.end_datetime)
-            if ((from_dateobj == p.datetime or from_dateobj < p.datetime) and
-                (to_dateobj == p.end_datetime or to_dateobj > p.end_datetime)):
+            if (p.end_datetime is None and to_dateobj is None and from_dateobj == p.datetime):
                 new_users = p.users
-                print(new_users)
                 new_users.remove(user)
-                print(new_users)
                 p.users = new_users
                 if (len(p.users) == 0):
                     old_polls.append(p)
                 else:
                     updated_polls.append(p)
+                break
+
+            if (p.end_datetime is None and to_dateobj is not None):
+                if ((from_dateobj == p.datetime or to_dateobj == p.datetime) or
+                     (from_dateobj < p.datetime and p.datetime < to_dateobj)):
+                    new_users = p.users
+                    new_users.remove(user)
+                    p.users = new_users
+                    if (len(p.users) == 0):
+                        old_polls.append(p)
+                    else:
+                        updated_polls.append(p)
+                break
+
+
+            if ((to_dateobj is None and p.end_datetime is not None) or (from_dateobj > p.end_datetime) or (to_dateobj < p.datetime)):
                 continue
+            if (poll.datetime == from_dateobj and
+                poll.end_datetime is None and to_dateobj is None):
+                poll.add_users([user])
+                intersecting_polls.append(poll)
+                break
+            print(p.datetime)
+            print(p.end_datetime)
+            if (from_dateobj <= p.datetime and to_dateobj >= p.end_datetime):
+                new_users = p.users
+                new_users.remove(user)
+                p.users = new_users
+                if (len(p.users) == 0):
+                    old_polls.append(p)
+                else:
+                    updated_polls.append(p)
+            if (from_dateobj <= p.datetime and to_dateobj < p.end_datetime):
+                poll_with_user = Datepoll(datetime=to_dateobj,
+                                          end_datetime=p.end_datetime)
+                new_polls.append(poll_with_user)
+                poll_with_user.users = p.users
+                new_users = p.users
+                new_users.remove(user)
+                old_polls.append(p)
+                if (len(new_users) != 0):
+                    poll_wo_user = Datepoll(datetime=p.datetime, end_datetime=to_dateobj)
+                    poll_wo_user.users = new_users
+                    new_polls.append(poll_wo_user)
+            elif (from_dateobj > p.datetime and to_dateobj > p.end_datetime):
+                poll_with_user = Datepoll(datetime=p.datetime,
+                                          end_datetime=from_dateobj)
+                new_polls.append(poll_with_user)
+                poll_with_user.users = p.users
+                new_users = p.users
+                new_users.remove(user)
+                old_polls.append(p)
+                if (len(new_users) != 0):
+                    poll_wo_user = Datepoll(datetime=from_dateobj, end_datetime=p.end_datetime)
+                    poll_wo_user.users = new_users
+                    new_polls.append(poll_wo_user)
+
+            elif (from_dateobj > p.datetime and to_dateobj < p.end_datetime):
+                poll_with_user0 = Datepoll(datetime=p.datetime, end_datetime=from_dateobj)
+                poll_wo_user = Datepoll(datetime=from_dateobj, end_datetime=to_dateobj)
+                poll_with_user1 = Datepoll(datetime=to_dateobj, end_datetime=p.end_datetime)
+                new_polls.extend([poll_with_user0, poll_with_user1])
+                poll_with_user0.users = p.users
+                poll_with_user1.users = p.users
+                users = p.users
+                users.remove(user)
+                if len(users) > 0:
+                    poll_wo_user.users = users
+                    new_polls.append(poll_wo_user)
+                old_polls.append(p)
+
+
             # TODO
         for poll in new_polls:
             self.append_datepoll(poll)
