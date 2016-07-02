@@ -26,6 +26,11 @@ def generate_hash():
                  + alpha.lower())
     return ''.join(random.choice(possibles) for i in range(5))
 
+def post_response_msgs(msgs, sender):
+    for msg in msgs:
+        payload = {'recipient': {'id': sender}, 'message': msg}
+        r = requests.post(MESNGR_API_URL + TOKEN, json=payload)
+
 
 def format_ampm(string):
     opp = {"am": "pm", "pm": "am"}
@@ -185,7 +190,7 @@ def event_times_text(event, timezone=0, user=None, length=5, show_title=False):
     now = datetime.utcnow()
     text = ""
     if show_title:
-        text = "%s %s by %s" % (c.CAL_EMOJI, str(event.title), str(event.creator.first_name))
+        text = "%s %s by %s\n" % (c.CAL_EMOJI, str(event.title), str(event.creator.first_name))
     if user is not None:
         text = "Here is your %ss:\n" % c.WHEN_EMOJI
     if len(date_polls) == 0:

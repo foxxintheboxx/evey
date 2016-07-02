@@ -45,6 +45,8 @@ class Event(db.Model):
         return False
 
     def append_datepoll(self, poll):
+        if poll.datetime == None:
+            return
         self.date_polls.append(poll)
         poll.poll_number = len(self.date_polls.all())
 
@@ -87,6 +89,8 @@ class Event(db.Model):
                 poll.end_datetime is None and to_dateobj is None):
                 poll.add_users([user])
                 intersecting_polls.append(poll)
+                break
+            if (to_dateobj is None):
                 break
             if (to_dateobj <= poll.datetime or from_dateobj >= poll.end_datetime):
                 continue
@@ -143,9 +147,11 @@ class Event(db.Model):
         for poll in intersecting_polls:
             self.append_datepoll(poll)
         print(intersecting_polls)
-        delete(old_polls)
+
         save(intersecting_polls)
+        delete(old_polls)
         self.merge_polls()
+        return intersecting_polls
 
     def merge_polls(self):
         datepoll_list = self.date_polls.all()

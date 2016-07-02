@@ -2,7 +2,7 @@ from flask import redirect, url_for, flash, session, request, render_template, g
 from . import main
 from ..convengine import EveyEngine
 from config import SECRET_KEY, TOKEN, WEBHOOK, WEBHOOK_TOKEN
-from ..utils import MESNGR_API_URL, fetch_user_data
+from ..utils import fetch_user_data, post_response_msgs
 import requests
 import json
 import traceback
@@ -23,12 +23,6 @@ def save(objs):
   for obj in objs:
     db.session.add(obj)
   db.session.commit()
-def post_response_msgs(msgs, sender):
-  for msg in msgs:
-    payload = {'recipient': {'id': sender}, 'message': msg}
-    r = requests.post(MESNGR_API_URL + TOKEN, json=payload)
-    print(r.json())
-
 
 @main.route('/webhook/' + WEBHOOK, methods=['GET'])
 def verification():

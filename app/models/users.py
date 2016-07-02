@@ -19,7 +19,6 @@ datepoll_user_association = db.Table(
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), index=True)
     fb_uid = db.Column(db.String(64), index=True, unique=True)
     messenger_uid = db.Column(db.String(64), index=True, unique=True)
     date_created = db.Column(db.DateTime, index=True)
@@ -32,6 +31,7 @@ class User(db.Model):
     is_removing_time = db.Column(db.String, index=True)
     is_adding_event_name = db.Column(db.Integer, index=True)
 
+    name = db.Column(db.String(120), index=True)
     first_name = db.Column(db.String(65), index=True)
     last_name = db.Column(db.String(64), index=True)
     timezone = db.Column(db.Integer, index=True)

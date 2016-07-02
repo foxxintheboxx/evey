@@ -12,7 +12,8 @@ from .models.locationpolls import Locationpoll
 from .models.users import User
 from .utils import fetch_user_data, save, delete, encode_unicode, \
      format_dateobj, format_event_postbacks, format_postback, \
-     numbers_from_tokens, generate_hash, number_to_emojistr, event_times_text
+     numbers_from_tokens, generate_hash, number_to_emojistr, \
+     event_times_text, post_response_msgs
 from config import WIT_APP_ID, WIT_SERVER
 from .onboardengine import OnboardEngine
 from const import WHEN_EMOJI, WHERE_EMOJI, OTHER_EMOJI, EVEY_URL, MSG_BODY, \
@@ -288,10 +289,11 @@ class EveyEngine(WitEngine, FBAPI):
         key = str(event.event_hash)
         postbacks = format_event_postbacks(dict(EVENT_POSTBACKS),
                                    event.event_hash)
-        text = "txt %s%s%s to m.me/evey.io" % (KEY_EMOJI, key, KEY_EMOJI)
+        text = "%s %s\n" % (CAL_EMOJI, title)
+        text += "paste %s%s%s to\n m.me/evey.io" % (KEY_EMOJI, key, KEY_EMOJI)
         buttons = [self.make_quick_reply("%s %s" % (str(CAL_EMOJI), str(event.title)),
                                          payload=postbacks["cancel_edit"])]
-        return [self.text_message("forward this msg" + DOWN_ARROW),
+        return [self.text_message("paste this msg to friends" + DOWN_ARROW),
                 self.quick_replies(buttons, self.text_message(text))]
 
     def see_people_in_event(self, event_json):
@@ -333,18 +335,48 @@ class EveyEngine(WitEngine, FBAPI):
         for i in intervals:
             event.add_new_interval(i.get("from"), i.get("to"), self.user)
         datepolls = event.get_datepolls()
-        for n in set(numbers):
+        numbers = set(numbers)
+        number_datepolls = []
+        for n in numbers:
             if n > len(datepolls) or n < 1:
                 continue  # add some degradation
+            number_datepolls.append(datepolls[n - 1])
             datepolls[n - 1].users.append(self.user)
         save(event.get_datepolls())
         save([self.user, event])
+        if (self.user != event.creator):
+            self.notify_creator(event, intervals, number_datepolls)
         text = GREEN_CHECK_EMOJI + " I added your times!"
         text2 = event_times_text(event, self.user.timezone)
         return [self.text_message(text),
                 self.button_attachment(
                     text=text2, buttons=[self.back_to_button(event.event_hash,
                                                              event)])]
+    def notify_creator(self, event, intervals, datepolls):
+        title = "%s %s" % (CAL_EMOJI, str(event.title))
+        text = "%s added these %ss to %s\n" % (str(self.user.name),
+                                              WHEN_EMOJI, title)
+        today = datetime.utcnow()
+        prev_date = ""
+        for p in datepolls:
+            intervals.append({"from": p.datetime, "to":p.end_datetime})
+        for i in intervals:
+            from_obj = i.get("from")
+            to_obj = i.get("to")
+            date = from_obj.strftime("%a %m/%d")
+            if (to_obj.day == today.day and to_obj.month == today.month):
+                date = "Today"
+            if prev_date != date:
+                text += date + "\n"
+            indent = "      "
+            date_str = format_dateobj(from_obj, to_obj, int(event.creator.timezone),
+                                      use_day=False, use_at=False)
+            text += "%s%s\n" % (indent, date_str)
+        msgs = [self.button_attachment(
+                      text=text, buttons=[self.back_to_button(event.event_hash,
+                                                              event)])]
+        post_response_msgs(msgs, str(event.creator.messenger_uid))
+
 
     def handle_remove_time(self, msg):
         event = self.event_from_hash(self.user.is_removing_time)
@@ -427,7 +459,8 @@ class EveyEngine(WitEngine, FBAPI):
         reg_dialog = (BLACK_CIRCLE + " txt a chain of free times i.e. \n   Thu 3-4 5-8, Fri 4-5\n")
         text1 =  ""
         if show_title:
-            text1 = "%s %s by %s" % (c.CAL_EMOJI, str(event.title), str(event.creator.first_name))
+            text1 = "%s %s by %s\n" % (CAL_EMOJI, str(event.title),
+                                       str(event.creator.first_name))
         text1 += ("To add your " + WHEN_EMOJI + " :\n")
 
         text1 += reg_dialog

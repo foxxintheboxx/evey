@@ -49,8 +49,8 @@ class WitEngine(object):
     def extract_intervals(self, msg, look_ahead=2):
         tokens = msg.split(" ")
         tokens  = [el.replace(",", "") for el in tokens]
-        pattern = "\d\d?:?\d?\d?[APap]?[mM]?-\d\d?:?\d?\d?[APap]?[mM]?"
-        matches = re.findall(pattern, msg)
+        pattern_interval  = "\d\d?:?\d?\d?[APap]?[mM]?-\d\d?:?\d?\d?[APap]?[mM]?"
+        matches = re.findall(pattern_interval, msg)
         intervals = []
         if len(matches) > 0:
             for i in range(len(matches)):
@@ -76,7 +76,35 @@ class WitEngine(object):
                 print(interval)
                 intervals.append(interval)
                 tokens.remove(match)
-        else:
+        pattern_single = "\d\d?:?\d?\d?[APap]?[mM]?"
+        matches = re.findall(pattern_single, msg)
+        if len(matches) > 0 and len(intervals) == 0:
+            for i in range(len(matches)):
+                match = matches[i]
+                j = tokens.index(match)
+                m = match
+                if ("m" not in m):
+                    m = match + "pm"
+                day = None
+                if j > 0:
+                    string = tokens[j - 1]
+                    day = string_to_day(string)
+                if not day and j > 1:
+                    string = tokens[j - 2]
+                    day = string_to_day(string)
+                if not day:
+                    day = "Today"
+                start_time = m
+                query = "%s %s"  % (day, start_time)
+                wit_resp = self.message(query)["entities"][DATE][0]
+                from_ = parse(wit_resp["value"]).astimezone(tzutc())
+                interval = {"from": from_, "to": None}
+                print(interval)
+                intervals.append(interval)
+                tokens.remove(match)
+                match = matches[i]
+
+        if len(intervals) == 0:
             wit_resp = self.message(msg)["entities"]
             if wit_resp.get(DATE):
                 data = wit_resp.get(DATE)
