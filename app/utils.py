@@ -201,15 +201,10 @@ def event_times_text(event, timezone=0, user=None, length=5, show_title=False):
     else:
         prev_date = ""
         for poll in date_polls:
-            if poll.poll_number == 2 and user is None:
-                text += "-" * min(len(text), 9) + "\n"
+            if poll.poll_number == 2:
+                text += "-" * min(len(text), 15) + "\n"
             if user is not None and user not in poll.users:
                 continue
-            votes = ""
-            if poll.votes() > 2:
-                votes = "%sx%s" % (poll.votes(), c.GUY_EMOJI)
-            else:
-                votes = c.GUY_EMOJI * poll.votes()
             dateobj = poll.datetime + timedelta(hours=timezone)
             indent = "      "
             date = dateobj.strftime("%a %m/%d")
@@ -218,21 +213,10 @@ def event_times_text(event, timezone=0, user=None, length=5, show_title=False):
             if prev_date != date:
                 text += date + "\n"
                 prev_date = date
-            date_str = format_dateobj(poll.datetime, poll.end_datetime,
-                                      timezone, use_day=False,
-                                      use_at=False)
-            quick_reply_str = format_dateobj(poll.datetime,
-                                             poll.end_datetime,
-                                             timezone, use_at=True,
-                                             use_day=True)
-            emoji_number = number_to_emojistr(poll.poll_number)
-            quick_reply_str = "%s %s" % (emoji_number, quick_reply_str)
-            quick_replies.append(quick_reply_str)
-            text += "%s%s %s, %s\n" % (indent,
-                                       emoji_number,
-                                       date_str,
-                                       votes)
+            date_str = poll.format_poll(offset=timezone, use_day=False,
+                                        use_at=False, indent=indent)
+            text += "%s\n" % (date_str)
             length -= 1
             if length == 0:
                 break
-    return {"text": text, "quick_replies": quick_replies}
+    return text

@@ -201,18 +201,24 @@ class Event(db.Model):
         old_polls = []
         new_polls = []
         updated_polls = []
+
+        print(from_dateobj)
         for p in polls:
             print(user not in p.users)
+
+            print(p.datetime)
+            print(p.end_datetime)
             if user not in p.users:
                 continue
-            if (p.end_datetime is None and to_dateobj is None and from_dateobj == p.datetime):
-                new_users = p.users
-                new_users.remove(user)
-                p.users = new_users
-                if (len(p.users) == 0):
-                    old_polls.append(p)
-                else:
-                    updated_polls.append(p)
+
+            if (p.end_datetime is None and to_dateobj is None):
+                if (p.datetime == from_dateobj):
+                    p.users.remove(user)
+                    if (len(p.users) == 0):
+                        old_polls.append(p)
+                    else:
+                        updated_polls.append(p)
+
                 break
 
             if (p.end_datetime is None and to_dateobj is not None):
@@ -225,19 +231,15 @@ class Event(db.Model):
                         old_polls.append(p)
                     else:
                         updated_polls.append(p)
-                break
-
-
-            if ((to_dateobj is None and p.end_datetime is not None) or (from_dateobj > p.end_datetime) or (to_dateobj < p.datetime)):
+                    break
                 continue
-            if (poll.datetime == from_dateobj and
-                poll.end_datetime is None and to_dateobj is None):
-                poll.add_users([user])
-                intersecting_polls.append(poll)
-                break
-            print(p.datetime)
-            print(p.end_datetime)
-            if (from_dateobj <= p.datetime and to_dateobj >= p.end_datetime):
+
+
+            if (to_dateobj is None and p.end_datetime is not None):
+                continue
+            elif ((from_dateobj > p.end_datetime) or (to_dateobj < p.datetime)):
+                continue
+            elif (from_dateobj <= p.datetime and to_dateobj >= p.end_datetime):
                 new_users = p.users
                 new_users.remove(user)
                 p.users = new_users
@@ -245,7 +247,7 @@ class Event(db.Model):
                     old_polls.append(p)
                 else:
                     updated_polls.append(p)
-            if (from_dateobj <= p.datetime and to_dateobj < p.end_datetime):
+            elif (from_dateobj <= p.datetime and to_dateobj < p.end_datetime):
                 poll_with_user = Datepoll(datetime=to_dateobj,
                                           end_datetime=p.end_datetime)
                 new_polls.append(poll_with_user)

@@ -81,6 +81,8 @@ class WitEngine(object):
         if len(matches) > 0 and len(intervals) == 0:
             for i in range(len(matches)):
                 match = matches[i]
+                if (match not in tokens):
+                    continue
                 j = tokens.index(match)
                 m = match
                 if ("m" not in m):
