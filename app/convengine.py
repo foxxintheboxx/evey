@@ -22,7 +22,7 @@ from const import WHEN_EMOJI, WHERE_EMOJI, OTHER_EMOJI, EVEY_URL, MSG_BODY, \
     BLACK_CIRCLE, EMOJI_NUM, PAPER_EMOJI, RIGHT_FINGER_EMOJI, PLZ_SLOWDOWN, \
     YES_EVENT_INVITE, NO_EVENT_INVITE, KEY_EMOJI, GREEN_CHECK_EMOJI, GET_STARTED_POSTBACK, \
     GET_STARTED_TEXT, VIEW_MY_EVENTS, SEARCH_EVENTS, HELP_POSTBACK, NO_EVENTS_TEXT, \
-    STAR_EMOJI
+    STAR_EMOJI, TIME
 
 
 class EveyEngine(WitEngine, FBAPI):
@@ -347,7 +347,8 @@ class EveyEngine(WitEngine, FBAPI):
         if (self.user != event.creator):
             self.notify_creator(event, intervals, number_datepolls)
         text = GREEN_CHECK_EMOJI + " I added your times!"
-        text2 = event_times_text(event, self.user.timezone)
+        text2 = event_times_text(event, self.user.timezone,
+                                 length=len(event.get_datepolls()))["text"]
         return [self.text_message(text),
                 self.button_attachment(
                     text=text2, buttons=[self.back_to_button(event.event_hash,
@@ -400,7 +401,8 @@ class EveyEngine(WitEngine, FBAPI):
         save(event.get_datepolls())
         save([self.user, event])
         text = GREEN_CHECK_EMOJI + " I removed your times!"
-        text2 = event_times_text(event, self.user.timezone)
+        text2 = event_times_text(event, self.user.timezone,
+                                 length=len(event.get_datepolls()))["text"]
         return [self.text_message(text),
                 self.button_attachment(
                     text=text2, buttons=[self.back_to_button(event.event_hash,
@@ -410,8 +412,9 @@ class EveyEngine(WitEngine, FBAPI):
         event = self.event_from_hash(event_json["event_hash"])
         if (len(event.get_datepolls()) ==  0):
             return self.add_date_callback(event_json, show_title=show_title)
-        text = event_times_text(event, self.user.timezone, length=length,
-                                show_title=show_title)
+        event_text_dict  = event_times_text(event, self.user.timezone, length=length,
+                                            show_title=show_title)
+        text = event_text_dict["text"]
         postbacks = format_event_postbacks(dict(EVENT_POSTBACKS),
                                            event.event_hash)
         buttons = []
@@ -444,13 +447,15 @@ class EveyEngine(WitEngine, FBAPI):
             type_="postback",
             title="%s %s" %(CAL_EMOJI, str(event.title)),
             payload=postbacks["cancel_edit"])
-        buttons.append(back_button)
+        if (len(buttons) < 3):
+            buttons.append(back_button)
+        print(len(buttons))
         quick_replies.append(back_button)
 
         btn_attach = self.button_attachment(text=text, buttons=buttons)
         return [btn_attach]
 
-    def add_date_callback(self, event_json, show_title=False):
+    def add_date_callback(self, event_json, show_title=False, length=5):
         self.user.is_adding_time = event_json["event_hash"]
         save([self.user])
         event = self.event_from_hash(event_json["event_hash"])
@@ -462,10 +467,9 @@ class EveyEngine(WitEngine, FBAPI):
             text1 = "%s %s by %s\n" % (CAL_EMOJI, str(event.title),
                                        str(event.creator.first_name))
         text1 += ("To add your " + WHEN_EMOJI + " :\n")
-
         text1 += reg_dialog
-        if len(event.get_datepolls()):
-          text1 += number_dialog
+        #if len(event.get_datepolls()):
+        #  text1 += number_dialog
 
         postbacks = format_event_postbacks(dict(EVENT_POSTBACKS),
                                            event.event_hash)
@@ -473,7 +477,14 @@ class EveyEngine(WitEngine, FBAPI):
         back_button = self.make_button(
             type_="postback", title=CANCEL, payload=postbacks["cancel_edit"])
         buttons.append(back_button)
-        return [self.button_attachment(text=text1, buttons=buttons)]
+        #return [self.button_attachment(text=text1, buttons=buttons)]
+        times_text_dict = event_times_text(event, self.user.timezone, length=length,
+                                          show_title=show_title)
+        replies = []
+        for text in times_text_dict["quick_replies"]:
+            postback = format_postback(TIME, {"time": text})
+            replies.append(self.make_quick_reply(text, postback))
+        return [self.quick_replies(replies, self.text_message(text1))]
 
     def show_all_times(self, event_json):
         event = self.event_from_hash(event_json["event_hash"])
@@ -486,7 +497,9 @@ class EveyEngine(WitEngine, FBAPI):
         save([self.user])
         event = self.event_from_hash(event_json["event_hash"])
         num_polls = len(event.get_datepolls())
-        text = event_times_text(event, self.user.timezone, user=self.user, length=num_polls)
+        event_times_dict = event_times_text(event, self.user.timezone,
+                                            user=self.user, length=num_polls)
+        text = event_times_dict["text"]
         buttons = []
         text1 = ("To remove your " + WHEN_EMOJI + " :\n" +
                  BLACK_CIRCLE + " text me a number i.e." +

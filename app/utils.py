@@ -30,6 +30,7 @@ def post_response_msgs(msgs, sender):
     for msg in msgs:
         payload = {'recipient': {'id': sender}, 'message': msg}
         r = requests.post(MESNGR_API_URL + TOKEN, json=payload)
+        print(r.json())
 
 
 def format_ampm(string):
@@ -189,6 +190,8 @@ def event_times_text(event, timezone=0, user=None, length=5, show_title=False):
     date_polls = event.get_datepolls()
     now = datetime.utcnow()
     text = ""
+
+    quick_replies = []
     if show_title:
         text = "%s %s by %s\n" % (c.CAL_EMOJI, str(event.title), str(event.creator.first_name))
     if user is not None:
@@ -215,16 +218,21 @@ def event_times_text(event, timezone=0, user=None, length=5, show_title=False):
             if prev_date != date:
                 text += date + "\n"
                 prev_date = date
-
             date_str = format_dateobj(poll.datetime, poll.end_datetime,
                                       timezone, use_day=False,
                                       use_at=False)
+            quick_reply_str = format_dateobj(poll.datetime,
+                                             poll.end_datetime,
+                                             timezone, use_at=True,
+                                             use_day=True)
+            emoji_number = number_to_emojistr(poll.poll_number)
+            quick_reply_str = "%s %s" % (emoji_number, quick_reply_str)
+            quick_replies.append(quick_reply_str)
             text += "%s%s %s, %s\n" % (indent,
-                                       number_to_emojistr(
-                                           poll.poll_number),
+                                       emoji_number,
                                        date_str,
                                        votes)
             length -= 1
             if length == 0:
                 break
-    return text
+    return {"text": text, "quick_replies": quick_replies}

@@ -1,0 +1,1001 @@
+2016-07-02T23:43:57.902188+00:00 app[web.1]:     resp_msgs = evey.understand(msgs)
+2016-07-02T23:43:57.902189+00:00 app[web.1]:   File "/app/app/convengine.py", line 75, in understand
+2016-07-02T23:43:57.902190+00:00 app[web.1]:     return self.handle_add_time(msgs[0])
+2016-07-02T23:43:57.902190+00:00 app[web.1]:   File "/app/app/convengine.py", line 335, in handle_add_time
+2016-07-02T23:43:57.902191+00:00 app[web.1]:     event.add_new_interval(i.get("from"), i.get("to"), self.user)
+2016-07-02T23:43:57.902192+00:00 app[web.1]:   File "/app/app/models/events.py", line 93, in add_new_interval
+2016-07-02T23:43:57.902193+00:00 app[web.1]:     if (to_dateobj <= poll.datetime or from_dateobj >= poll.end_datetime):
+2016-07-02T23:43:57.902194+00:00 app[web.1]: 
+2016-07-02T23:43:57.902195+00:00 app[web.1]: hello
+2016-07-02T23:43:57.902194+00:00 app[web.1]: TypeError: can't compare datetime.datetime to NoneType
+2016-07-02T23:44:16.817960+00:00 app[web.1]: msgs: [u'Create a chicken dinner']
+2016-07-02T23:44:16.663948+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'time': 1467503056486, u'messaging': [{u'message': {u'seq': 14310, u'text': u'Create a chicken dinner', u'mid': u'mid.1467503056449:65b32c6a38e5218b42'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}, u'timestamp': 1467503056458}]}]}
+2016-07-02T23:44:17.129380+00:00 app[web.1]: saving
+2016-07-02T23:44:17.160712+00:00 app[web.1]: [{'attachment': {'type': 'template', 'payload': {'template_type': 'generic', 'elements': [{'title': '\xf0\x9f\x93\x85 Chicken Dinner', 'buttons': [{'type': 'postback', 'payload': 'WHEN${"event_hash": "dGMA0"}', 'title': '\xf0\x9f\x95\x90 none yet'}, {'type': 'postback', 'payload': 'WHO${"event_hash": "dGMA0"}', 'title': '\xf0\x9f\x91\xa6'}, {'type': 'postback', 'payload': 'SHARE${"event_hash": "dGMA0"}', 'title': 'invite ppl to this'}]}]}}}]
+2016-07-02T23:44:17.129438+00:00 app[web.1]: [<Event u'Chicken Dinner'>, <Calendar of u'Ian Fox'>]
+2016-07-02T23:44:17.098825+00:00 app[web.1]: saving
+2016-07-02T23:44:17.098842+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-02T23:44:18.384919+00:00 app[web.1]: hello
+2016-07-02T23:44:18.392386+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=7a89c7d7-3b2f-4439-9a07-8f0fecca120a fwd="173.252.90.91" dyno=web.1 connect=1ms service=1727ms status=200 bytes=171
+2016-07-02T23:44:20.577658+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'time': 1467503060362, u'messaging': [{u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}, u'timestamp': 1467503060362, u'postback': {u'payload': u'WHEN${"event_hash": "dGMA0"}'}}]}]}
+2016-07-02T23:44:20.577676+00:00 app[web.1]: postback
+2016-07-02T23:44:20.604284+00:00 app[web.1]: saving
+2016-07-02T23:44:20.604308+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-02T23:44:21.330686+00:00 app[web.1]: hello
+2016-07-02T23:44:21.343422+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=00c7cea5-9d01-4160-9f31-069bfd031085 fwd="173.252.90.93" dyno=web.1 connect=0ms service=760ms status=200 bytes=171
+2016-07-02T23:44:24.965128+00:00 app[web.1]: msgs: [u'4']
+2016-07-02T23:44:24.944999+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'time': 1467503064777, u'messaging': [{u'message': {u'seq': 14318, u'text': u'4', u'mid': u'mid.1467503064743:5384041e0db438e204'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}, u'timestamp': 1467503064751}]}]}
+2016-07-02T23:44:25.509508+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f702191f410>]
+2016-07-02T23:44:25.509526+00:00 app[web.1]: saving
+2016-07-02T23:44:25.509527+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f702191f410>]
+2016-07-02T23:44:25.490822+00:00 app[web.1]: {'from': datetime.datetime(2016, 7, 2, 23, 0, tzinfo=tzutc()), 'to': None}
+2016-07-02T23:44:25.518192+00:00 app[web.1]: []
+2016-07-02T23:44:25.544777+00:00 app[web.1]: []
+2016-07-02T23:44:25.544804+00:00 app[web.1]: deleting
+2016-07-02T23:44:25.544805+00:00 app[web.1]: []
+2016-07-02T23:44:25.547556+00:00 app[web.1]: saving
+2016-07-02T23:44:25.547565+00:00 app[web.1]: []
+2016-07-02T23:44:25.565900+00:00 app[web.1]: saving
+2016-07-02T23:44:25.565914+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f702190aa50>]
+2016-07-02T23:44:25.568845+00:00 app[web.1]: saving
+2016-07-02T23:44:25.578236+00:00 app[web.1]: [<User u'Ian Fox'>, <Event u'Chicken Dinner'>]
+2016-07-02T23:44:25.598940+00:00 app[web.1]: [{'text': '\xe2\x9c\x85 I added your times!'}, {'attachment': {'type': 'template', 'payload': {'template_type': 'button', 'text': 'Today\n      1\xef\xb8\x8f\xe2\x83\xa3 4pm, \xf0\x9f\x91\xa6\n', 'buttons': [{'type': 'postback', 'payload': 'BACK${"event_hash": "dGMA0"}', 'title': '\xf0\x9f\x93\x85 Chicken Dinner'}]}}}]
+2016-07-02T23:44:25.518177+00:00 app[web.1]: deleting
+2016-07-02T23:44:26.586787+00:00 app[web.1]: hello
+2016-07-02T23:44:26.590963+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=b4848bc6-bf67-46f3-b65b-3eaeec3c7be1 fwd="173.252.90.116" dyno=web.1 connect=1ms service=1647ms status=200 bytes=171
+2016-07-02T23:44:36.568184+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'time': 1467503076398, u'messaging': [{u'message': {u'seq': 14325, u'text': u'6, 7', u'mid': u'mid.1467503076364:9041eb4ac80175c232'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}, u'timestamp': 1467503076371}]}]}
+2016-07-02T23:44:36.603542+00:00 app[web.1]: msgs: [u'6, 7']
+2016-07-02T23:44:37.138044+00:00 app[web.1]: {'from': datetime.datetime(2016, 7, 3, 1, 0, tzinfo=tzutc()), 'to': None}
+2016-07-02T23:44:37.391400+00:00 app[web.1]: {'from': datetime.datetime(2016, 7, 3, 2, 0, tzinfo=tzutc()), 'to': None}
+2016-07-02T23:44:37.403359+00:00 app[web.1]: Traceback (most recent call last):
+2016-07-02T23:44:37.403371+00:00 app[web.1]:   File "/app/app/main/views.py", line 84, in webhook
+2016-07-02T23:44:37.403372+00:00 app[web.1]:     resp_msgs = evey.understand(msgs)
+2016-07-02T23:44:37.403373+00:00 app[web.1]:   File "/app/app/convengine.py", line 75, in understand
+2016-07-02T23:44:37.403373+00:00 app[web.1]:     return self.handle_add_time(msgs[0])
+2016-07-02T23:44:37.403374+00:00 app[web.1]:   File "/app/app/convengine.py", line 335, in handle_add_time
+2016-07-02T23:44:37.403375+00:00 app[web.1]:     event.add_new_interval(i.get("from"), i.get("to"), self.user)
+2016-07-02T23:44:37.403376+00:00 app[web.1]:   File "/app/app/models/events.py", line 93, in add_new_interval
+2016-07-02T23:44:37.403376+00:00 app[web.1]:     if (to_dateobj <= poll.datetime or from_dateobj >= poll.end_datetime):
+2016-07-02T23:44:37.403377+00:00 app[web.1]: TypeError: can't compare datetime.datetime to NoneType
+2016-07-02T23:44:37.403476+00:00 app[web.1]: hello
+2016-07-02T23:44:37.403412+00:00 app[web.1]: 
+2016-07-02T23:44:37.410877+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=fbe38f7f-6eb2-47fe-bc5d-5847ddf11aca fwd="173.252.90.241" dyno=web.1 connect=1ms service=841ms status=200 bytes=171
+2016-07-02T23:46:22.268691+00:00 heroku[api]: Release v602 created by foxxintheboxx@berkeley.edu
+2016-07-02T23:46:22.268588+00:00 heroku[api]: Deploy af6010d by foxxintheboxx@berkeley.edu
+2016-07-02T23:46:22.468020+00:00 heroku[slug-compiler]: Slug compilation started
+2016-07-02T23:46:22.468028+00:00 heroku[slug-compiler]: Slug compilation finished
+2016-07-02T23:46:22.490361+00:00 heroku[web.1]: State changed from up to starting
+2016-07-02T23:46:22.489682+00:00 heroku[web.1]: Restarting
+2016-07-02T23:46:25.426125+00:00 heroku[web.1]: Stopping all processes with SIGTERM
+2016-07-02T23:46:26.131490+00:00 app[web.1]: [2016-07-02 23:46:26 +0000] [10] [INFO] Worker exiting (pid: 10)
+2016-07-02T23:46:26.178820+00:00 app[web.1]: [2016-07-02 23:46:26 +0000] [3] [INFO] Shutting down: Master
+2016-07-02T23:46:26.131431+00:00 app[web.1]: [2016-07-02 23:46:26 +0000] [9] [INFO] Worker exiting (pid: 9)
+2016-07-02T23:46:26.131526+00:00 app[web.1]: [2016-07-02 23:46:26 +0000] [3] [INFO] Handling signal: term
+2016-07-02T23:46:26.407923+00:00 heroku[web.1]: Starting process with command `gunicorn run:app`
+2016-07-02T23:46:26.984128+00:00 heroku[web.1]: Process exited with status 0
+2016-07-02T23:46:28.427986+00:00 app[web.1]: [2016-07-02 23:46:28 +0000] [3] [INFO] Using worker: sync
+2016-07-02T23:46:28.427221+00:00 app[web.1]: [2016-07-02 23:46:28 +0000] [3] [INFO] Starting gunicorn 19.5.0
+2016-07-02T23:46:28.427848+00:00 app[web.1]: [2016-07-02 23:46:28 +0000] [3] [INFO] Listening at: http://0.0.0.0:25595 (3)
+2016-07-02T23:46:28.432359+00:00 app[web.1]: [2016-07-02 23:46:28 +0000] [9] [INFO] Booting worker with pid: 9
+2016-07-02T23:46:28.504556+00:00 app[web.1]: [2016-07-02 23:46:28 +0000] [10] [INFO] Booting worker with pid: 10
+2016-07-02T23:46:28.872796+00:00 heroku[web.1]: State changed from starting to up
+2016-07-02T23:46:49.113009+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467503208910, u'message': {u'text': u'6, 7', u'mid': u'mid.1467503208899:64ced8b711feb38371', u'seq': 14326}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467503208938}]}
+2016-07-02T23:46:49.318412+00:00 app[web.1]: msgs: [u'6, 7']
+2016-07-02T23:46:50.315981+00:00 app[web.1]: {'to': None, 'from': datetime.datetime(2016, 7, 3, 1, 0, tzinfo=tzutc())}
+2016-07-02T23:46:50.593271+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=eb223f28-30fb-4533-b7d2-cb7ee96c67cd fwd="173.252.88.93" dyno=web.1 connect=0ms service=1480ms status=200 bytes=171
+2016-07-02T23:47:53.836283+00:00 heroku[api]: Deploy ab2b86c by foxxintheboxx@berkeley.edu
+2016-07-02T23:47:54.034334+00:00 heroku[slug-compiler]: Slug compilation finished
+2016-07-02T23:47:54.034228+00:00 heroku[slug-compiler]: Slug compilation started
+2016-07-02T23:47:53.836329+00:00 heroku[api]: Release v603 created by foxxintheboxx@berkeley.edu
+2016-07-02T23:47:54.108929+00:00 heroku[web.1]: State changed from up to starting
+2016-07-02T23:47:54.108216+00:00 heroku[web.1]: Restarting
+2016-07-02T23:47:57.696643+00:00 heroku[web.1]: Stopping all processes with SIGTERM
+2016-07-02T23:47:58.424600+00:00 heroku[web.1]: Starting process with command `gunicorn run:app`
+2016-07-02T23:47:58.738850+00:00 app[web.1]: [2016-07-02 23:47:58 +0000] [3] [INFO] Handling signal: term
+2016-07-02T23:47:58.742017+00:00 app[web.1]: [2016-07-02 23:47:58 +0000] [9] [INFO] Worker exiting (pid: 9)
+2016-07-02T23:47:58.767794+00:00 app[web.1]: [2016-07-02 23:47:58 +0000] [10] [INFO] Worker exiting (pid: 10)
+2016-07-02T23:47:58.861135+00:00 app[web.1]: [2016-07-02 23:47:58 +0000] [3] [INFO] Shutting down: Master
+2016-07-02T23:48:01.055086+00:00 app[web.1]: [2016-07-02 23:48:01 +0000] [3] [INFO] Starting gunicorn 19.5.0
+2016-07-02T23:48:01.073853+00:00 app[web.1]: [2016-07-02 23:48:01 +0000] [3] [INFO] Using worker: sync
+2016-07-02T23:48:01.092058+00:00 app[web.1]: [2016-07-02 23:48:01 +0000] [9] [INFO] Booting worker with pid: 9
+2016-07-02T23:48:01.182999+00:00 app[web.1]: [2016-07-02 23:48:01 +0000] [10] [INFO] Booting worker with pid: 10
+2016-07-02T23:48:01.066393+00:00 app[web.1]: [2016-07-02 23:48:01 +0000] [3] [INFO] Listening at: http://0.0.0.0:5345 (3)
+2016-07-02T23:48:02.170412+00:00 heroku[web.1]: State changed from starting to up
+2016-07-02T23:48:07.475022+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'time': 1467503287354, u'id': u'130562467349590', u'messaging': [{u'message': {u'text': u'6, 7', u'seq': 14327, u'mid': u'mid.1467503287314:988307b36c42237783'}, u'timestamp': 1467503287326, u'recipient': {u'id': u'130562467349590'}, u'sender': {u'id': u'10209354544730920'}}]}]}
+2016-07-02T23:48:07.635248+00:00 app[web.1]: msgs: [u'6, 7']
+2016-07-02T23:48:08.290653+00:00 app[web.1]: saving
+2016-07-02T23:48:08.290661+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f812c188d90>]
+2016-07-02T23:48:08.296682+00:00 app[web.1]: deleting
+2016-07-02T23:48:08.296698+00:00 app[web.1]: []
+2016-07-02T23:48:08.303883+00:00 app[web.1]: []
+2016-07-02T23:48:08.290643+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f812c188d90>]
+2016-07-02T23:48:08.303901+00:00 app[web.1]: deleting
+2016-07-02T23:48:08.112136+00:00 app[web.1]: {'from': datetime.datetime(2016, 7, 3, 1, 0, tzinfo=tzutc()), 'to': None}
+2016-07-02T23:48:08.271171+00:00 app[web.1]: {'from': datetime.datetime(2016, 7, 3, 2, 0, tzinfo=tzutc()), 'to': None}
+2016-07-02T23:48:08.343270+00:00 app[web.1]: []
+2016-07-02T23:48:08.303902+00:00 app[web.1]: []
+2016-07-02T23:48:08.305066+00:00 app[web.1]: saving
+2016-07-02T23:48:08.305075+00:00 app[web.1]: []
+2016-07-02T23:48:08.339219+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f812c188510>]
+2016-07-02T23:48:08.339230+00:00 app[web.1]: saving
+2016-07-02T23:48:08.339231+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f812c188510>]
+2016-07-02T23:48:08.353616+00:00 app[web.1]: deleting
+2016-07-02T23:48:08.357581+00:00 app[web.1]: []
+2016-07-02T23:48:08.357566+00:00 app[web.1]: saving
+2016-07-02T23:48:08.343259+00:00 app[web.1]: deleting
+2016-07-02T23:48:08.353617+00:00 app[web.1]: []
+2016-07-02T23:48:08.353596+00:00 app[web.1]: []
+2016-07-02T23:48:08.375316+00:00 app[web.1]: saving
+2016-07-02T23:48:08.377674+00:00 app[web.1]: saving
+2016-07-02T23:48:08.375329+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f812c1f2690>, <app.models.datepolls.Datepoll object at 0x7f812c1f2450>, <app.models.datepolls.Datepoll object at 0x7f812c1f2250>]
+2016-07-02T23:48:08.404942+00:00 app[web.1]: [{'text': '\xe2\x9c\x85 I added your times!'}, {'attachment': {'payload': {'template_type': 'button', 'text': 'Today\n      1\xef\xb8\x8f\xe2\x83\xa3 4pm, \xf0\x9f\x91\xa6\n---------\n      2\xef\xb8\x8f\xe2\x83\xa3 6pm, \xf0\x9f\x91\xa6\n      3\xef\xb8\x8f\xe2\x83\xa3 7pm, \xf0\x9f\x91\xa6\n', 'buttons': [{'payload': 'BACK${"event_hash": "dGMA0"}', 'title': '\xf0\x9f\x93\x85 Chicken Dinner', 'type': 'postback'}]}, 'type': 'template'}}]
+2016-07-02T23:48:08.383198+00:00 app[web.1]: [<User u'Ian Fox'>, <Event u'Chicken Dinner'>]
+2016-07-02T23:48:09.558156+00:00 app[web.1]: hello
+2016-07-02T23:48:09.565561+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=dace5379-700e-4b32-be3f-478e40324565 fwd="173.252.90.241" dyno=web.1 connect=1ms service=2091ms status=200 bytes=171
+2016-07-02T23:49:11.704089+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'time': 1467503351551, u'id': u'130562467349590', u'messaging': [{u'message': {u'text': u'Create Urth Cafe Lunch', u'seq': 14334, u'mid': u'mid.1467503351515:5204c8a764fc3a1755'}, u'timestamp': 1467503351523, u'recipient': {u'id': u'130562467349590'}, u'sender': {u'id': u'10209354544730920'}}]}]}
+2016-07-02T23:49:12.157490+00:00 app[web.1]: saving
+2016-07-02T23:49:11.964742+00:00 app[web.1]: msgs: [u'Create Urth Cafe Lunch']
+2016-07-02T23:49:12.157537+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-02T23:49:12.189400+00:00 app[web.1]: [<Event u'Urth Cafe Lunch'>, <Calendar of u'Ian Fox'>, <app.models.locationpolls.Locationpoll object at 0x7f812739cdd0>]
+2016-07-02T23:49:12.189312+00:00 app[web.1]: saving
+2016-07-02T23:49:12.245930+00:00 app[web.1]: [{'attachment': {'payload': {'template_type': 'generic', 'elements': [{'buttons': [{'payload': 'WHEN${"event_hash": "O5gGd"}', 'title': '\xf0\x9f\x95\x90 none yet', 'type': 'postback'}, {'payload': 'WHO${"event_hash": "O5gGd"}', 'title': '\xf0\x9f\x91\xa6', 'type': 'postback'}, {'payload': 'SHARE${"event_hash": "O5gGd"}', 'title': 'invite ppl to this', 'type': 'postback'}], 'title': '\xf0\x9f\x93\x85 Urth Cafe Lunch'}]}, 'type': 'template'}}]
+2016-07-02T23:49:13.083219+00:00 app[web.1]: hello
+2016-07-02T23:49:13.099445+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=3e36fcb8-8f2c-4b07-8293-5f1d584720c8 fwd="173.252.90.230" dyno=web.1 connect=1ms service=1400ms status=200 bytes=171
+2016-07-02T23:49:15.855035+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'time': 1467503355659, u'id': u'130562467349590', u'messaging': [{u'postback': {u'payload': u'SHARE${"event_hash": "O5gGd"}'}, u'timestamp': 1467503355659, u'recipient': {u'id': u'130562467349590'}, u'sender': {u'id': u'10209354544730920'}}]}]}
+2016-07-02T23:49:15.855048+00:00 app[web.1]: postback
+2016-07-02T23:49:16.568892+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=2b47d198-6397-48ec-bb60-e28bd5cf3d7d fwd="173.252.90.80" dyno=web.1 connect=0ms service=717ms status=200 bytes=171
+2016-07-02T23:49:16.560153+00:00 app[web.1]: hello
+2016-07-02T23:50:27.470856+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'time': 1467503427341, u'id': u'130562467349590', u'messaging': [{u'message': {u'quick_reply': {u'payload': u'CANCEL_EDIT${"event_hash": "O5gGd"}'}, u'text': u'\U0001f4c5 Urth Cafe Lunch', u'seq': 14344, u'mid': u'mid.1467503427295:5ba7974c1280f47132'}, u'timestamp': 1467503427312, u'recipient': {u'id': u'130562467349590'}, u'sender': {u'id': u'10209354544730920'}}]}]}
+2016-07-02T23:50:27.505927+00:00 app[web.1]: saving
+2016-07-02T23:50:27.506017+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-02T23:50:28.269600+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=b45c5f4e-2725-4358-ba81-309f760f121e fwd="173.252.88.93" dyno=web.1 connect=1ms service=793ms status=200 bytes=171
+2016-07-02T23:50:43.582884+00:00 heroku[api]: Release v604 created by foxxintheboxx@berkeley.edu
+2016-07-02T23:50:43.758621+00:00 heroku[slug-compiler]: Slug compilation started
+2016-07-02T23:50:43.758627+00:00 heroku[slug-compiler]: Slug compilation finished
+2016-07-02T23:50:43.582819+00:00 heroku[api]: Deploy ac14208 by foxxintheboxx@berkeley.edu
+2016-07-02T23:50:43.801371+00:00 heroku[web.1]: State changed from up to starting
+2016-07-02T23:50:43.801371+00:00 heroku[web.1]: Restarting
+2016-07-02T23:50:47.458053+00:00 heroku[web.1]: Stopping all processes with SIGTERM
+2016-07-02T23:50:48.126495+00:00 app[web.1]: [2016-07-02 23:50:48 +0000] [9] [INFO] Worker exiting (pid: 9)
+2016-07-02T23:50:48.128572+00:00 app[web.1]: [2016-07-02 23:50:48 +0000] [10] [INFO] Worker exiting (pid: 10)
+2016-07-02T23:50:48.129739+00:00 app[web.1]: [2016-07-02 23:50:48 +0000] [3] [INFO] Handling signal: term
+2016-07-02T23:50:48.169195+00:00 app[web.1]: [2016-07-02 23:50:48 +0000] [3] [INFO] Shutting down: Master
+2016-07-02T23:50:48.217144+00:00 heroku[web.1]: Starting process with command `gunicorn run:app`
+2016-07-02T23:50:49.397518+00:00 heroku[web.1]: Process exited with status 0
+2016-07-02T23:50:50.486134+00:00 app[web.1]: [2016-07-02 23:50:50 +0000] [3] [INFO] Listening at: http://0.0.0.0:53223 (3)
+2016-07-02T23:50:50.485206+00:00 app[web.1]: [2016-07-02 23:50:50 +0000] [3] [INFO] Starting gunicorn 19.5.0
+2016-07-02T23:50:50.491809+00:00 app[web.1]: [2016-07-02 23:50:50 +0000] [9] [INFO] Booting worker with pid: 9
+2016-07-02T23:50:50.486366+00:00 app[web.1]: [2016-07-02 23:50:50 +0000] [3] [INFO] Using worker: sync
+2016-07-02T23:50:50.613730+00:00 app[web.1]: [2016-07-02 23:50:50 +0000] [10] [INFO] Booting worker with pid: 10
+2016-07-02T23:50:51.953482+00:00 heroku[web.1]: State changed from starting to up
+2016-07-02T23:52:15.897707+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'time': 1467503535718, u'messaging': [{u'timestamp': 1467503535718, u'postback': {u'payload': u'SHARE${"event_hash": "O5gGd"}'}, u'recipient': {u'id': u'130562467349590'}, u'sender': {u'id': u'10209354544730920'}}]}]}
+2016-07-02T23:52:15.897721+00:00 app[web.1]: postback
+2016-07-02T23:52:16.505943+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=90567fa9-1db7-42f9-b2fd-16804a369b03 fwd="173.252.88.180" dyno=web.1 connect=0ms service=610ms status=200 bytes=171
+2016-07-02T23:52:16.502751+00:00 app[web.1]: hello
+2016-07-02T23:53:52.238656+00:00 heroku[api]: Release v605 created by foxxintheboxx@berkeley.edu
+2016-07-02T23:53:52.396716+00:00 heroku[slug-compiler]: Slug compilation started
+2016-07-02T23:53:52.396725+00:00 heroku[slug-compiler]: Slug compilation finished
+2016-07-02T23:53:52.238601+00:00 heroku[api]: Deploy 54df6e5 by foxxintheboxx@berkeley.edu
+2016-07-02T23:53:52.641432+00:00 heroku[web.1]: Restarting
+2016-07-02T23:53:52.642322+00:00 heroku[web.1]: State changed from up to starting
+2016-07-02T23:53:55.622709+00:00 heroku[web.1]: Stopping all processes with SIGTERM
+2016-07-02T23:53:56.296527+00:00 app[web.1]: [2016-07-02 23:53:56 +0000] [3] [INFO] Handling signal: term
+2016-07-02T23:53:56.296761+00:00 app[web.1]: [2016-07-02 23:53:56 +0000] [9] [INFO] Worker exiting (pid: 9)
+2016-07-02T23:53:56.296633+00:00 app[web.1]: [2016-07-02 23:53:56 +0000] [10] [INFO] Worker exiting (pid: 10)
+2016-07-02T23:53:56.341157+00:00 app[web.1]: [2016-07-02 23:53:56 +0000] [3] [INFO] Shutting down: Master
+2016-07-02T23:53:57.217523+00:00 heroku[web.1]: Process exited with status 0
+2016-07-02T23:53:57.496509+00:00 heroku[web.1]: Starting process with command `gunicorn run:app`
+2016-07-02T23:53:59.680111+00:00 app[web.1]: [2016-07-02 23:53:59 +0000] [3] [INFO] Starting gunicorn 19.5.0
+2016-07-02T23:53:59.680713+00:00 app[web.1]: [2016-07-02 23:53:59 +0000] [3] [INFO] Using worker: sync
+2016-07-02T23:53:59.730675+00:00 app[web.1]: [2016-07-02 23:53:59 +0000] [10] [INFO] Booting worker with pid: 10
+2016-07-02T23:53:59.684738+00:00 app[web.1]: [2016-07-02 23:53:59 +0000] [9] [INFO] Booting worker with pid: 9
+2016-07-02T23:53:59.680607+00:00 app[web.1]: [2016-07-02 23:53:59 +0000] [3] [INFO] Listening at: http://0.0.0.0:16951 (3)
+2016-07-02T23:54:01.186042+00:00 heroku[web.1]: State changed from starting to up
+2016-07-02T23:54:51.264740+00:00 app[web.1]: {u'entry': [{u'messaging': [{u'recipient': {u'id': u'130562467349590'}, u'sender': {u'id': u'10209354544730920'}, u'message': {u'seq': 14355, u'mid': u'mid.1467503691032:fc5878b5c1327c5c13', u'quick_reply': {u'payload': u'CANCEL_EDIT${"event_hash": "O5gGd"}'}, u'text': u'\U0001f4c5 Urth Cafe Lunch'}, u'timestamp': 1467503691042}], u'time': 1467503691074, u'id': u'130562467349590'}], u'object': u'page'}
+2016-07-02T23:54:51.442296+00:00 app[web.1]: saving
+2016-07-02T23:54:51.442310+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-02T23:54:52.432343+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=a4c719e5-6814-475a-bcb4-48b1065b7ba0 fwd="173.252.88.90" dyno=web.1 connect=1ms service=1175ms status=200 bytes=171
+2016-07-02T23:54:52.432613+00:00 app[web.1]: hello
+2016-07-02T23:54:57.829745+00:00 app[web.1]: {u'entry': [{u'messaging': [{u'recipient': {u'id': u'130562467349590'}, u'sender': {u'id': u'10209354544730920'}, u'postback': {u'payload': u'WHEN${"event_hash": "O5gGd"}'}, u'timestamp': 1467503697567}], u'time': 1467503697567, u'id': u'130562467349590'}], u'object': u'page'}
+2016-07-02T23:54:57.829758+00:00 app[web.1]: postback
+2016-07-02T23:54:57.856174+00:00 app[web.1]: saving
+2016-07-02T23:54:57.856264+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-02T23:54:58.586560+00:00 app[web.1]: hello
+2016-07-02T23:54:58.588706+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=0ea9b272-31b4-46d8-91c0-3cf30190bf93 fwd="173.252.90.86" dyno=web.1 connect=0ms service=761ms status=200 bytes=171
+2016-07-02T23:55:02.802175+00:00 heroku[slug-compiler]: Slug compilation started
+2016-07-02T23:55:02.802185+00:00 heroku[slug-compiler]: Slug compilation finished
+2016-07-02T23:55:02.546365+00:00 heroku[api]: Deploy d967bd9 by foxxintheboxx@berkeley.edu
+2016-07-02T23:55:02.546406+00:00 heroku[api]: Release v606 created by foxxintheboxx@berkeley.edu
+2016-07-02T23:55:02.823371+00:00 heroku[web.1]: Restarting
+2016-07-02T23:55:02.823371+00:00 heroku[web.1]: State changed from up to starting
+2016-07-02T23:55:06.358893+00:00 heroku[web.1]: Starting process with command `gunicorn run:app`
+2016-07-02T23:55:07.278790+00:00 app[web.1]: [2016-07-02 23:55:07 +0000] [3] [INFO] Handling signal: term
+2016-07-02T23:55:07.275985+00:00 app[web.1]: [2016-07-02 23:55:07 +0000] [10] [INFO] Worker exiting (pid: 10)
+2016-07-02T23:55:07.275657+00:00 app[web.1]: [2016-07-02 23:55:07 +0000] [9] [INFO] Worker exiting (pid: 9)
+2016-07-02T23:55:07.288402+00:00 app[web.1]: [2016-07-02 23:55:07 +0000] [3] [INFO] Shutting down: Master
+2016-07-02T23:55:08.195224+00:00 heroku[web.1]: Process exited with status 0
+2016-07-02T23:55:08.376513+00:00 app[web.1]: [2016-07-02 23:55:08 +0000] [3] [INFO] Starting gunicorn 19.5.0
+2016-07-02T23:55:08.376913+00:00 app[web.1]: [2016-07-02 23:55:08 +0000] [3] [INFO] Listening at: http://0.0.0.0:35454 (3)
+2016-07-02T23:55:08.376984+00:00 app[web.1]: [2016-07-02 23:55:08 +0000] [3] [INFO] Using worker: sync
+2016-07-02T23:55:08.380884+00:00 app[web.1]: [2016-07-02 23:55:08 +0000] [9] [INFO] Booting worker with pid: 9
+2016-07-02T23:55:08.471877+00:00 app[web.1]: [2016-07-02 23:55:08 +0000] [10] [INFO] Booting worker with pid: 10
+2016-07-02T23:55:09.949712+00:00 heroku[web.1]: State changed from starting to up
+2016-07-02T23:55:11.544062+00:00 app[web.1]: {u'entry': [{u'messaging': [{u'sender': {u'id': u'10209354544730920'}, u'message': {u'text': u'Fri 3', u'seq': 14363, u'mid': u'mid.1467503707283:19508fa705390d8834'}, u'timestamp': 1467503707292, u'recipient': {u'id': u'130562467349590'}}], u'id': u'130562467349590', u'time': 1467503707320}], u'object': u'page'}
+2016-07-02T23:55:11.692812+00:00 app[web.1]: msgs: [u'Fri 3']
+2016-07-02T23:55:13.085939+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=d9196f47-7e2c-4e47-8a95-c5513a211dae fwd="173.252.90.102" dyno=web.1 connect=0ms service=1535ms status=200 bytes=171
+2016-07-02T23:55:13.075128+00:00 app[web.1]: hello
+2016-07-02T23:55:15.592156+00:00 app[web.1]: saving
+2016-07-02T23:55:15.429333+00:00 app[web.1]: postback
+2016-07-02T23:55:15.592190+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-02T23:55:15.429320+00:00 app[web.1]: {u'entry': [{u'messaging': [{u'sender': {u'id': u'10209354544730920'}, u'postback': {u'payload': u'BACK${"event_hash": "O5gGd"}'}, u'timestamp': 1467503715176, u'recipient': {u'id': u'130562467349590'}}], u'id': u'130562467349590', u'time': 1467503715176}], u'object': u'page'}
+2016-07-02T23:55:16.330975+00:00 app[web.1]: hello
+2016-07-02T23:55:16.342532+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=e9990437-4a3f-404c-b46b-d27219dd0be4 fwd="173.252.88.182" dyno=web.1 connect=0ms service=910ms status=200 bytes=171
+2016-07-02T23:55:18.823009+00:00 app[web.1]: {u'entry': [{u'messaging': [{u'sender': {u'id': u'10209354544730920'}, u'postback': {u'payload': u'SHARE${"event_hash": "O5gGd"}'}, u'timestamp': 1467503718695, u'recipient': {u'id': u'130562467349590'}}], u'id': u'130562467349590', u'time': 1467503718695}], u'object': u'page'}
+2016-07-02T23:55:18.823021+00:00 app[web.1]: postback
+2016-07-02T23:55:19.269321+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=5bb45dc6-b175-4d47-a667-4ee68510f585 fwd="173.252.90.86" dyno=web.1 connect=1ms service=447ms status=200 bytes=171
+2016-07-02T23:56:34.317177+00:00 heroku[slug-compiler]: Slug compilation started
+2016-07-02T23:56:34.317182+00:00 heroku[slug-compiler]: Slug compilation finished
+2016-07-02T23:56:34.128002+00:00 heroku[api]: Release v607 created by foxxintheboxx@berkeley.edu
+2016-07-02T23:56:34.127944+00:00 heroku[api]: Deploy f73235c by foxxintheboxx@berkeley.edu
+2016-07-02T23:56:34.365035+00:00 heroku[web.1]: Restarting
+2016-07-02T23:56:34.365614+00:00 heroku[web.1]: State changed from up to starting
+2016-07-02T23:56:37.528380+00:00 heroku[web.1]: Stopping all processes with SIGTERM
+2016-07-02T23:56:38.206498+00:00 app[web.1]: [2016-07-02 23:56:38 +0000] [3] [INFO] Handling signal: term
+2016-07-02T23:56:38.206849+00:00 app[web.1]: [2016-07-02 23:56:38 +0000] [10] [INFO] Worker exiting (pid: 10)
+2016-07-02T23:56:38.252416+00:00 app[web.1]: [2016-07-02 23:56:38 +0000] [3] [INFO] Shutting down: Master
+2016-07-02T23:56:38.207377+00:00 app[web.1]: [2016-07-02 23:56:38 +0000] [9] [INFO] Worker exiting (pid: 9)
+2016-07-02T23:56:39.292464+00:00 heroku[web.1]: Process exited with status 0
+2016-07-02T23:56:39.187112+00:00 heroku[web.1]: Starting process with command `gunicorn run:app`
+2016-07-02T23:56:42.005778+00:00 app[web.1]: [2016-07-02 23:56:42 +0000] [3] [INFO] Starting gunicorn 19.5.0
+2016-07-02T23:56:42.006597+00:00 app[web.1]: [2016-07-02 23:56:42 +0000] [3] [INFO] Listening at: http://0.0.0.0:9761 (3)
+2016-07-02T23:56:42.013795+00:00 app[web.1]: [2016-07-02 23:56:42 +0000] [9] [INFO] Booting worker with pid: 9
+2016-07-02T23:56:42.006771+00:00 app[web.1]: [2016-07-02 23:56:42 +0000] [3] [INFO] Using worker: sync
+2016-07-02T23:56:42.092576+00:00 app[web.1]: [2016-07-02 23:56:42 +0000] [10] [INFO] Booting worker with pid: 10
+2016-07-02T23:56:42.868464+00:00 heroku[web.1]: State changed from starting to up
+2016-07-03T00:04:08.270060+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467504248007, u'message': {u'text': u'\U0001f4c5 Urth Cafe Lunch', u'quick_reply': {u'payload': u'CANCEL_EDIT${"event_hash": "O5gGd"}'}, u'mid': u'mid.1467504247998:5f52a8a6cbe19a9686', u'seq': 14382}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467504248071}]}
+2016-07-03T00:04:08.633017+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T00:04:08.633001+00:00 app[web.1]: saving
+2016-07-03T00:04:09.604247+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=aa9721d8-2d83-467a-9141-e76ce8d0fc2b fwd="173.252.90.110" dyno=web.1 connect=0ms service=1349ms status=200 bytes=171
+2016-07-03T00:04:22.659005+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467504262433, u'message': {u'text': u'Create Diablo Hiking', u'mid': u'mid.1467504262425:4d812b927777d53e10', u'seq': 14386}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467504262459}]}
+2016-07-03T00:04:22.929140+00:00 app[web.1]: msgs: [u'Create Diablo Hiking']
+2016-07-03T00:04:23.549639+00:00 app[web.1]: saving
+2016-07-03T00:04:23.549654+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T00:04:23.557335+00:00 app[web.1]: [{'text': "Hi Ian, this is how to use me!\n\xe2\x97\x8f 'make' <event name> \n\xe2\x97\x8f 'find' <event name>\n\xe2\x97\x8f 'events' to see all your events"}]
+2016-07-03T00:04:23.908429+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=dce5486a-7229-4048-9e0a-3d6b8c45f88e fwd="173.252.90.236" dyno=web.1 connect=0ms service=1267ms status=200 bytes=171
+2016-07-03T00:04:23.921332+00:00 app[web.1]: hello
+2016-07-03T00:04:32.148869+00:00 app[web.1]: msgs: [u'Make Diable Hiking']
+2016-07-03T00:04:32.115305+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467504271900, u'message': {u'text': u'Make Diable Hiking', u'mid': u'mid.1467504271892:618deff61852407033', u'seq': 14390}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467504271926}]}
+2016-07-03T00:04:32.415124+00:00 app[web.1]: saving
+2016-07-03T00:04:32.511555+00:00 app[web.1]: [<Event u'Diable Hiking'>, <Calendar of u'Ian Fox'>]
+2016-07-03T00:04:32.415141+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T00:04:32.511173+00:00 app[web.1]: saving
+2016-07-03T00:04:32.593795+00:00 app[web.1]: [{'attachment': {'payload': {'template_type': 'generic', 'elements': [{'buttons': [{'payload': 'WHEN${"event_hash": "feBG4"}', 'type': 'postback', 'title': '\xf0\x9f\x95\x90 none yet'}, {'payload': 'WHO${"event_hash": "feBG4"}', 'type': 'postback', 'title': '\xf0\x9f\x91\xa6'}, {'payload': 'SHARE${"event_hash": "feBG4"}', 'type': 'postback', 'title': 'invite ppl to this'}], 'title': '\xf0\x9f\x93\x85 Diable Hiking'}]}, 'type': 'template'}}]
+2016-07-03T00:04:33.482669+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=7acfe9f6-78a8-4286-b272-32ba9aee9118 fwd="173.252.90.228" dyno=web.1 connect=0ms service=1385ms status=200 bytes=171
+2016-07-03T00:04:33.489707+00:00 app[web.1]: hello
+2016-07-03T00:04:39.307637+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467504278954, u'postback': {u'payload': u'WHEN${"event_hash": "feBG4"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467504278954}]}
+2016-07-03T00:04:39.307651+00:00 app[web.1]: postback
+2016-07-03T00:04:39.509271+00:00 app[web.1]: saving
+2016-07-03T00:04:39.509286+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T00:04:40.495185+00:00 app[web.1]: hello
+2016-07-03T00:04:40.504213+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=bd6e599c-395b-42dd-8e25-6ee939deaaec fwd="173.252.90.82" dyno=web.1 connect=3ms service=1254ms status=200 bytes=171
+2016-07-03T00:04:54.932245+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467504294705, u'message': {u'text': u'Thu 3-4 5-7 wed 6-7', u'mid': u'mid.1467504294696:64b181f1810301fb12', u'seq': 14398}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467504294733}]}
+2016-07-03T00:04:54.945400+00:00 app[web.1]: msgs: [u'Thu 3-4 5-7 wed 6-7']
+2016-07-03T00:04:57.360461+00:00 app[web.1]: {'to': datetime.datetime(2016, 7, 7, 23, 0, tzinfo=tzutc()), 'from': datetime.datetime(2016, 7, 7, 22, 0, tzinfo=tzutc())}
+2016-07-03T00:04:57.657616+00:00 app[web.1]: {'to': datetime.datetime(2016, 7, 8, 2, 0, tzinfo=tzutc()), 'from': datetime.datetime(2016, 7, 8, 0, 0, tzinfo=tzutc())}
+2016-07-03T00:04:57.968413+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa33634d0>]
+2016-07-03T00:04:57.944206+00:00 app[web.1]: {'to': datetime.datetime(2016, 7, 7, 2, 0, tzinfo=tzutc()), 'from': datetime.datetime(2016, 7, 7, 1, 0, tzinfo=tzutc())}
+2016-07-03T00:04:57.968424+00:00 app[web.1]: saving
+2016-07-03T00:04:57.976299+00:00 app[web.1]: deleting
+2016-07-03T00:04:57.976314+00:00 app[web.1]: []
+2016-07-03T00:04:57.989422+00:00 app[web.1]: []
+2016-07-03T00:04:57.968425+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa33634d0>]
+2016-07-03T00:04:57.989433+00:00 app[web.1]: deleting
+2016-07-03T00:04:57.989434+00:00 app[web.1]: []
+2016-07-03T00:04:57.990902+00:00 app[web.1]: saving
+2016-07-03T00:04:58.040482+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa3302f50>]
+2016-07-03T00:04:57.990909+00:00 app[web.1]: []
+2016-07-03T00:04:58.040493+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa3302f50>]
+2016-07-03T00:04:58.096882+00:00 app[web.1]: deleting
+2016-07-03T00:04:58.056516+00:00 app[web.1]: []
+2016-07-03T00:04:58.040492+00:00 app[web.1]: saving
+2016-07-03T00:04:58.096871+00:00 app[web.1]: True
+2016-07-03T00:04:58.096880+00:00 app[web.1]: []
+2016-07-03T00:04:58.056508+00:00 app[web.1]: deleting
+2016-07-03T00:04:58.096882+00:00 app[web.1]: []
+2016-07-03T00:04:58.132586+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa32efa50>]
+2016-07-03T00:04:58.137745+00:00 app[web.1]: deleting
+2016-07-03T00:04:58.132600+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa32efa50>]
+2016-07-03T00:04:58.100539+00:00 app[web.1]: saving
+2016-07-03T00:04:58.132597+00:00 app[web.1]: saving
+2016-07-03T00:04:58.100546+00:00 app[web.1]: []
+2016-07-03T00:04:58.137760+00:00 app[web.1]: []
+2016-07-03T00:04:58.181164+00:00 app[web.1]: True
+2016-07-03T00:04:58.198216+00:00 app[web.1]: True
+2016-07-03T00:04:58.198230+00:00 app[web.1]: []
+2016-07-03T00:04:58.198231+00:00 app[web.1]: deleting
+2016-07-03T00:04:58.198232+00:00 app[web.1]: []
+2016-07-03T00:04:58.200012+00:00 app[web.1]: saving
+2016-07-03T00:04:58.200020+00:00 app[web.1]: []
+2016-07-03T00:04:58.296203+00:00 app[web.1]: saving
+2016-07-03T00:04:58.296218+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa3314bd0>, <app.models.datepolls.Datepoll object at 0x7f4fa3314c10>, <app.models.datepolls.Datepoll object at 0x7f4fa3314e10>]
+2016-07-03T00:04:58.308390+00:00 app[web.1]: saving
+2016-07-03T00:04:58.320651+00:00 app[web.1]: [<User u'Ian Fox'>, <Event u'Diable Hiking'>]
+2016-07-03T00:04:58.394319+00:00 app[web.1]: [{'text': '\xe2\x9c\x85 I added your times!'}, {'attachment': {'payload': {'text': 'Thu 07/07\n      1\xef\xb8\x8f\xe2\x83\xa3 3-4pm, \xf0\x9f\x91\xa6\n---------\nWed 07/06\n      2\xef\xb8\x8f\xe2\x83\xa3 6-7pm, \xf0\x9f\x91\xa6\nThu 07/07\n      3\xef\xb8\x8f\xe2\x83\xa3 5-7pm, \xf0\x9f\x91\xa6\n', 'template_type': 'button', 'buttons': [{'payload': 'BACK${"event_hash": "feBG4"}', 'type': 'postback', 'title': '\xf0\x9f\x93\x85 Diable Hiking'}]}, 'type': 'template'}}]
+2016-07-03T00:04:59.602005+00:00 app[web.1]: hello
+2016-07-03T00:04:59.605304+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=4016a712-a1c1-4dd9-99f4-d8b03a4982a1 fwd="173.252.90.237" dyno=web.1 connect=0ms service=4704ms status=200 bytes=171
+2016-07-03T00:05:03.033262+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467504302757, u'postback': {u'payload': u'BACK${"event_hash": "feBG4"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467504302757}]}
+2016-07-03T00:05:03.033276+00:00 app[web.1]: postback
+2016-07-03T00:05:03.268794+00:00 app[web.1]: saving
+2016-07-03T00:05:03.268808+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T00:05:04.491641+00:00 app[web.1]: hello
+2016-07-03T00:05:04.485842+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=007bf1dc-191c-4a10-94fd-36cb18fc46d6 fwd="173.252.88.188" dyno=web.1 connect=0ms service=1490ms status=200 bytes=171
+2016-07-03T00:05:06.765603+00:00 app[web.1]: postback
+2016-07-03T00:05:06.765586+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467504306475, u'postback': {u'payload': u'WHO${"event_hash": "feBG4"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467504306475}]}
+2016-07-03T00:05:08.115647+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=770916eb-116b-4e39-967e-22c5ab45da1b fwd="173.252.90.85" dyno=web.1 connect=2ms service=1357ms status=200 bytes=171
+2016-07-03T00:05:08.117655+00:00 app[web.1]: hello
+2016-07-03T00:05:10.790021+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T00:05:10.738831+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467504310510, u'message': {u'text': u'\U0001f4c5 Diable Hiking', u'quick_reply': {u'payload': u'CANCEL_EDIT${"event_hash": "feBG4"}'}, u'mid': u'mid.1467504310501:43ab644772788c1807', u'seq': 14413}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467504310540}]}
+2016-07-03T00:05:10.790008+00:00 app[web.1]: saving
+2016-07-03T00:05:11.711444+00:00 app[web.1]: hello
+2016-07-03T00:05:11.708283+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=3e52d321-4ac2-4bda-a8ce-89958f80209d fwd="173.252.90.243" dyno=web.1 connect=1ms service=988ms status=200 bytes=171
+2016-07-03T00:05:13.359297+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467504313114, u'postback': {u'payload': u'SHARE${"event_hash": "feBG4"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467504313114}]}
+2016-07-03T00:05:13.359363+00:00 app[web.1]: postback
+2016-07-03T00:05:14.031564+00:00 app[web.1]: hello
+2016-07-03T00:05:14.024636+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=bff00f66-e827-4fa3-886e-37581377028e fwd="173.252.88.185" dyno=web.1 connect=0ms service=684ms status=200 bytes=171
+2016-07-03T00:05:56.276778+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467504356066, u'message': {u'text': u'Make an event to have brunch Sunday July 11', u'mid': u'mid.1467504355962:b22f230ba8f5f1d746', u'seq': 14424}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467504356101}]}
+2016-07-03T00:05:56.307179+00:00 app[web.1]: msgs: [u'Make an event to have brunch Sunday July 11']
+2016-07-03T00:05:57.525393+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=6e0a6304-2860-4590-a596-e0ab9607c9f7 fwd="173.252.88.85" dyno=web.1 connect=0ms service=1262ms status=200 bytes=171
+2016-07-03T00:05:57.523821+00:00 app[web.1]: hello
+2016-07-03T00:07:00.848321+00:00 app[web.1]: msgs: [u'Make a brunch Monday July 11']
+2016-07-03T00:07:00.804603+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467504420577, u'message': {u'text': u'Make a brunch Monday July 11', u'mid': u'mid.1467504420568:d8bd47a7c593f19638', u'seq': 14428}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467504420605}]}
+2016-07-03T00:07:01.345517+00:00 app[web.1]: saving
+2016-07-03T00:07:01.346526+00:00 app[web.1]: [<Event u'Brunch'>, <Calendar of u'Ian Fox'>, <app.models.datepolls.Datepoll object at 0x7f4fa3333450>]
+2016-07-03T00:07:01.211888+00:00 app[web.1]: saving
+2016-07-03T00:07:01.460239+00:00 app[web.1]: [{'attachment': {'payload': {'template_type': 'generic', 'elements': [{'buttons': [{'payload': 'WHEN${"event_hash": "Md64M"}', 'type': 'postback', 'title': '\xf0\x9f\x95\x90 Mon 7/11 @ 12am'}, {'payload': 'WHO${"event_hash": "Md64M"}', 'type': 'postback', 'title': '\xf0\x9f\x91\xa6'}, {'payload': 'SHARE${"event_hash": "Md64M"}', 'type': 'postback', 'title': 'invite ppl to this'}], 'title': '\xf0\x9f\x93\x85 Brunch'}]}, 'type': 'template'}}]
+2016-07-03T00:07:01.212280+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T00:07:02.450892+00:00 app[web.1]: hello
+2016-07-03T00:07:02.440841+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=13f97e08-9244-4915-b3b9-6132ef3f0622 fwd="173.252.88.92" dyno=web.1 connect=1ms service=1655ms status=200 bytes=171
+2016-07-03T00:07:08.835488+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467504428643, u'postback': {u'payload': u'GET_STARTED'}, u'sender': {u'id': u'1390308317649833'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467504428643}]}
+2016-07-03T00:07:08.835504+00:00 app[web.1]: postback
+2016-07-03T00:07:09.155876+00:00 app[web.1]: {u'timezone': -7, u'profile_pic': u'https://scontent.xx.fbcdn.net/v/t1.0-1/p200x200/12798959_10204426136133252_8664407238518797644_n.jpg?oh=4799feb99ade54e747ca6b4abd8abca9&oe=57FF0DF9', u'last_name': u'Pakravan', u'first_name': u'Nika'}
+2016-07-03T00:07:09.156650+00:00 app[web.1]: uhh wtf
+2016-07-03T00:07:09.157129+00:00 app[web.1]: [<User u'Nika Pakravan'>]
+2016-07-03T00:07:09.156987+00:00 app[web.1]: saving
+2016-07-03T00:07:09.429594+00:00 app[web.1]: {u'timezone': -7, u'profile_pic': u'https://scontent.xx.fbcdn.net/v/t1.0-1/p200x200/12798959_10204426136133252_8664407238518797644_n.jpg?oh=4799feb99ade54e747ca6b4abd8abca9&oe=57FF0DF9', u'last_name': u'Pakravan', u'first_name': u'Nika'}
+2016-07-03T00:07:10.251098+00:00 app[web.1]: hello
+2016-07-03T00:07:10.248322+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=a432d0c8-7b8f-4e3f-9063-f094cd1a7728 fwd="173.252.123.139" dyno=web.1 connect=0ms service=1427ms status=200 bytes=171
+2016-07-03T00:07:16.518647+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467504436384, u'postback': {u'payload': u'YES_EVENT_INVITE'}, u'sender': {u'id': u'1390308317649833'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467504436384}]}
+2016-07-03T00:07:16.518664+00:00 app[web.1]: postback
+2016-07-03T00:07:16.869946+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=98eeb08a-00f5-4078-892f-0784e66f0ab7 fwd="173.252.123.145" dyno=web.1 connect=1ms service=365ms status=200 bytes=171
+2016-07-03T00:07:16.878939+00:00 app[web.1]: hello
+2016-07-03T00:07:24.938289+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467504444637, u'postback': {u'payload': u'WHEN${"event_hash": "Md64M"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467504444637}]}
+2016-07-03T00:07:24.938948+00:00 app[web.1]: postback
+2016-07-03T00:07:25.205516+00:00 app[web.1]: saving
+2016-07-03T00:07:25.205849+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T00:07:26.126793+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=dec31d84-70bd-4322-8039-b63882da7d15 fwd="173.252.88.190" dyno=web.1 connect=5ms service=1247ms status=200 bytes=171
+2016-07-03T00:07:26.104659+00:00 app[web.1]: hello
+2016-07-03T00:07:30.631341+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467504450425, u'postback': {u'payload': u'REMOVE_TIME${"event_hash": "Md64M"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467504450425}]}
+2016-07-03T00:07:30.631396+00:00 app[web.1]: postback
+2016-07-03T00:07:30.730044+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T00:07:30.730031+00:00 app[web.1]: saving
+2016-07-03T00:07:32.090933+00:00 app[web.1]: hello
+2016-07-03T00:07:32.100974+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=bca4e1cd-9cc4-44b1-bdc2-7e3b44f5413a fwd="173.252.88.184" dyno=web.1 connect=2ms service=1490ms status=200 bytes=171
+2016-07-03T00:07:33.880875+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467504453676, u'postback': {u'payload': u'CANCEL_EDIT${"event_hash": "Md64M"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467504453676}]}
+2016-07-03T00:07:33.880889+00:00 app[web.1]: postback
+2016-07-03T00:07:33.950234+00:00 app[web.1]: saving
+2016-07-03T00:07:33.950250+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T00:07:34.971488+00:00 app[web.1]: hello
+2016-07-03T00:07:34.966129+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=83a8271c-b226-48f4-a1b9-6b0aee59991f fwd="173.252.88.190" dyno=web.1 connect=1ms service=1107ms status=200 bytes=171
+2016-07-03T00:07:37.055126+00:00 app[web.1]: postback
+2016-07-03T00:07:37.055039+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467504456894, u'postback': {u'payload': u'WHEN${"event_hash": "Md64M"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467504456894}]}
+2016-07-03T00:07:37.316854+00:00 app[web.1]: saving
+2016-07-03T00:07:37.316866+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T00:07:38.172234+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=3cfef9b7-b971-4a8f-bb4c-b7a2c3d60ff6 fwd="173.252.90.94" dyno=web.1 connect=0ms service=1104ms status=200 bytes=171
+2016-07-03T00:07:38.149616+00:00 app[web.1]: hello
+2016-07-03T00:07:40.045746+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467504459875, u'postback': {u'payload': u'ADD_TIME${"event_hash": "Md64M"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467504459875}]}
+2016-07-03T00:07:40.089057+00:00 app[web.1]: saving
+2016-07-03T00:07:40.045761+00:00 app[web.1]: postback
+2016-07-03T00:07:40.089076+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T00:07:40.911588+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=4ecc2b97-1f6d-4d8b-b1f2-e76a0c8d6aea fwd="173.252.88.187" dyno=web.1 connect=1ms service=868ms status=200 bytes=171
+2016-07-03T00:07:40.906165+00:00 app[web.1]: hello
+2016-07-03T00:08:06.532898+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467504486275, u'message': {u'text': u'11-1 12-2 12:30-2:30', u'mid': u'mid.1467504486236:5bc489c5081b8f3139', u'seq': 14463}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467504486301}]}
+2016-07-03T00:08:06.621683+00:00 app[web.1]: msgs: [u'11-1 12-2 12:30-2:30']
+2016-07-03T00:08:08.161930+00:00 app[web.1]:   File "/app/app/convengine.py", line 75, in understand
+2016-07-03T00:08:08.161931+00:00 app[web.1]:   File "/app/app/convengine.py", line 331, in handle_add_time
+2016-07-03T00:08:08.161919+00:00 app[web.1]: Traceback (most recent call last):
+2016-07-03T00:08:08.161934+00:00 app[web.1]:     j = tokens.index(match)
+2016-07-03T00:08:08.161929+00:00 app[web.1]:     resp_msgs = evey.understand(msgs)
+2016-07-03T00:08:08.161931+00:00 app[web.1]:     return self.handle_add_time(msgs[0])
+2016-07-03T00:08:08.161939+00:00 app[web.1]: 
+2016-07-03T00:08:08.161929+00:00 app[web.1]:   File "/app/app/main/views.py", line 84, in webhook
+2016-07-03T00:08:08.161934+00:00 app[web.1]: ValueError: u'11' is not in list
+2016-07-03T00:08:08.161932+00:00 app[web.1]:     intervals = self.extract_intervals(msg)
+2016-07-03T00:08:08.161933+00:00 app[web.1]:   File "/app/app/witengine.py", line 84, in extract_intervals
+2016-07-03T00:08:08.161940+00:00 app[web.1]: hello
+2016-07-03T00:08:08.170253+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=a88e5f97-6bdf-49ea-8790-36bd9a41be9a fwd="173.252.88.95" dyno=web.1 connect=1ms service=1670ms status=200 bytes=171
+2016-07-03T00:13:42.819463+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467504822623, u'message': {u'text': u'\U0001f511O5gGd\U0001f511', u'mid': u'mid.1467504822616:451989685d3bc29c22', u'seq': 14464}, u'sender': {u'id': u'1390308317649833'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467504822658}]}
+2016-07-03T00:13:42.927251+00:00 app[web.1]: msgs: [u'\U0001f511O5gGd\U0001f511']
+2016-07-03T00:13:42.957295+00:00 app[web.1]: saving
+2016-07-03T00:13:42.957309+00:00 app[web.1]: [<Event u'Urth Cafe Lunch'>]
+2016-07-03T00:13:43.113563+00:00 app[web.1]: saving
+2016-07-03T00:13:43.113580+00:00 app[web.1]: [<User u'Nika Pakravan'>]
+2016-07-03T00:13:43.136802+00:00 app[web.1]: [{'text': 'Hi Nika!'}, {'attachment': {'payload': {'text': '\xf0\x9f\x93\x85 Urth Cafe Lunch by Ian\nFri 07/08\n      1\xef\xb8\x8f\xe2\x83\xa3 3pm, \xf0\x9f\x91\xa6\n', 'template_type': 'button', 'buttons': [{'payload': 'ADD_TIME${"event_hash": "O5gGd"}', 'type': 'postback', 'title': 'add \xf0\x9f\x95\x90'}, {'payload': 'CANCEL_EDIT${"event_hash": "O5gGd"}', 'type': 'postback', 'title': '\xf0\x9f\x93\x85 Urth Cafe Lunch'}]}, 'type': 'template'}}]
+2016-07-03T00:13:44.104622+00:00 app[web.1]: hello
+2016-07-03T00:13:44.097367+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=e47e3695-ace3-47d5-9ff0-79cd423cc24a fwd="173.252.90.240" dyno=web.1 connect=0ms service=1293ms status=200 bytes=171
+2016-07-03T00:14:42.431151+00:00 app[web.1]: postback
+2016-07-03T00:14:42.431137+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467504882186, u'postback': {u'payload': u'ADD_TIME${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'1390308317649833'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467504882186}]}
+2016-07-03T00:14:42.473659+00:00 app[web.1]: saving
+2016-07-03T00:14:42.473758+00:00 app[web.1]: [<User u'Nika Pakravan'>]
+2016-07-03T00:14:43.307910+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=f29ea3f2-6015-43d9-a0ce-4d50e94a7de7 fwd="173.252.123.144" dyno=web.1 connect=1ms service=894ms status=200 bytes=171
+2016-07-03T00:14:43.319820+00:00 app[web.1]: hello
+2016-07-03T00:18:04.561397+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467505084344, u'message': {u'text': u'Fri 1-5', u'mid': u'mid.1467505084333:d96505b33cf7ceeb35', u'seq': 14475}, u'sender': {u'id': u'1390308317649833'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467505084376}]}
+2016-07-03T00:18:04.582244+00:00 app[web.1]: msgs: [u'Fri 1-5']
+2016-07-03T00:18:04.886471+00:00 app[web.1]: {'to': datetime.datetime(2016, 7, 9, 0, 0, tzinfo=tzutc()), 'from': datetime.datetime(2016, 7, 8, 20, 0, tzinfo=tzutc())}
+2016-07-03T00:18:04.912508+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa33334d0>]
+2016-07-03T00:18:04.924487+00:00 app[web.1]: []
+2016-07-03T00:18:04.912526+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa33334d0>]
+2016-07-03T00:18:04.912524+00:00 app[web.1]: saving
+2016-07-03T00:18:04.952383+00:00 app[web.1]: saving
+2016-07-03T00:18:04.940858+00:00 app[web.1]: []
+2016-07-03T00:18:04.924458+00:00 app[web.1]: deleting
+2016-07-03T00:18:05.029027+00:00 app[web.1]: saving
+2016-07-03T00:18:04.952402+00:00 app[web.1]: []
+2016-07-03T00:18:04.940877+00:00 app[web.1]: deleting
+2016-07-03T00:18:04.940877+00:00 app[web.1]: []
+2016-07-03T00:18:05.029047+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa32d9190>, <app.models.datepolls.Datepoll object at 0x7f4fa32d97d0>]
+2016-07-03T00:18:05.067187+00:00 app[web.1]: [<User u'Nika Pakravan'>, <Event u'Urth Cafe Lunch'>]
+2016-07-03T00:18:05.040322+00:00 app[web.1]: saving
+2016-07-03T00:18:05.949449+00:00 app[web.1]: [{'text': '\xe2\x9c\x85 I added your times!'}, {'attachment': {'payload': {'text': 'Fri 07/08\n      1\xef\xb8\x8f\xe2\x83\xa3 3pm, \xf0\x9f\x91\xa6\n---------\n      2\xef\xb8\x8f\xe2\x83\xa3 1-5pm, \xf0\x9f\x91\xa6\n', 'template_type': 'button', 'buttons': [{'payload': 'BACK${"event_hash": "O5gGd"}', 'type': 'postback', 'title': '\xf0\x9f\x93\x85 Urth Cafe Lunch'}]}, 'type': 'template'}}]
+2016-07-03T00:18:06.980195+00:00 app[web.1]: hello
+2016-07-03T00:18:06.977660+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=091178c3-c707-49f6-823e-3b514e09ffbd fwd="173.252.88.90" dyno=web.1 connect=0ms service=2432ms status=200 bytes=171
+2016-07-03T00:18:07.258410+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467505084469, u'message': {u'text': u'Fri 1-5', u'mid': u'mid.1467505084459:bae7d75c4c295e2e74', u'seq': 14476}, u'sender': {u'id': u'1390308317649833'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467505087054}]}
+2016-07-03T00:18:07.323091+00:00 app[web.1]: msgs: [u'Fri 1-5']
+2016-07-03T00:18:07.866550+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa3302b10>]
+2016-07-03T00:18:07.842513+00:00 app[web.1]: {'to': datetime.datetime(2016, 7, 9, 0, 0, tzinfo=tzutc()), 'from': datetime.datetime(2016, 7, 8, 20, 0, tzinfo=tzutc())}
+2016-07-03T00:18:07.866598+00:00 app[web.1]: saving
+2016-07-03T00:18:07.866699+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa3302b10>]
+2016-07-03T00:18:07.870398+00:00 app[web.1]: deleting
+2016-07-03T00:18:07.882135+00:00 app[web.1]: []
+2016-07-03T00:18:07.870451+00:00 app[web.1]: []
+2016-07-03T00:18:07.882191+00:00 app[web.1]: deleting
+2016-07-03T00:18:07.942020+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa32d9510>, <app.models.datepolls.Datepoll object at 0x7f4fa32d9d50>]
+2016-07-03T00:18:07.965296+00:00 app[web.1]: [<User u'Nika Pakravan'>, <Event u'Urth Cafe Lunch'>]
+2016-07-03T00:18:07.882228+00:00 app[web.1]: []
+2016-07-03T00:18:07.884574+00:00 app[web.1]: []
+2016-07-03T00:18:07.949462+00:00 app[web.1]: saving
+2016-07-03T00:18:07.884472+00:00 app[web.1]: saving
+2016-07-03T00:18:07.942004+00:00 app[web.1]: saving
+2016-07-03T00:18:08.776789+00:00 app[web.1]: [{'text': '\xe2\x9c\x85 I added your times!'}, {'attachment': {'payload': {'text': 'Fri 07/08\n      1\xef\xb8\x8f\xe2\x83\xa3 3pm, \xf0\x9f\x91\xa6\n---------\n      2\xef\xb8\x8f\xe2\x83\xa3 1-5pm, \xf0\x9f\x91\xa6\n', 'template_type': 'button', 'buttons': [{'payload': 'BACK${"event_hash": "O5gGd"}', 'type': 'postback', 'title': '\xf0\x9f\x93\x85 Urth Cafe Lunch'}]}, 'type': 'template'}}]
+2016-07-03T00:18:09.672971+00:00 app[web.1]: hello
+2016-07-03T00:18:09.667841+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=e73f972b-5393-4aa9-9067-f4aa706791ca fwd="173.252.88.93" dyno=web.1 connect=0ms service=2421ms status=200 bytes=171
+2016-07-03T00:20:25.346323+00:00 app[web.1]: hello
+2016-07-03T00:20:25.342747+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=04b648bc-a268-47c8-82ab-cf4295949d83 fwd="173.252.90.94" dyno=web.1 connect=0ms service=955ms status=200 bytes=171
+2016-07-03T00:20:27.306045+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467505227081, u'postback': {u'payload': u'WHEN${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467505227081}]}
+2016-07-03T00:20:27.306063+00:00 app[web.1]: postback
+2016-07-03T00:20:27.499284+00:00 app[web.1]: saving
+2016-07-03T00:20:27.499387+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T00:20:28.196795+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=9fa6cbad-259f-46ef-825d-c0b9514e8b33 fwd="173.252.88.188" dyno=web.1 connect=0ms service=892ms status=200 bytes=171
+2016-07-03T00:20:28.191893+00:00 app[web.1]: hello
+2016-07-03T00:20:29.952712+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467505229771, u'postback': {u'payload': u'BACK${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'1390308317649833'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467505229771}]}
+2016-07-03T00:20:29.952735+00:00 app[web.1]: postback
+2016-07-03T00:20:29.996559+00:00 app[web.1]: saving
+2016-07-03T00:20:29.996607+00:00 app[web.1]: [<User u'Nika Pakravan'>]
+2016-07-03T00:20:30.822671+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=02223401-ed10-42de-bdea-d297cca754ed fwd="173.252.123.144" dyno=web.1 connect=1ms service=890ms status=200 bytes=171
+2016-07-03T00:20:30.834601+00:00 app[web.1]: hello
+2016-07-03T00:20:35.872469+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467505235681, u'postback': {u'payload': u'SHARE${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'1390308317649833'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467505235681}]}
+2016-07-03T00:20:35.872483+00:00 app[web.1]: postback
+2016-07-03T00:20:36.417561+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=c198516f-f372-49e7-8749-5187665e5080 fwd="173.252.123.138" dyno=web.1 connect=2ms service=561ms status=200 bytes=171
+2016-07-03T00:20:36.415727+00:00 app[web.1]: hello
+2016-07-03T00:20:39.159593+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467505238911, u'postback': {u'payload': u'ADD_TIME${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467505238911}]}
+2016-07-03T00:20:39.159627+00:00 app[web.1]: postback
+2016-07-03T00:20:39.213123+00:00 app[web.1]: saving
+2016-07-03T00:20:39.213196+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T00:20:39.952234+00:00 app[web.1]: hello
+2016-07-03T00:20:39.953090+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=0c301cc8-da1c-4c3e-939d-93f86da81c52 fwd="173.252.88.189" dyno=web.1 connect=0ms service=805ms status=200 bytes=171
+2016-07-03T00:20:50.035227+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467505249824, u'message': {u'text': u'Mon 1', u'mid': u'mid.1467505249815:4416c2c8949e22eb56', u'seq': 14516}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467505249851}]}
+2016-07-03T00:20:50.065997+00:00 app[web.1]: msgs: [u'Mon 1']
+2016-07-03T00:20:50.473881+00:00 app[web.1]: {'to': None, 'from': datetime.datetime(2016, 7, 4, 20, 0, tzinfo=tzutc())}
+2016-07-03T00:20:50.516711+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa83e36d0>]
+2016-07-03T00:20:50.516726+00:00 app[web.1]: saving
+2016-07-03T00:20:50.524995+00:00 app[web.1]: deleting
+2016-07-03T00:20:50.516804+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa83e36d0>]
+2016-07-03T00:20:50.540818+00:00 app[web.1]: deleting
+2016-07-03T00:20:50.525053+00:00 app[web.1]: []
+2016-07-03T00:20:50.540819+00:00 app[web.1]: []
+2016-07-03T00:20:50.544429+00:00 app[web.1]: saving
+2016-07-03T00:20:50.540807+00:00 app[web.1]: []
+2016-07-03T00:20:50.544441+00:00 app[web.1]: []
+2016-07-03T00:20:50.596067+00:00 app[web.1]: saving
+2016-07-03T00:20:50.596083+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa846e4d0>, <app.models.datepolls.Datepoll object at 0x7f4fa846e250>, <app.models.datepolls.Datepoll object at 0x7f4fa846ec10>]
+2016-07-03T00:20:50.617677+00:00 app[web.1]: saving
+2016-07-03T00:20:50.638430+00:00 app[web.1]: [<User u'Ian Fox'>, <Event u'Urth Cafe Lunch'>]
+2016-07-03T00:20:50.682703+00:00 app[web.1]: [{'text': '\xe2\x9c\x85 I added your times!'}, {'attachment': {'payload': {'text': 'Fri 07/08\n      1\xef\xb8\x8f\xe2\x83\xa3 3pm, \xf0\x9f\x91\xa6\n---------\nMon 07/04\n      2\xef\xb8\x8f\xe2\x83\xa3 1pm, \xf0\x9f\x91\xa6\nFri 07/08\n      3\xef\xb8\x8f\xe2\x83\xa3 1-5pm, \xf0\x9f\x91\xa6\n', 'template_type': 'button', 'buttons': [{'payload': 'BACK${"event_hash": "O5gGd"}', 'type': 'postback', 'title': '\xf0\x9f\x93\x85 Urth Cafe Lunch'}]}, 'type': 'template'}}]
+2016-07-03T00:20:51.595782+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=963f8d9c-9e29-4e91-99ad-a16dbf3c1a2a fwd="173.252.88.95" dyno=web.1 connect=0ms service=1577ms status=200 bytes=171
+2016-07-03T00:20:51.601471+00:00 app[web.1]: hello
+2016-07-03T00:37:19.777206+00:00 app[web.1]: postback
+2016-07-03T00:37:19.777192+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467506239524, u'postback': {u'payload': u'SHARE${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467506239524}]}
+2016-07-03T00:37:20.392963+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=f3feb4fb-42fe-4869-bedc-d77c57669027 fwd="173.252.90.86" dyno=web.1 connect=0ms service=625ms status=200 bytes=171
+2016-07-03T00:37:20.392335+00:00 app[web.1]: hello
+2016-07-03T00:40:41.996196+00:00 app[web.1]: saving
+2016-07-03T00:40:41.996212+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T00:40:41.931230+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467506441718, u'message': {u'text': u'\U0001f4c5 Urth Cafe Lunch', u'quick_reply': {u'payload': u'CANCEL_EDIT${"event_hash": "O5gGd"}'}, u'mid': u'mid.1467506441707:c0a886d84b7b71c561', u'seq': 14531}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467506441746}]}
+2016-07-03T00:40:42.963744+00:00 app[web.1]: hello
+2016-07-03T00:40:42.970168+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=2b216640-0b0d-4471-b234-c806ebed53cd fwd="173.252.90.242" dyno=web.1 connect=3ms service=1056ms status=200 bytes=171
+2016-07-03T00:45:00.517507+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467506700238, u'postback': {u'payload': u'WHO${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467506700238}]}
+2016-07-03T00:45:00.517518+00:00 app[web.1]: postback
+2016-07-03T00:45:02.015689+00:00 app[web.1]: hello
+2016-07-03T00:45:02.034871+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=e9e8a724-aca5-4a49-998e-9a3dd68d1524 fwd="173.252.90.85" dyno=web.1 connect=0ms service=1531ms status=200 bytes=171
+2016-07-03T00:45:36.364755+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467506736135, u'message': {u'text': u'\U0001f4c5 Urth Cafe Lunch', u'quick_reply': {u'payload': u'CANCEL_EDIT${"event_hash": "O5gGd"}'}, u'mid': u'mid.1467506736125:8cb8beda8439b41369', u'seq': 14539}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467506736164}]}
+2016-07-03T00:45:36.409130+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T00:45:36.409114+00:00 app[web.1]: saving
+2016-07-03T00:45:37.504014+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=2ce942a1-c4e8-4a77-81dd-9ff8aaee571e fwd="173.252.88.93" dyno=web.1 connect=0ms service=1144ms status=200 bytes=171
+2016-07-03T00:45:37.501980+00:00 app[web.1]: hello
+2016-07-03T00:45:42.559179+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467506742396, u'postback': {u'payload': u'WHEN${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467506742396}]}
+2016-07-03T00:45:42.559191+00:00 app[web.1]: postback
+2016-07-03T00:45:42.822179+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T00:45:42.822163+00:00 app[web.1]: saving
+2016-07-03T00:45:43.510591+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=56ab8ccf-6742-4e16-b53b-43df8f8b6b33 fwd="173.252.88.185" dyno=web.1 connect=0ms service=967ms status=200 bytes=171
+2016-07-03T00:45:43.517819+00:00 app[web.1]: hello
+2016-07-03T00:45:50.043543+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467506749797, u'postback': {u'payload': u'ADD_TIME${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467506749797}]}
+2016-07-03T00:45:50.077086+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T00:45:50.043558+00:00 app[web.1]: postback
+2016-07-03T00:45:50.077072+00:00 app[web.1]: saving
+2016-07-03T00:45:50.765212+00:00 app[web.1]: hello
+2016-07-03T00:45:50.756498+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=bb80ede8-de93-498d-a8b8-33894c519b4e fwd="173.252.88.191" dyno=web.1 connect=1ms service=726ms status=200 bytes=171
+2016-07-03T00:53:51.447549+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467507231149, u'postback': {u'payload': u'CANCEL_EDIT${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467507231149}]}
+2016-07-03T00:53:51.447570+00:00 app[web.1]: postback
+2016-07-03T00:53:51.489608+00:00 app[web.1]: saving
+2016-07-03T00:53:51.489626+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T00:53:52.426569+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=5c14f9a1-36ee-4f59-bd54-6ea45b8e86bf fwd="173.252.90.90" dyno=web.1 connect=0ms service=991ms status=200 bytes=171
+2016-07-03T00:53:52.432605+00:00 app[web.1]: hello
+2016-07-03T02:26:29.406274+00:00 app[web.1]: [<Event u'Have Brunch Sunday July 11'>]
+2016-07-03T02:26:29.171249+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467512788953, u'postback': {u'payload': u'VIEW_MY_EVENTS'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467512788953}]}
+2016-07-03T02:26:29.192757+00:00 app[web.1]: [<Event u'Hike'>, <Event u'Date'>, <Event u'Hike2'>, <Event u'Chicken Dinner'>, <Event u'SF Bar Outing'>, <Event u'Drinks'>, <Event u'Chicken Dinner'>, <Event u'Urth Cafe Lunch'>, <Event u'Diable Hiking'>, <Event u'Have Brunch Sunday July 11'>, <Event u'Brunch'>]
+2016-07-03T02:26:29.171264+00:00 app[web.1]: postback
+2016-07-03T02:26:29.733877+00:00 app[web.1]: 5
+2016-07-03T02:26:29.627479+00:00 app[web.1]: [<Event u'Hike'>, <Event u'Date'>, <Event u'Hike2'>, <Event u'Chicken Dinner'>, <Event u'SF Bar Outing'>, <Event u'Drinks'>, <Event u'Chicken Dinner'>, <Event u'Urth Cafe Lunch'>, <Event u'Diable Hiking'>, <Event u'Brunch'>]
+2016-07-03T02:26:30.775926+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=a528a150-4474-4281-b299-833554762345 fwd="173.252.90.80" dyno=web.1 connect=1ms service=1577ms status=200 bytes=171
+2016-07-03T03:15:56.625887+00:00 app[web.1]: postback
+2016-07-03T03:15:56.625876+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467515756404, u'postback': {u'payload': u'WHEN${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467515756404}]}
+2016-07-03T03:15:56.702006+00:00 app[web.1]: saving
+2016-07-03T03:15:56.702128+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T03:15:57.382022+00:00 app[web.1]: hello
+2016-07-03T03:15:57.386838+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=573d1320-789b-44fd-8328-091275135ea2 fwd="173.252.90.90" dyno=web.1 connect=0ms service=761ms status=200 bytes=171
+2016-07-03T03:16:01.617029+00:00 app[web.1]: saving
+2016-07-03T03:16:01.594480+00:00 app[web.1]: postback
+2016-07-03T03:16:01.617045+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T03:16:01.594468+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467515761356, u'postback': {u'payload': u'CANCEL_EDIT${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467515761356}]}
+2016-07-03T03:16:02.398270+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=53bfe6e5-0c6b-4163-af37-2e5c73948d16 fwd="173.252.90.83" dyno=web.1 connect=1ms service=803ms status=200 bytes=171
+2016-07-03T03:16:02.391453+00:00 app[web.1]: hello
+2016-07-03T03:16:05.938118+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467515765696, u'postback': {u'payload': u'ADD_TIME${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467515765696}]}
+2016-07-03T03:16:05.938131+00:00 app[web.1]: postback
+2016-07-03T03:16:05.953486+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T03:16:05.953462+00:00 app[web.1]: saving
+2016-07-03T03:16:06.615203+00:00 app[web.1]: hello
+2016-07-03T03:16:06.620239+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=f874a7b7-6f1c-4f31-a1bf-61719b0acf9d fwd="173.252.90.88" dyno=web.1 connect=5ms service=686ms status=200 bytes=171
+2016-07-03T03:16:09.543272+00:00 app[web.1]: postback
+2016-07-03T03:16:09.543240+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467515769315, u'postback': {u'payload': u'CANCEL_EDIT${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467515769315}]}
+2016-07-03T03:16:09.559073+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T03:16:09.559040+00:00 app[web.1]: saving
+2016-07-03T03:16:10.321275+00:00 app[web.1]: hello
+2016-07-03T03:16:10.325547+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=78a3cb8a-9a6b-4653-9217-743ffebee05e fwd="173.252.90.90" dyno=web.1 connect=1ms service=789ms status=200 bytes=171
+2016-07-03T03:16:17.372134+00:00 app[web.1]: hello
+2016-07-03T03:16:17.375334+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=3aa220d4-e30f-4e99-b12d-60328453fa00 fwd="173.252.88.180" dyno=web.1 connect=1ms service=876ms status=200 bytes=171
+2016-07-03T03:16:21.199841+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467515780973, u'postback': {u'payload': u'ADD_TIME${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467515780973}]}
+2016-07-03T03:16:21.213334+00:00 app[web.1]: saving
+2016-07-03T03:16:21.199860+00:00 app[web.1]: postback
+2016-07-03T03:16:21.213373+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T03:16:21.959945+00:00 app[web.1]: hello
+2016-07-03T03:16:21.969512+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=d7a97d2e-0689-4e8d-9b7f-f8eae4e5301f fwd="173.252.90.87" dyno=web.1 connect=1ms service=766ms status=200 bytes=171
+2016-07-03T03:16:36.325099+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467515796075, u'postback': {u'payload': u'CANCEL_EDIT${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467515796075}]}
+2016-07-03T03:16:36.339862+00:00 app[web.1]: saving
+2016-07-03T03:16:36.325112+00:00 app[web.1]: postback
+2016-07-03T03:16:36.339877+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T03:16:37.195030+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=38c5740e-ff5c-41c7-9553-1503531e98ec fwd="173.252.88.185" dyno=web.1 connect=1ms service=865ms status=200 bytes=171
+2016-07-03T03:16:37.186582+00:00 app[web.1]: hello
+2016-07-03T03:26:03.555586+00:00 app[web.1]: postback
+2016-07-03T03:26:03.555570+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467516363380, u'postback': {u'payload': u'WHO${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467516363380}]}
+2016-07-03T03:26:04.520863+00:00 app[web.1]: hello
+2016-07-03T03:26:04.525454+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=3dfc5d67-886e-4340-99ef-b396ad613e15 fwd="173.252.90.81" dyno=web.1 connect=0ms service=969ms status=200 bytes=171
+2016-07-03T03:26:08.321975+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467516368119, u'message': {u'text': u'\U0001f4c5 Urth Cafe Lunch', u'quick_reply': {u'payload': u'CANCEL_EDIT${"event_hash": "O5gGd"}'}, u'mid': u'mid.1467516368109:19bae4f754a9c11726', u'seq': 14593}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467516368146}]}
+2016-07-03T03:26:08.336915+00:00 app[web.1]: saving
+2016-07-03T03:26:08.336938+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T03:26:09.076845+00:00 app[web.1]: hello
+2016-07-03T03:26:09.083302+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=3578149d-8614-4066-8209-7d0e59586d0b fwd="173.252.90.235" dyno=web.1 connect=1ms service=759ms status=200 bytes=171
+2016-07-03T03:26:11.292594+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467516371076, u'postback': {u'payload': u'SHARE${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467516371076}]}
+2016-07-03T03:26:11.292606+00:00 app[web.1]: postback
+2016-07-03T03:26:11.720619+00:00 app[web.1]: hello
+2016-07-03T03:26:11.728631+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=c15aeee2-5fb1-43ed-a516-e2e8c9d88859 fwd="173.252.90.84" dyno=web.1 connect=0ms service=431ms status=200 bytes=171
+2016-07-03T03:26:57.882283+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467516417671, u'message': {u'text': u'\U0001f4c5 Urth Cafe Lunch\npaste \U0001f511O5gGd\U0001f511 to\n m.me/evey.io', u'mid': u'mid.1467516417565:db99b5228ac8044e50', u'seq': 14604}, u'sender': {u'id': u'10154353920037384'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467516417694}]}
+2016-07-03T03:26:57.895769+00:00 app[web.1]: msgs: [u'\U0001f4c5 Urth Cafe Lunch\npaste \U0001f511O5gGd\U0001f511 to\n m.me/evey.io']
+2016-07-03T03:26:57.916333+00:00 app[web.1]: saving
+2016-07-03T03:26:57.916371+00:00 app[web.1]: [<Event u'Urth Cafe Lunch'>]
+2016-07-03T03:26:57.983266+00:00 app[web.1]: saving
+2016-07-03T03:26:57.983283+00:00 app[web.1]: [<User u'Akhila Raju'>]
+2016-07-03T03:26:57.989957+00:00 app[web.1]: [{'text': 'Hi Akhila!'}, {'attachment': {'payload': {'text': '\xf0\x9f\x93\x85 Urth Cafe Lunch by Ian\nFri 07/08\n      1\xef\xb8\x8f\xe2\x83\xa3 3pm, \xf0\x9f\x91\xa6\n---------\nMon 07/04\n      2\xef\xb8\x8f\xe2\x83\xa3 1pm, \xf0\x9f\x91\xa6\nFri 07/08\n      3\xef\xb8\x8f\xe2\x83\xa3 1-5pm, \xf0\x9f\x91\xa6\n', 'template_type': 'button', 'buttons': [{'payload': 'ADD_TIME${"event_hash": "O5gGd"}', 'type': 'postback', 'title': 'add \xf0\x9f\x95\x90'}, {'payload': 'CANCEL_EDIT${"event_hash": "O5gGd"}', 'type': 'postback', 'title': '\xf0\x9f\x93\x85 Urth Cafe Lunch'}]}, 'type': 'template'}}]
+2016-07-03T03:26:58.869322+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=b82c07f2-9c1a-4ca4-9394-8c8d20e20226 fwd="173.252.88.190" dyno=web.1 connect=0ms service=982ms status=200 bytes=171
+2016-07-03T03:26:58.860046+00:00 app[web.1]: hello
+2016-07-03T03:27:04.935834+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467516424698, u'postback': {u'payload': u'ADD_TIME${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10154353920037384'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467516424698}]}
+2016-07-03T03:27:04.935854+00:00 app[web.1]: postback
+2016-07-03T03:27:04.953268+00:00 app[web.1]: saving
+2016-07-03T03:27:04.953295+00:00 app[web.1]: [<User u'Akhila Raju'>]
+2016-07-03T03:27:05.618415+00:00 app[web.1]: hello
+2016-07-03T03:27:05.627466+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=abfe2100-c0a4-4c5b-ab8a-c2a181ab0128 fwd="173.252.90.231" dyno=web.1 connect=0ms service=686ms status=200 bytes=171
+2016-07-03T03:27:18.226492+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467516437978, u'message': {u'text': u'Fri 3pm', u'mid': u'mid.1467516437969:cd33fdc3a5c64ecc38', u'seq': 14615}, u'sender': {u'id': u'10154353920037384'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467516437996}]}
+2016-07-03T03:27:18.240981+00:00 app[web.1]: msgs: [u'Fri 3pm']
+2016-07-03T03:27:20.305269+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=6279356b-33b5-4e3b-a85e-ec1a67e15e5f fwd="173.252.88.94" dyno=web.1 connect=0ms service=2073ms status=200 bytes=171
+2016-07-03T03:27:20.248158+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa83ff690>]
+2016-07-03T03:27:20.231861+00:00 app[web.1]: {'to': None, 'from': datetime.datetime(2016, 7, 8, 22, 0, tzinfo=tzutc())}
+2016-07-03T03:27:20.257636+00:00 app[web.1]: []
+2016-07-03T03:27:20.248173+00:00 app[web.1]: saving
+2016-07-03T03:27:20.252688+00:00 app[web.1]: []
+2016-07-03T03:27:20.248174+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa83ff690>]
+2016-07-03T03:27:20.258857+00:00 app[web.1]: []
+2016-07-03T03:27:20.276232+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa849a850>, <app.models.datepolls.Datepoll object at 0x7f4fa849a090>, <app.models.datepolls.Datepoll object at 0x7f4fa83ff790>]
+2016-07-03T03:27:20.257654+00:00 app[web.1]: []
+2016-07-03T03:27:20.258843+00:00 app[web.1]: saving
+2016-07-03T03:27:20.252674+00:00 app[web.1]: deleting
+2016-07-03T03:27:20.257649+00:00 app[web.1]: deleting
+2016-07-03T03:27:20.276215+00:00 app[web.1]: saving
+2016-07-03T03:27:20.296492+00:00 app[web.1]: Traceback (most recent call last):
+2016-07-03T03:27:20.286473+00:00 app[web.1]: [<User u'Akhila Raju'>, <Event u'Urth Cafe Lunch'>]
+2016-07-03T03:27:20.296503+00:00 app[web.1]:     resp_msgs = evey.understand(msgs)
+2016-07-03T03:27:20.279394+00:00 app[web.1]: saving
+2016-07-03T03:27:20.296506+00:00 app[web.1]:     self.notify_creator(event, intervals, number_datepolls)
+2016-07-03T03:27:20.296505+00:00 app[web.1]:   File "/app/app/convengine.py", line 348, in handle_add_time
+2016-07-03T03:27:20.296506+00:00 app[web.1]:   File "/app/app/convengine.py", line 367, in notify_creator
+2016-07-03T03:27:20.296504+00:00 app[web.1]:     return self.handle_add_time(msgs[0])
+2016-07-03T03:27:20.296508+00:00 app[web.1]: AttributeError: 'NoneType' object has no attribute 'day'
+2016-07-03T03:27:20.296509+00:00 app[web.1]: hello
+2016-07-03T03:27:20.296507+00:00 app[web.1]:     if (to_obj.day == today.day and to_obj.month == today.month):
+2016-07-03T03:27:20.296509+00:00 app[web.1]: 
+2016-07-03T03:27:20.296502+00:00 app[web.1]:   File "/app/app/main/views.py", line 84, in webhook
+2016-07-03T03:27:20.296504+00:00 app[web.1]:   File "/app/app/convengine.py", line 75, in understand
+2016-07-03T03:27:33.257171+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467516453070, u'message': {u'text': u'Fri 1-5pm', u'mid': u'mid.1467516453059:46ada997021035bd73', u'seq': 14616}, u'sender': {u'id': u'10154353920037384'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467516453090}]}
+2016-07-03T03:27:33.271180+00:00 app[web.1]: msgs: [u'Fri 1-5pm']
+2016-07-03T03:27:34.424278+00:00 app[web.1]: {'to': datetime.datetime(2016, 7, 9, 0, 0, tzinfo=tzutc()), 'from': datetime.datetime(2016, 7, 8, 20, 0, tzinfo=tzutc())}
+2016-07-03T03:27:34.441069+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa842cc50>]
+2016-07-03T03:27:34.441082+00:00 app[web.1]: saving
+2016-07-03T03:27:34.444170+00:00 app[web.1]: deleting
+2016-07-03T03:27:34.441083+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa842cc50>]
+2016-07-03T03:27:34.444179+00:00 app[web.1]: []
+2016-07-03T03:27:34.449339+00:00 app[web.1]: []
+2016-07-03T03:27:34.449349+00:00 app[web.1]: deleting
+2016-07-03T03:27:34.449352+00:00 app[web.1]: []
+2016-07-03T03:27:34.450535+00:00 app[web.1]: saving
+2016-07-03T03:27:34.450543+00:00 app[web.1]: []
+2016-07-03T03:27:34.470131+00:00 app[web.1]: saving
+2016-07-03T03:27:34.470150+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa846e490>, <app.models.datepolls.Datepoll object at 0x7f4fa846ea90>, <app.models.datepolls.Datepoll object at 0x7f4fa846e990>]
+2016-07-03T03:27:34.475931+00:00 app[web.1]: saving
+2016-07-03T03:27:34.481965+00:00 app[web.1]: [<User u'Akhila Raju'>, <Event u'Urth Cafe Lunch'>]
+2016-07-03T03:27:35.138485+00:00 app[web.1]: [{'text': '\xe2\x9c\x85 I added your times!'}, {'attachment': {'payload': {'text': 'Fri 07/08\n      1\xef\xb8\x8f\xe2\x83\xa3 3pm, \xf0\x9f\x91\xa6\xf0\x9f\x91\xa6\n---------\nMon 07/04\n      2\xef\xb8\x8f\xe2\x83\xa3 1pm, \xf0\x9f\x91\xa6\nFri 07/08\n      3\xef\xb8\x8f\xe2\x83\xa3 1-5pm, \xf0\x9f\x91\xa6\xf0\x9f\x91\xa6\n', 'template_type': 'button', 'buttons': [{'payload': 'BACK${"event_hash": "O5gGd"}', 'type': 'postback', 'title': '\xf0\x9f\x93\x85 Urth Cafe Lunch'}]}, 'type': 'template'}}]
+2016-07-03T03:27:35.973421+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=f5f01f0c-1033-48f4-afa7-ef52b991e6d2 fwd="173.252.90.87" dyno=web.1 connect=1ms service=2698ms status=200 bytes=171
+2016-07-03T03:27:35.951640+00:00 app[web.1]: hello
+2016-07-03T03:27:40.685126+00:00 app[web.1]: postback
+2016-07-03T03:27:40.685113+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467516460473, u'postback': {u'payload': u'BACK${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10154353920037384'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467516460473}]}
+2016-07-03T03:27:40.702452+00:00 app[web.1]: saving
+2016-07-03T03:27:40.702486+00:00 app[web.1]: [<User u'Akhila Raju'>]
+2016-07-03T03:27:41.474577+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=70bb2a34-07dd-4bc7-93bd-16daf2a903ce fwd="173.252.90.237" dyno=web.1 connect=1ms service=786ms status=200 bytes=171
+2016-07-03T03:27:41.467528+00:00 app[web.1]: hello
+2016-07-03T03:27:43.615118+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467516463361, u'postback': {u'payload': u'WHO${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10154353920037384'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467516463361}]}
+2016-07-03T03:27:43.615136+00:00 app[web.1]: postback
+2016-07-03T03:27:44.742624+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=a0dc45b9-ecfb-4aa6-84fe-fa9c923edd68 fwd="173.252.90.247" dyno=web.1 connect=2ms service=1124ms status=200 bytes=171
+2016-07-03T03:27:44.735115+00:00 app[web.1]: hello
+2016-07-03T03:27:47.100723+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467516466878, u'postback': {u'payload': u'WHEN${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10154353920037384'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467516466878}]}
+2016-07-03T03:27:47.100735+00:00 app[web.1]: postback
+2016-07-03T03:27:47.166563+00:00 app[web.1]: saving
+2016-07-03T03:27:47.166582+00:00 app[web.1]: [<User u'Akhila Raju'>]
+2016-07-03T03:27:47.990462+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=924fe9e6-580f-4317-9e18-c2660096901a fwd="173.252.90.241" dyno=web.1 connect=0ms service=882ms status=200 bytes=171
+2016-07-03T03:29:22.503579+00:00 app[web.1]: postback
+2016-07-03T03:29:22.503563+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467516562241, u'postback': {u'payload': u'BACK${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467516562241}]}
+2016-07-03T03:29:22.519293+00:00 app[web.1]: saving
+2016-07-03T03:29:22.519321+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T03:29:23.354109+00:00 app[web.1]: hello
+2016-07-03T03:29:23.361337+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=487503dc-2553-4dd0-97dd-0adac051d4ac fwd="173.252.90.82" dyno=web.1 connect=1ms service=854ms status=200 bytes=171
+2016-07-03T04:55:01.091054+00:00 app[web.1]: postback
+2016-07-03T04:55:01.091038+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467521700860, u'postback': {u'payload': u'WHEN${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467521700860}]}
+2016-07-03T04:55:01.178203+00:00 app[web.1]: saving
+2016-07-03T04:55:01.178226+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T04:55:01.839225+00:00 app[web.1]: hello
+2016-07-03T04:55:01.847818+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=2577b597-05ce-42b6-9ffe-0de288b94968 fwd="173.252.88.183" dyno=web.1 connect=0ms service=752ms status=200 bytes=171
+2016-07-03T04:55:10.836228+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467521710675, u'postback': {u'payload': u'ADD_TIME${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467521710675}]}
+2016-07-03T04:55:10.836242+00:00 app[web.1]: postback
+2016-07-03T04:55:10.849821+00:00 app[web.1]: saving
+2016-07-03T04:55:10.849843+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T04:55:11.504562+00:00 app[web.1]: hello
+2016-07-03T04:55:11.512595+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=54c8513e-383c-43d2-8ef8-7e9af7415c5a fwd="173.252.88.183" dyno=web.1 connect=0ms service=673ms status=200 bytes=171
+2016-07-03T04:55:29.992808+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467521729796, u'postback': {u'payload': u'CANCEL_EDIT${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467521729796}]}
+2016-07-03T04:55:29.992827+00:00 app[web.1]: postback
+2016-07-03T04:55:30.007690+00:00 app[web.1]: saving
+2016-07-03T04:55:30.007727+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T04:55:30.747042+00:00 app[web.1]: hello
+2016-07-03T04:55:30.762331+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=4162e956-9388-46f0-a0bf-dd3a614e5aae fwd="173.252.88.191" dyno=web.1 connect=1ms service=761ms status=200 bytes=171
+2016-07-03T04:55:32.884913+00:00 app[web.1]: postback
+2016-07-03T04:55:32.884899+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467521732647, u'postback': {u'payload': u'WHO${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467521732647}]}
+2016-07-03T04:55:34.222419+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=3b8a2805-d4fb-4c5d-9031-a34ab8f91097 fwd="173.252.90.81" dyno=web.1 connect=0ms service=1335ms status=200 bytes=171
+2016-07-03T04:55:34.216302+00:00 app[web.1]: hello
+2016-07-03T04:55:39.072621+00:00 app[web.1]: saving
+2016-07-03T04:55:39.055426+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467521738867, u'message': {u'text': u'\U0001f4c5 Urth Cafe Lunch', u'quick_reply': {u'payload': u'CANCEL_EDIT${"event_hash": "O5gGd"}'}, u'mid': u'mid.1467521738857:19cf77eed5e4c83946', u'seq': 14659}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467521738892}]}
+2016-07-03T04:55:39.072638+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T04:55:39.807482+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=cdeeafec-a859-473f-99de-4e5d3313b71b fwd="173.252.90.248" dyno=web.1 connect=1ms service=763ms status=200 bytes=171
+2016-07-03T04:55:39.814493+00:00 app[web.1]: hello
+2016-07-03T04:55:42.878981+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467521742747, u'postback': {u'payload': u'VIEW_MY_EVENTS'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467521742747}]}
+2016-07-03T04:55:42.879015+00:00 app[web.1]: postback
+2016-07-03T04:55:42.896835+00:00 app[web.1]: [<Event u'Hike'>, <Event u'Date'>, <Event u'Hike2'>, <Event u'Chicken Dinner'>, <Event u'SF Bar Outing'>, <Event u'Drinks'>, <Event u'Chicken Dinner'>, <Event u'Urth Cafe Lunch'>, <Event u'Diable Hiking'>, <Event u'Have Brunch Sunday July 11'>, <Event u'Brunch'>]
+2016-07-03T04:55:43.054004+00:00 app[web.1]: [<Event u'Have Brunch Sunday July 11'>]
+2016-07-03T04:55:43.215239+00:00 app[web.1]: [<Event u'Hike'>, <Event u'Date'>, <Event u'Hike2'>, <Event u'Chicken Dinner'>, <Event u'SF Bar Outing'>, <Event u'Drinks'>, <Event u'Chicken Dinner'>, <Event u'Urth Cafe Lunch'>, <Event u'Diable Hiking'>, <Event u'Brunch'>]
+2016-07-03T04:55:43.295259+00:00 app[web.1]: 4
+2016-07-03T04:55:44.155042+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=90508070-375c-490b-b4b6-2156b9b08c4a fwd="173.252.90.81" dyno=web.1 connect=1ms service=1274ms status=200 bytes=171
+2016-07-03T04:55:44.149514+00:00 app[web.1]: hello
+2016-07-03T04:55:54.807607+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467521754688, u'postback': {u'payload': u'CANCEL_EDIT${"event_hash": "cgn6n"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467521754688}]}
+2016-07-03T04:55:54.807623+00:00 app[web.1]: postback
+2016-07-03T04:55:54.825112+00:00 app[web.1]: saving
+2016-07-03T04:55:54.825132+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T04:55:55.659436+00:00 app[web.1]: hello
+2016-07-03T04:55:55.682520+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=ecb93313-54cc-40e6-aeef-b4b2d5e13ac7 fwd="173.252.90.81" dyno=web.1 connect=1ms service=856ms status=200 bytes=171
+2016-07-03T04:56:05.076042+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467521764837, u'postback': {u'payload': u'WHEN${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467521764837}]}
+2016-07-03T04:56:05.145041+00:00 app[web.1]: saving
+2016-07-03T04:56:05.076057+00:00 app[web.1]: postback
+2016-07-03T04:56:05.145061+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T04:56:05.881963+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=43241951-66d9-4fbb-8726-7a9cfc44dcef fwd="173.252.88.190" dyno=web.1 connect=0ms service=803ms status=200 bytes=171
+2016-07-03T04:56:05.875407+00:00 app[web.1]: hello
+2016-07-03T04:56:49.124717+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467521808927, u'postback': {u'payload': u'ADD_TIME${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467521808927}]}
+2016-07-03T04:56:49.124732+00:00 app[web.1]: postback
+2016-07-03T04:56:49.137602+00:00 app[web.1]: saving
+2016-07-03T04:56:49.137616+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T04:56:49.796829+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=211d0f9f-86b3-4fbc-8a50-2b73a8749848 fwd="173.252.90.87" dyno=web.1 connect=0ms service=671ms status=200 bytes=171
+2016-07-03T04:56:49.792859+00:00 app[web.1]: hello
+2016-07-03T04:56:52.256929+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467521812020, u'postback': {u'payload': u'CANCEL_EDIT${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467521812020}]}
+2016-07-03T04:56:52.256942+00:00 app[web.1]: postback
+2016-07-03T04:56:52.276186+00:00 app[web.1]: saving
+2016-07-03T04:56:52.276201+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T04:56:53.023083+00:00 app[web.1]: hello
+2016-07-03T04:57:41.669938+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467521861489, u'postback': {u'payload': u'CANCEL_EDIT${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467521861489}]}
+2016-07-03T04:57:41.669953+00:00 app[web.1]: postback
+2016-07-03T04:57:41.685823+00:00 app[web.1]: saving
+2016-07-03T04:57:41.685847+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T04:57:42.508662+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=7ac92e56-2ea9-4744-af97-d63be8fe7155 fwd="173.252.88.183" dyno=web.1 connect=0ms service=836ms status=200 bytes=171
+2016-07-03T04:57:42.502948+00:00 app[web.1]: hello
+2016-07-03T04:57:55.276104+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467521875041, u'postback': {u'payload': u'ADD_TIME${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467521875041}]}
+2016-07-03T04:57:55.276117+00:00 app[web.1]: postback
+2016-07-03T04:57:55.290432+00:00 app[web.1]: saving
+2016-07-03T04:57:55.290453+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T04:57:56.039666+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=2824c4fc-5766-45f6-9759-1fd5662ae73f fwd="173.252.88.188" dyno=web.1 connect=1ms service=758ms status=200 bytes=171
+2016-07-03T04:57:56.029813+00:00 app[web.1]: hello
+2016-07-03T04:58:22.417667+00:00 app[web.1]: [<Event u'Hike'>, <Event u'Date'>, <Event u'Hike2'>, <Event u'Chicken Dinner'>, <Event u'SF Bar Outing'>, <Event u'Drinks'>, <Event u'Chicken Dinner'>, <Event u'Urth Cafe Lunch'>, <Event u'Diable Hiking'>, <Event u'Have Brunch Sunday July 11'>, <Event u'Brunch'>]
+2016-07-03T04:58:22.399243+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467521902212, u'postback': {u'payload': u'VIEW_MY_EVENTS'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467521902212}]}
+2016-07-03T04:58:22.566124+00:00 app[web.1]: [<Event u'Have Brunch Sunday July 11'>]
+2016-07-03T04:58:22.399256+00:00 app[web.1]: postback
+2016-07-03T04:58:22.711214+00:00 app[web.1]: [<Event u'Hike'>, <Event u'Date'>, <Event u'Hike2'>, <Event u'Chicken Dinner'>, <Event u'SF Bar Outing'>, <Event u'Drinks'>, <Event u'Chicken Dinner'>, <Event u'Urth Cafe Lunch'>, <Event u'Diable Hiking'>, <Event u'Brunch'>]
+2016-07-03T04:58:22.790294+00:00 app[web.1]: 4
+2016-07-03T04:58:23.735467+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=31f141ea-d81c-42b5-bfd0-9fb2c63f6445 fwd="173.252.88.180" dyno=web.1 connect=1ms service=1330ms status=200 bytes=171
+2016-07-03T04:58:23.725237+00:00 app[web.1]: hello
+2016-07-03T05:28:30.219539+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467523709981, u'postback': {u'payload': u'SHARE${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467523709981}]}
+2016-07-03T05:28:30.219556+00:00 app[web.1]: postback
+2016-07-03T05:28:30.658055+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=d8a6de0d-6a4b-4915-90b7-ba8377f62301 fwd="173.252.90.93" dyno=web.1 connect=1ms service=438ms status=200 bytes=171
+2016-07-03T05:28:30.653974+00:00 app[web.1]: hello
+2016-07-03T20:25:02.681657+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T20:25:02.656051+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467577502236, u'message': {u'text': u'\U0001f4c5 Urth Cafe Lunch', u'quick_reply': {u'payload': u'CANCEL_EDIT${"event_hash": "O5gGd"}'}, u'mid': u'mid.1467577502151:7285c8276de9258949', u'seq': 14701}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467577502453}]}
+2016-07-03T20:25:02.681636+00:00 app[web.1]: saving
+2016-07-03T20:25:03.574397+00:00 app[web.1]: hello
+2016-07-03T20:25:03.573657+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=aa447052-0194-42e4-8940-db1561d16214 fwd="173.252.88.92" dyno=web.1 connect=1ms service=942ms status=200 bytes=171
+2016-07-03T20:25:14.732237+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467577514493, u'postback': {u'payload': u'WHEN${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467577514493}]}
+2016-07-03T20:25:14.732253+00:00 app[web.1]: postback
+2016-07-03T20:25:14.803975+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T20:25:14.803881+00:00 app[web.1]: saving
+2016-07-03T20:25:15.699131+00:00 app[web.1]: hello
+2016-07-03T20:25:15.696231+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=7e74151f-38f1-4b32-a200-5eccd2c56cb3 fwd="173.252.88.182" dyno=web.1 connect=0ms service=971ms status=200 bytes=171
+2016-07-03T20:25:26.256712+00:00 app[web.1]: postback
+2016-07-03T20:25:26.274643+00:00 app[web.1]: saving
+2016-07-03T20:25:26.274669+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T20:25:26.256686+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467577526043, u'postback': {u'payload': u'ADD_TIME${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467577526043}]}
+2016-07-03T20:25:27.048587+00:00 app[web.1]: hello
+2016-07-03T20:25:27.047367+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=cfd84e3b-ba0f-4e6b-b7bd-8bedb1fc3af2 fwd="173.252.88.181" dyno=web.1 connect=0ms service=796ms status=200 bytes=171
+2016-07-03T20:58:35.453128+00:00 app[web.1]: postback
+2016-07-03T20:58:35.469673+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T20:58:35.453110+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467579515232, u'postback': {u'payload': u'CANCEL_EDIT${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467579515232}]}
+2016-07-03T20:58:35.469654+00:00 app[web.1]: saving
+2016-07-03T20:58:36.301726+00:00 app[web.1]: hello
+2016-07-03T20:58:36.304670+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=2805aa10-5df5-4215-978a-1369210725c9 fwd="173.252.90.88" dyno=web.1 connect=0ms service=852ms status=200 bytes=171
+2016-07-03T20:58:38.873685+00:00 app[web.1]: postback
+2016-07-03T20:58:38.873672+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467579518619, u'postback': {u'payload': u'WHO${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467579518619}]}
+2016-07-03T20:58:40.305756+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=1278486f-1e97-4e82-bafa-5d452aae9b3f fwd="173.252.90.85" dyno=web.1 connect=0ms service=1435ms status=200 bytes=171
+2016-07-03T20:58:40.304692+00:00 app[web.1]: hello
+2016-07-03T20:58:44.886521+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467579524693, u'message': {u'text': u'\U0001f4c5 Urth Cafe Lunch', u'quick_reply': {u'payload': u'CANCEL_EDIT${"event_hash": "O5gGd"}'}, u'mid': u'mid.1467579524683:b176a9975eec773466', u'seq': 14721}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467579524722}]}
+2016-07-03T20:58:44.902809+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T20:58:44.902792+00:00 app[web.1]: saving
+2016-07-03T20:58:45.736326+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=81e3b567-c512-4890-a11b-b65a42098e2a fwd="173.252.90.229" dyno=web.1 connect=1ms service=854ms status=200 bytes=171
+2016-07-03T20:58:45.737340+00:00 app[web.1]: hello
+2016-07-03T20:58:47.646607+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467579527458, u'postback': {u'payload': u'WHEN${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467579527458}]}
+2016-07-03T20:58:47.713530+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T20:58:47.646627+00:00 app[web.1]: postback
+2016-07-03T20:58:47.713506+00:00 app[web.1]: saving
+2016-07-03T20:58:48.440307+00:00 app[web.1]: hello
+2016-07-03T20:58:48.441294+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=0b1a4f49-000b-4a0e-9c76-56fbb37afaf2 fwd="173.252.90.82" dyno=web.1 connect=0ms service=797ms status=200 bytes=171
+2016-07-03T20:58:51.948308+00:00 app[web.1]: postback
+2016-07-03T20:58:51.961221+00:00 app[web.1]: saving
+2016-07-03T20:58:51.961236+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T20:58:51.948275+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467579531706, u'postback': {u'payload': u'ADD_TIME${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467579531706}]}
+2016-07-03T20:58:52.694973+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=630c6ce6-e011-49f6-97d6-bb357b473e9e fwd="173.252.90.83" dyno=web.1 connect=0ms service=749ms status=200 bytes=171
+2016-07-03T20:58:52.694144+00:00 app[web.1]: hello
+2016-07-03T20:59:05.205463+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467579545033, u'message': {u'text': u'1, 2', u'mid': u'mid.1467579544992:59c5cbbd259b8b8b96', u'seq': 14733}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467579545060}]}
+2016-07-03T20:59:05.217313+00:00 app[web.1]: msgs: [u'1, 2']
+2016-07-03T20:59:06.717560+00:00 app[web.1]: {'to': None, 'from': datetime.datetime(2016, 7, 3, 20, 0, tzinfo=tzutc())}
+2016-07-03T20:59:07.940152+00:00 app[web.1]: saving
+2016-07-03T20:59:07.945620+00:00 app[web.1]: deleting
+2016-07-03T20:59:07.940153+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa8487950>]
+2016-07-03T20:59:07.940138+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa8487950>]
+2016-07-03T20:59:07.956605+00:00 app[web.1]: deleting
+2016-07-03T20:59:08.014854+00:00 app[web.1]: saving
+2016-07-03T20:59:07.960290+00:00 app[web.1]: saving
+2016-07-03T20:59:07.960338+00:00 app[web.1]: []
+2016-07-03T20:59:08.014808+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa842ccd0>]
+2016-07-03T20:59:07.914547+00:00 app[web.1]: {'to': None, 'from': datetime.datetime(2016, 7, 3, 21, 0, tzinfo=tzutc())}
+2016-07-03T20:59:08.020496+00:00 app[web.1]: deleting
+2016-07-03T20:59:07.956606+00:00 app[web.1]: []
+2016-07-03T20:59:08.020511+00:00 app[web.1]: []
+2016-07-03T20:59:08.026618+00:00 app[web.1]: []
+2016-07-03T20:59:08.014906+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa842ccd0>]
+2016-07-03T20:59:08.062595+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa849fa90>, <app.models.datepolls.Datepoll object at 0x7f4fa84503d0>, <app.models.datepolls.Datepoll object at 0x7f4fa84500d0>, <app.models.datepolls.Datepoll object at 0x7f4fa8450510>, <app.models.datepolls.Datepoll object at 0x7f4fa8450150>]
+2016-07-03T20:59:08.067465+00:00 app[web.1]: saving
+2016-07-03T20:59:07.945637+00:00 app[web.1]: []
+2016-07-03T20:59:07.956585+00:00 app[web.1]: []
+2016-07-03T20:59:08.028035+00:00 app[web.1]: saving
+2016-07-03T20:59:08.026630+00:00 app[web.1]: []
+2016-07-03T20:59:08.074322+00:00 app[web.1]: [<User u'Ian Fox'>, <Event u'Urth Cafe Lunch'>]
+2016-07-03T20:59:08.062572+00:00 app[web.1]: saving
+2016-07-03T20:59:08.028047+00:00 app[web.1]: []
+2016-07-03T20:59:08.026629+00:00 app[web.1]: deleting
+2016-07-03T20:59:08.103761+00:00 app[web.1]: [{'text': '\xe2\x9c\x85 I added your times!'}, {'attachment': {'payload': {'text': 'Fri 07/08\n      1\xef\xb8\x8f\xe2\x83\xa3 3pm, \xf0\x9f\x91\xa6\xf0\x9f\x91\xa6\n---------\nToday\n      2\xef\xb8\x8f\xe2\x83\xa3 1pm, \xf0\x9f\x91\xa6\n      3\xef\xb8\x8f\xe2\x83\xa3 2pm, \xf0\x9f\x91\xa6\nMon 07/04\n      4\xef\xb8\x8f\xe2\x83\xa3 1pm, \xf0\x9f\x91\xa6\nFri 07/08\n      5\xef\xb8\x8f\xe2\x83\xa3 1-5pm, \xf0\x9f\x91\xa6\xf0\x9f\x91\xa6\n', 'template_type': 'button', 'buttons': [{'payload': 'BACK${"event_hash": "O5gGd"}', 'type': 'postback', 'title': '\xf0\x9f\x93\x85 Urth Cafe Lunch'}]}, 'type': 'template'}}]
+2016-07-03T20:59:09.131401+00:00 app[web.1]: hello
+2016-07-03T20:59:09.128397+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=7af602c0-4579-413a-84b4-ab2607baecbc fwd="173.252.90.246" dyno=web.1 connect=1ms service=3932ms status=200 bytes=171
+2016-07-03T20:59:23.758975+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467579563609, u'message': {u'text': u'Fri 3pm', u'mid': u'mid.1467579563599:b085fc0cb1ec56ba26', u'seq': 14740}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467579563636}]}
+2016-07-03T20:59:23.774072+00:00 app[web.1]: msgs: [u'Fri 3pm']
+2016-07-03T20:59:23.938323+00:00 app[web.1]: {'to': None, 'from': datetime.datetime(2016, 7, 8, 22, 0, tzinfo=tzutc())}
+2016-07-03T20:59:23.969648+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa3302510>]
+2016-07-03T20:59:23.974953+00:00 app[web.1]: deleting
+2016-07-03T20:59:23.969673+00:00 app[web.1]: saving
+2016-07-03T20:59:23.975039+00:00 app[web.1]: []
+2016-07-03T20:59:23.969676+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa3302510>]
+2016-07-03T20:59:23.985632+00:00 app[web.1]: []
+2016-07-03T20:59:23.990951+00:00 app[web.1]: saving
+2016-07-03T20:59:23.985645+00:00 app[web.1]: deleting
+2016-07-03T20:59:23.990962+00:00 app[web.1]: []
+2016-07-03T20:59:23.985646+00:00 app[web.1]: []
+2016-07-03T20:59:24.025500+00:00 app[web.1]: saving
+2016-07-03T20:59:24.025514+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa32d9110>, <app.models.datepolls.Datepoll object at 0x7f4fa32a6ad0>, <app.models.datepolls.Datepoll object at 0x7f4fa32d9dd0>, <app.models.datepolls.Datepoll object at 0x7f4fa32d9f50>, <app.models.datepolls.Datepoll object at 0x7f4fa32a6790>]
+2016-07-03T20:59:24.032081+00:00 app[web.1]: saving
+2016-07-03T20:59:24.067090+00:00 app[web.1]: [{'text': '\xe2\x9c\x85 I added your times!'}, {'attachment': {'payload': {'text': 'Fri 07/08\n      1\xef\xb8\x8f\xe2\x83\xa3 3pm, \xf0\x9f\x91\xa6\xf0\x9f\x91\xa6\n---------\nToday\n      2\xef\xb8\x8f\xe2\x83\xa3 1pm, \xf0\x9f\x91\xa6\n      3\xef\xb8\x8f\xe2\x83\xa3 2pm, \xf0\x9f\x91\xa6\nMon 07/04\n      4\xef\xb8\x8f\xe2\x83\xa3 1pm, \xf0\x9f\x91\xa6\nFri 07/08\n      5\xef\xb8\x8f\xe2\x83\xa3 1-5pm, \xf0\x9f\x91\xa6\xf0\x9f\x91\xa6\n', 'template_type': 'button', 'buttons': [{'payload': 'BACK${"event_hash": "O5gGd"}', 'type': 'postback', 'title': '\xf0\x9f\x93\x85 Urth Cafe Lunch'}]}, 'type': 'template'}}]
+2016-07-03T20:59:24.038510+00:00 app[web.1]: [<User u'Ian Fox'>, <Event u'Urth Cafe Lunch'>]
+2016-07-03T20:59:25.103611+00:00 app[web.1]: hello
+2016-07-03T20:59:25.101599+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=179fdc85-a5b3-4f22-8389-bf006a0fc05b fwd="173.252.90.246" dyno=web.1 connect=1ms service=1350ms status=200 bytes=171
+2016-07-03T20:59:39.012553+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T20:59:38.987866+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467579578771, u'postback': {u'payload': u'BACK${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467579578771}]}
+2016-07-03T20:59:39.012462+00:00 app[web.1]: saving
+2016-07-03T20:59:38.987906+00:00 app[web.1]: postback
+2016-07-03T20:59:39.855888+00:00 app[web.1]: hello
+2016-07-03T20:59:39.868393+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=f199262c-bc82-46d4-8939-22eeb817bf17 fwd="173.252.90.86" dyno=web.1 connect=0ms service=873ms status=200 bytes=171
+2016-07-03T20:59:53.157682+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467579592920, u'postback': {u'payload': u'WHO${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467579592920}]}
+2016-07-03T20:59:53.157733+00:00 app[web.1]: postback
+2016-07-03T20:59:54.603013+00:00 app[web.1]: hello
+2016-07-03T20:59:54.600215+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=2e1b4dd5-82eb-4620-b960-b664cad19b04 fwd="173.252.90.81" dyno=web.1 connect=0ms service=1449ms status=200 bytes=171
+2016-07-03T20:59:57.200152+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467579596957, u'postback': {u'payload': u'WHEN${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467579596957}]}
+2016-07-03T20:59:57.200224+00:00 app[web.1]: postback
+2016-07-03T20:59:57.362185+00:00 app[web.1]: saving
+2016-07-03T20:59:57.362203+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T20:59:58.028745+00:00 app[web.1]: hello
+2016-07-03T20:59:58.029040+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=c2dfd017-3793-4077-9448-5703f3403bfe fwd="173.252.90.89" dyno=web.1 connect=1ms service=835ms status=200 bytes=171
+2016-07-03T21:00:00.757105+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467579600509, u'postback': {u'payload': u'REMOVE_TIME${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467579600509}]}
+2016-07-03T21:00:00.777198+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T21:00:00.757122+00:00 app[web.1]: postback
+2016-07-03T21:00:00.777182+00:00 app[web.1]: saving
+2016-07-03T21:00:01.725700+00:00 app[web.1]: hello
+2016-07-03T21:00:01.726219+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=b5acaa66-7761-423e-90fb-879cf29c42af fwd="173.252.88.187" dyno=web.1 connect=0ms service=972ms status=200 bytes=171
+2016-07-03T21:00:21.208996+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467579621077, u'postback': {u'payload': u'CANCEL_EDIT${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467579621077}]}
+2016-07-03T21:00:21.209011+00:00 app[web.1]: postback
+2016-07-03T21:00:21.225284+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T21:00:21.225269+00:00 app[web.1]: saving
+2016-07-03T21:00:21.979437+00:00 app[web.1]: hello
+2016-07-03T21:00:21.979093+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=8d18983e-7e3b-4bf7-8a6d-2fa708b508ee fwd="173.252.90.85" dyno=web.1 connect=2ms service=775ms status=200 bytes=171
+2016-07-03T21:00:24.304759+00:00 app[web.1]: postback
+2016-07-03T21:00:24.435265+00:00 app[web.1]: saving
+2016-07-03T21:00:24.435288+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T21:00:24.304744+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467579624013, u'postback': {u'payload': u'WHEN${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467579624013}]}
+2016-07-03T21:00:25.129434+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=efead416-503d-466b-8f57-c04577b99adc fwd="173.252.88.182" dyno=web.1 connect=1ms service=828ms status=200 bytes=171
+2016-07-03T21:00:25.128410+00:00 app[web.1]: hello
+2016-07-03T21:00:34.706232+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467579634546, u'postback': {u'payload': u'ADD_TIME${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467579634546}]}
+2016-07-03T21:00:34.720610+00:00 app[web.1]: saving
+2016-07-03T21:00:34.706250+00:00 app[web.1]: postback
+2016-07-03T21:00:34.720625+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T21:00:35.429690+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=ee33ac3f-fe0a-4afb-9e5b-bc3341d7796c fwd="173.252.90.81" dyno=web.1 connect=0ms service=727ms status=200 bytes=171
+2016-07-03T21:00:35.430056+00:00 app[web.1]: hello
+2016-07-03T21:00:46.748676+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467579646541, u'message': {u'text': u'Fri 1-5pm', u'mid': u'mid.1467579646532:82d20a036984b54299', u'seq': 14778}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467579646568}]}
+2016-07-03T21:00:46.760837+00:00 app[web.1]: msgs: [u'Fri 1-5pm']
+2016-07-03T21:00:47.571003+00:00 app[web.1]: saving
+2016-07-03T21:00:47.570993+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa8419150>]
+2016-07-03T21:00:47.571006+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa8419150>]
+2016-07-03T21:00:47.547044+00:00 app[web.1]: {'to': datetime.datetime(2016, 7, 9, 0, 0, tzinfo=tzutc()), 'from': datetime.datetime(2016, 7, 8, 20, 0, tzinfo=tzutc())}
+2016-07-03T21:00:47.580981+00:00 app[web.1]: []
+2016-07-03T21:00:47.574574+00:00 app[web.1]: []
+2016-07-03T21:00:47.574554+00:00 app[web.1]: deleting
+2016-07-03T21:00:47.580995+00:00 app[web.1]: []
+2016-07-03T21:00:47.582278+00:00 app[web.1]: saving
+2016-07-03T21:00:47.607024+00:00 app[web.1]: saving
+2016-07-03T21:00:47.582289+00:00 app[web.1]: []
+2016-07-03T21:00:47.580994+00:00 app[web.1]: deleting
+2016-07-03T21:00:47.611437+00:00 app[web.1]: saving
+2016-07-03T21:00:47.617047+00:00 app[web.1]: [<User u'Ian Fox'>, <Event u'Urth Cafe Lunch'>]
+2016-07-03T21:00:47.607038+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa842cc90>, <app.models.datepolls.Datepoll object at 0x7f4fa857d890>, <app.models.datepolls.Datepoll object at 0x7f4fa842c990>, <app.models.datepolls.Datepoll object at 0x7f4fa857d850>, <app.models.datepolls.Datepoll object at 0x7f4fa842c910>]
+2016-07-03T21:00:47.646448+00:00 app[web.1]: [{'text': '\xe2\x9c\x85 I added your times!'}, {'attachment': {'payload': {'text': 'Fri 07/08\n      1\xef\xb8\x8f\xe2\x83\xa3 1-5pm, 3x\xf0\x9f\x91\xa6\n---------\nToday\n      2\xef\xb8\x8f\xe2\x83\xa3 1pm, \xf0\x9f\x91\xa6\n      3\xef\xb8\x8f\xe2\x83\xa3 2pm, \xf0\x9f\x91\xa6\nMon 07/04\n      4\xef\xb8\x8f\xe2\x83\xa3 1pm, \xf0\x9f\x91\xa6\nFri 07/08\n      5\xef\xb8\x8f\xe2\x83\xa3 3pm, \xf0\x9f\x91\xa6\xf0\x9f\x91\xa6\n', 'template_type': 'button', 'buttons': [{'payload': 'BACK${"event_hash": "O5gGd"}', 'type': 'postback', 'title': '\xf0\x9f\x93\x85 Urth Cafe Lunch'}]}, 'type': 'template'}}]
+2016-07-03T21:00:48.483775+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=b6d1dd4d-cb54-4d4e-9b14-4754893cde01 fwd="173.252.90.100" dyno=web.1 connect=1ms service=1739ms status=200 bytes=171
+2016-07-03T21:00:48.484080+00:00 app[web.1]: hello
+2016-07-03T21:01:35.914443+00:00 app[web.1]: saving
+2016-07-03T21:01:35.893248+00:00 app[web.1]: postback
+2016-07-03T21:01:35.914460+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T21:01:35.893233+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467579695651, u'postback': {u'payload': u'BACK${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467579695651}]}
+2016-07-03T21:01:36.690437+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=d99832fe-cfec-4d65-9062-619117f7ce8f fwd="173.252.90.92" dyno=web.1 connect=1ms service=805ms status=200 bytes=171
+2016-07-03T21:01:36.687462+00:00 app[web.1]: hello
+2016-07-03T21:01:39.263947+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T21:01:39.118829+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467579698978, u'postback': {u'payload': u'WHEN${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467579698978}]}
+2016-07-03T21:01:39.118885+00:00 app[web.1]: postback
+2016-07-03T21:01:39.263925+00:00 app[web.1]: saving
+2016-07-03T21:01:40.061854+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=cdd73d57-3081-4ea0-804a-02724bb6b979 fwd="173.252.90.88" dyno=web.1 connect=1ms service=949ms status=200 bytes=171
+2016-07-03T21:01:40.061606+00:00 app[web.1]: hello
+2016-07-03T21:01:43.563855+00:00 app[web.1]: postback
+2016-07-03T21:01:43.563842+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467579703326, u'postback': {u'payload': u'ADD_TIME${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467579703326}]}
+2016-07-03T21:01:43.599006+00:00 app[web.1]: saving
+2016-07-03T21:01:43.599022+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T21:01:44.385560+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=759529e9-de20-461f-afc3-1b364e02ef9b fwd="173.252.88.186" dyno=web.1 connect=0ms service=823ms status=200 bytes=171
+2016-07-03T21:01:44.381320+00:00 app[web.1]: hello
+2016-07-03T21:01:54.918185+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467579714712, u'message': {u'text': u'Wed 1-7 8-9', u'mid': u'mid.1467579714703:e53e66a15c181a0f61', u'seq': 14797}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467579714738}]}
+2016-07-03T21:01:54.961092+00:00 app[web.1]: msgs: [u'Wed 1-7 8-9']
+2016-07-03T21:01:55.358940+00:00 app[web.1]: {'to': datetime.datetime(2016, 7, 7, 2, 0, tzinfo=tzutc()), 'from': datetime.datetime(2016, 7, 6, 20, 0, tzinfo=tzutc())}
+2016-07-03T21:01:55.590093+00:00 app[web.1]: {'to': datetime.datetime(2016, 7, 7, 4, 0, tzinfo=tzutc()), 'from': datetime.datetime(2016, 7, 7, 3, 0, tzinfo=tzutc())}
+2016-07-03T21:01:55.754306+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa32d9290>]
+2016-07-03T21:01:55.767636+00:00 app[web.1]: deleting
+2016-07-03T21:01:55.754321+00:00 app[web.1]: saving
+2016-07-03T21:01:55.767655+00:00 app[web.1]: []
+2016-07-03T21:01:55.814606+00:00 app[web.1]: deleting
+2016-07-03T21:01:55.754324+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa32d9290>]
+2016-07-03T21:01:55.999458+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa3302e90>]
+2016-07-03T21:01:55.814584+00:00 app[web.1]: False
+2016-07-03T21:01:55.814606+00:00 app[web.1]: []
+2016-07-03T21:01:55.999442+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa3302e90>]
+2016-07-03T21:01:55.999456+00:00 app[web.1]: saving
+2016-07-03T21:01:55.818461+00:00 app[web.1]: saving
+2016-07-03T21:01:55.818475+00:00 app[web.1]: []
+2016-07-03T21:01:55.814604+00:00 app[web.1]: []
+2016-07-03T21:01:56.052939+00:00 app[web.1]: True
+2016-07-03T21:01:56.066574+00:00 app[web.1]: []
+2016-07-03T21:01:56.088491+00:00 app[web.1]: saving
+2016-07-03T21:01:56.010928+00:00 app[web.1]: []
+2016-07-03T21:01:56.010898+00:00 app[web.1]: deleting
+2016-07-03T21:01:56.066545+00:00 app[web.1]: False
+2016-07-03T21:01:56.066572+00:00 app[web.1]: []
+2016-07-03T21:01:56.236303+00:00 app[web.1]: [<app.models.datepolls.Datepoll object at 0x7f4fa324fe10>, <app.models.datepolls.Datepoll object at 0x7f4fa3238090>, <app.models.datepolls.Datepoll object at 0x7f4fa324ff50>, <app.models.datepolls.Datepoll object at 0x7f4fa3238290>, <app.models.datepolls.Datepoll object at 0x7f4fa324f6d0>, <app.models.datepolls.Datepoll object at 0x7f4fa324fc90>, <app.models.datepolls.Datepoll object at 0x7f4fa324f510>]
+2016-07-03T21:01:56.247884+00:00 app[web.1]: saving
+2016-07-03T21:01:56.088513+00:00 app[web.1]: []
+2016-07-03T21:01:56.066573+00:00 app[web.1]: deleting
+2016-07-03T21:01:56.236285+00:00 app[web.1]: saving
+2016-07-03T21:01:56.266554+00:00 app[web.1]: [<User u'Ian Fox'>, <Event u'Urth Cafe Lunch'>]
+2016-07-03T21:01:56.374773+00:00 app[web.1]: [{'text': '\xe2\x9c\x85 I added your times!'}, {'attachment': {'payload': {'text': 'Fri 07/08\n      1\xef\xb8\x8f\xe2\x83\xa3 1-5pm, 3x\xf0\x9f\x91\xa6\n---------\nToday\n      2\xef\xb8\x8f\xe2\x83\xa3 1pm, \xf0\x9f\x91\xa6\n      3\xef\xb8\x8f\xe2\x83\xa3 2pm, \xf0\x9f\x91\xa6\nMon 07/04\n      4\xef\xb8\x8f\xe2\x83\xa3 1pm, \xf0\x9f\x91\xa6\nWed 07/06\n      5\xef\xb8\x8f\xe2\x83\xa3 1-7pm, \xf0\x9f\x91\xa6\n', 'template_type': 'button', 'buttons': [{'payload': 'BACK${"event_hash": "O5gGd"}', 'type': 'postback', 'title': '\xf0\x9f\x93\x85 Urth Cafe Lunch'}]}, 'type': 'template'}}]
+2016-07-03T21:01:57.355896+00:00 app[web.1]: hello
+2016-07-03T21:01:57.357618+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=0aa80eb4-9a0c-4869-a0e6-9c05b68cb04a fwd="173.252.88.90" dyno=web.1 connect=0ms service=2443ms status=200 bytes=171
+2016-07-03T21:02:15.885288+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T21:02:15.885278+00:00 app[web.1]: saving
+2016-07-03T21:02:15.854895+00:00 app[web.1]: postback
+2016-07-03T21:02:15.854880+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467579735584, u'postback': {u'payload': u'BACK${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467579735584}]}
+2016-07-03T21:02:16.722754+00:00 app[web.1]: hello
+2016-07-03T21:02:16.725616+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=c2271c57-8a7b-47c1-8a08-635c74d043c6 fwd="173.252.88.186" dyno=web.1 connect=0ms service=880ms status=200 bytes=171
+2016-07-03T21:02:18.914523+00:00 app[web.1]: saving
+2016-07-03T21:02:18.734320+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467579738433, u'postback': {u'payload': u'WHEN${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467579738433}]}
+2016-07-03T21:02:18.914538+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T21:02:18.734333+00:00 app[web.1]: postback
+2016-07-03T21:02:19.128017+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=6a5f3125-8bd8-40e6-be09-6ca4bc1e67d1 fwd="173.252.90.91" dyno=web.1 connect=0ms service=400ms status=200 bytes=171
+2016-07-03T21:02:19.126617+00:00 app[web.1]: hello
+2016-07-03T21:02:27.329292+00:00 app[web.1]: {u'object': u'page', u'entry': [{u'id': u'130562467349590', u'messaging': [{u'timestamp': 1467579747148, u'postback': {u'payload': u'WHEN${"event_hash": "O5gGd"}'}, u'sender': {u'id': u'10209354544730920'}, u'recipient': {u'id': u'130562467349590'}}], u'time': 1467579747148}]}
+2016-07-03T21:02:27.329313+00:00 app[web.1]: postback
+2016-07-03T21:02:27.470406+00:00 app[web.1]: saving
+2016-07-03T21:02:27.470436+00:00 app[web.1]: [<User u'Ian Fox'>]
+2016-07-03T21:02:27.679116+00:00 app[web.1]: hello
+2016-07-03T21:02:27.679162+00:00 heroku[router]: at=info method=POST path="/webhook/18aaf94cff67b8498a4a811b91a50be40c75de1398f52b066" host=eveyai.herokuapp.com request_id=6e3747a8-03e9-46a3-9525-2dd020050c57 fwd="173.252.90.80" dyno=web.1 connect=0ms service=353ms status=200 bytes=171

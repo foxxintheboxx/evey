@@ -65,7 +65,7 @@ class WitEngine(object):
                     string = tokens[j - 2]
                     day = string_to_day(string)
                 if not day:
-                    continue
+                    day = "Today"
                 start_time, end_time = m.split("-")
                 query = "%s %s to %s %s" % (day, start_time, day, end_time)
                 wit_resp = self.message(query)["entities"][DATE][0]
