@@ -65,9 +65,11 @@ def format_ampm(string):
 
 def string_to_day(string):
     fullnames = c.DAY_ABRV.values()
+    string = string.lower()
+    fullnames = [n.lower() for n in fullnames]
     if string in fullnames:
         return string
-    return c.DAY_ABRV.get(string.lower())
+    return c.DAY_ABRV.get(string)
 
 
 def encode_unicode(unicode_string):
@@ -106,7 +108,7 @@ def format_event_postbacks(postbacks, event_hash):
 
 def format_dateobj(dateobj, to_dateobj=None, offset=0, use_day=True,
                    use_at=True):
-    today = datetime.utcnow()
+    today = datetime.utcnow() + timedelta(hours=offset)
     ampm = "am"
     dateobj = (dateobj + timedelta(hours=offset))
     if dateobj.hour % 24 > 12:
@@ -188,7 +190,7 @@ def number_to_emojistr(number):
 
 def event_times_text(event, timezone=0, user=None, length=5, show_title=False):
     date_polls = event.get_datepolls()
-    now = datetime.utcnow()
+    now = datetime.utcnow() + timedelta(hours=timezone)
     text = ""
 
     quick_replies = []
@@ -200,23 +202,66 @@ def event_times_text(event, timezone=0, user=None, length=5, show_title=False):
         text = "Looks like no one has added any of their availabilities yet\n"
     else:
         prev_date = ""
+
+        indent = "      "
+        max_len = 0
+        vals = []
         for poll in date_polls:
+            date_str = poll.format_poll(offset=timezone, use_day=False,
+                                        use_at=False, indent=indent,
+                                        use_votes=False)
+            val = len(date_str)
+            if "-" not in date_str and ":" not in date_str:
+                val += 8
+            vals.append(val)
+            max_len = max(max_len, len(date_str))
+        for i in range(len(date_polls)):
+            poll = date_polls[i]
             if poll.poll_number == 2:
                 text += "-" * min(len(text), 15) + "\n"
             if user is not None and user not in poll.users:
                 continue
             dateobj = poll.datetime + timedelta(hours=timezone)
-            indent = "      "
             date = dateobj.strftime("%a %m/%d")
             if (dateobj.day == now.day and dateobj.month == now.month):
                 date = "Today"
             if prev_date != date:
                 text += date + "\n"
                 prev_date = date
+            vote_buff = abs((max_len - vals[i])) * " "
+            print(len(vote_buff))
             date_str = poll.format_poll(offset=timezone, use_day=False,
-                                        use_at=False, indent=indent)
+                                        use_at=False, indent=indent,
+                                        vote_buff=vote_buff)
             text += "%s\n" % (date_str)
             length -= 1
             if length == 0:
                 break
     return text
+
+
+def utc_same_day(now_user):
+    now_utc = datetime.utcnow()
+    if now_utc.day == now_user.day:
+        return True
+    return False
+
+
+def replace_relative_days(msg, user_date):
+    new_tokens = []
+    tokens = msg.split(" ")
+    for i in range(len(tokens)):
+        t = tokens[i]
+        t = convert_relative_day_names(user_date, t)
+        new_tokens.append(t)
+    return " ".join(new_tokens)
+
+def convert_relative_day_names(user_date, t):
+    if not utc_same_day(user_date):
+      date_str = "%s/%s/%s" % (user_date.month, user_date.day, user_date.year)
+      if t.lower() == "today" or t.lower() == "tonight":
+        t = date_str
+      if t.lower() == "tomorrow":
+        t = date_str
+    return t
+

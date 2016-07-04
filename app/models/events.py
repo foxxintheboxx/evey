@@ -82,8 +82,14 @@ class Event(db.Model):
         intersecting_polls = []
         old_polls = []
         for poll in date_polls:
-            if ((poll.end_datetime is None and to_dateobj is not None) or
-                (to_dateobj is None and poll.end_datetime is not None)):
+            if (poll.end_datetime is None and to_dateobj is not None):
+                if ((from_dateobj == poll.datetime or to_dateobj == poll.datetime) or
+                     (from_dateobj < poll.datetime and poll.datetime < to_dateobj)):
+                    poll.add_users([user])
+                    intersecting_polls.append(poll)
+                continue
+
+            if (to_dateobj is None and poll.end_datetime is not None):
                 continue
             if (poll.datetime == from_dateobj and
                 poll.end_datetime is None and to_dateobj is None):

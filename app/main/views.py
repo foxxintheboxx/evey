@@ -95,7 +95,6 @@ def load_user(id):
 
 
 @main.route('/')
-@login_required
 def index():
     if current_user != None:
       print(current_user)
@@ -108,3 +107,6 @@ def index():
         r = requests.post(MESNGR_API_URL + TOKEN, json=payload)
     return render_template("index.html")
 
+@main.route('/privacy-policy')
+def privacy_policy():
+    return render_template("privacypolicy.html")

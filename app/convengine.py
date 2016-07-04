@@ -13,7 +13,7 @@ from .models.users import User
 from .utils import fetch_user_data, save, delete, encode_unicode, \
      format_dateobj, format_event_postbacks, format_postback, \
      numbers_from_tokens, generate_hash, number_to_emojistr, \
-     event_times_text, post_response_msgs
+     replace_relative_days, event_times_text, post_response_msgs
 from config import WIT_APP_ID, WIT_SERVER
 from .onboardengine import OnboardEngine
 from const import WHEN_EMOJI, WHERE_EMOJI, OTHER_EMOJI, EVEY_URL, MSG_BODY, \
@@ -68,6 +68,9 @@ class EveyEngine(WitEngine, FBAPI):
             return msg
 
         msg = msgs[0]
+        now_utc = datetime.utcnow()
+        now_user = now_utc + timedelta(hours=self.user.timezone)
+        msg = replace_relative_days(msg, now_user)
         msg_data = self.message(msg)
         if ("event" not in msg_data["entities"]):
             if len(self.user.is_editing_location) > 0:
@@ -138,7 +141,8 @@ class EveyEngine(WitEngine, FBAPI):
         calendar.events.append(event)
         objects = [event, calendar]
         if DATE in entities:
-            dateobj = parse(entities[DATE][0]["value"]).astimezone(tzutc())
+            dateobj = parse(entities[DATE][0]["value"])
+            dateobj +=  timedelta(hours=-1*self.user.timezone) # hack to convert ot utc time
             datepoll = Datepoll(datetime=dateobj)
             datepoll.users.append(curr_user)
             event.append_datepoll(datepoll)
@@ -329,12 +333,15 @@ class EveyEngine(WitEngine, FBAPI):
 
     def handle_add_time(self, msg):
         event = self.event_from_hash(self.user.is_adding_time)
-        intervals = self.extract_intervals(msg)
+        intervals = self.extract_intervals(msg, timezone=self.user.timezone)
+        print(intervals)
         tokens = msg.split(" ")
         tokens = [encode_unicode(el.replace(",", "")) for el in tokens]
         for i in intervals:
             event.add_new_interval(i.get("from"), i.get("to"), self.user)
         datepolls = event.get_datepolls()
+        postbacks = format_event_postbacks(dict(EVENT_POSTBACKS),
+                                           event.event_hash)
         save(event.get_datepolls())
         save([self.user, event])
         if (self.user != event.creator):
@@ -342,7 +349,7 @@ class EveyEngine(WitEngine, FBAPI):
         text = GREEN_CHECK_EMOJI + " I added your times!"
         text2 = event_times_text(event, self.user.timezone,
                                  length=len(event.get_datepolls()))
-        title = ("%s %s" % (CAL_EMOJI, event.title))[:15]
+        title = ("%s %s" % (CAL_EMOJI, str(event.title)))[:15]
         if (len(title) == 15):
           title += "..."
         replies = [self.make_quick_reply(title, postbacks["cancel_edit"])]
@@ -381,7 +388,7 @@ class EveyEngine(WitEngine, FBAPI):
 
     def handle_remove_time(self, msg):
         event = self.event_from_hash(self.user.is_removing_time)
-        intervals = self.extract_intervals(msg)
+        intervals = self.extract_intervals(msg, self.user.timezone)
         tokens = msg.split(" ")
         tokens = [encode_unicode(el.replace(",", "")) for el in tokens]
         for i in intervals:
@@ -450,7 +457,8 @@ class EveyEngine(WitEngine, FBAPI):
         return [btn_attach]
 
     def quick_reply_time(self, event_json):
-        time_str = event_json["time"]
+        user_date = datetime.utcnow() + timedelta(hours=self.user.timezone)
+        time_str = replace_relative_days(event_json["time"], user_date)
         if len(self.user.is_adding_time) > 0:
             return self.handle_add_time(time_str)
         if len(self.user.is_removing_time) > 0:

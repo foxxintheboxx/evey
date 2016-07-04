@@ -1,10 +1,10 @@
 import requests
 from dateutil.parser import parse
-from dateutil.tz import *
+from dateutil.tz import tzutc
 from config import WIT_API
 from datetime import timedelta, datetime
 import re
-from .utils import format_ampm, string_to_day
+from .utils import format_ampm, string_to_day, replace_relative_days, convert_relative_day_names
 from const import DATE
 
 class WitEngine(object):
@@ -46,10 +46,13 @@ class WitEngine(object):
     def remove_space(self, query):
         return query.replace(' ', '%20')
 
-    def extract_intervals(self, msg, look_ahead=2):
+    def extract_intervals(self, msg, timezone=0, look_ahead=2):
+
+        user_date = datetime.utcnow() + timedelta(hours=timezone)
+        msg = replace_relative_days(msg, user_date)
         tokens = msg.split(" ")
         tokens  = [el.replace(",", "") for el in tokens]
-        pattern_interval  = "\d\d?:?\d?\d?[APap]?[mM]?-\d\d?:?\d?\d?[APap]?[mM]?"
+        pattern_interval  = "\d\d?:?\d?\d?[APap]?[mM]?\s*-\s*\d\d?:?\d?\d?[APap]?[mM]?"
         matches = re.findall(pattern_interval, msg)
         intervals = []
         if len(matches) > 0:
@@ -65,12 +68,16 @@ class WitEngine(object):
                     string = tokens[j - 2]
                     day = string_to_day(string)
                 if not day:
-                    day = "Today"
+                    day = convert_relative_day_names(user_date, "Today")
+
                 start_time, end_time = m.split("-")
                 query = "%s %s to %s %s" % (day, start_time, day, end_time)
                 wit_resp = self.message(query)["entities"][DATE][0]
-                from_ = parse(wit_resp["from"]["value"]).astimezone(tzutc())
-                to =  parse(wit_resp["to"]["value"]).astimezone(tzutc())
+                from_ = parse(wit_resp["from"]["value"])
+                from_ +=  timedelta(hours=-1*timezone) # hack to convert ot utc time
+
+                to =  parse(wit_resp["to"]["value"])
+                to += timedelta(hours=-1*timezone)
                 to = to - timedelta(hours = 1)
                 interval = {"from": from_, "to": to}
                 print(interval)
@@ -95,11 +102,12 @@ class WitEngine(object):
                     string = tokens[j - 2]
                     day = string_to_day(string)
                 if not day:
-                    day = "Today"
+                    day = convert_relative_day_names(user_date, "Today")
                 start_time = m
                 query = "%s %s"  % (day, start_time)
                 wit_resp = self.message(query)["entities"][DATE][0]
-                from_ = parse(wit_resp["value"]).astimezone(tzutc())
+                from_ = parse(wit_resp["value"])
+                from_ +=  timedelta(hours=-1*timezone) # hack to convert ot utc time
                 interval = {"from": from_, "to": None}
                 print(interval)
                 intervals.append(interval)
@@ -112,11 +120,15 @@ class WitEngine(object):
                 data = wit_resp.get(DATE)
                 for obj in data:
                     if obj.get("type") == "value":
-                        intervals.append(
-                            {"from": parse(obj.get("value")).astimezone(tzutc())})
+                        from_ = parse(obj.get("value"))
+                        from_ += timedelta(hours=-1*timezone)
+                        interval = {"from": from_}
+                        intervals.append(interval)
                     if obj.get("type") == "interval":
-                        from_ = parse(obj["from"]["value"]).astimezone(tzutc())
-                        to =  parse(obj["to"]["value"]).astimezone(tzutc())
+                        from_ = parse(obj["from"]["value"])
+                        from_ = timedelta(hours=-1*timezone)
+                        to =  parse(obj["to"]["value"])
+                        to = timedelta(hours=-1*timezone)
                         to = to - timedelta(hours = 1)
                         interval = {"from": from_, "to": to}
                         intervals.append(interval)

@@ -25,7 +25,7 @@ class Datepoll(db.Model):
             self.users.append(user)
 
     def format_poll(self, offset=0, use_day=True, use_at=True, indent="",
-                    use_emoji_number=True, use_votes=True):
+                    use_emoji_number=True, use_votes=True, vote_buff=""):
         text = format_dateobj(self.datetime, self.end_datetime, offset,
                               use_day=use_day, use_at=use_at)
         text = "%s%s %s" % (indent, number_to_emojistr(self.poll_number),
@@ -36,5 +36,5 @@ class Datepoll(db.Model):
               votes = "%sx%s" % (self.votes(), c.GUY_EMOJI)
           else:
               votes = c.GUY_EMOJI * self.votes()
-          text += ", %s" % votes
+          text += ",  %s%s" % (vote_buff, votes)
         return text

@@ -25,7 +25,21 @@ DAY_ABRV = {"sun": "Sunday",
             "fri": "Friday",
             "sat": "Saturday",
             "mon": "Monday",
-            "today": "Today",}
+            "today": "Today",
+            "tonight": "Tonight",}
+MONTH_ABRV = {"jan": "January",
+              "feb": "February",
+              "mar": "March",
+              "apr": "April",
+              "may": "May",
+              "jun": "June",
+              "jul": "July",
+              "aug": "August",
+              "sept": "September",
+              "oct": "October",
+              "nov": "November",
+              "dec": "Decemeber",}
+
 
 #EMOJIS
 WHEN_EMOJI = "🕐"
